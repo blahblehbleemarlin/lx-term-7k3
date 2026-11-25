@@ -202,7 +202,7 @@ body.boss main svg{filter:grayscale(1)}
 <body>
 <header>
   <div class="topbar">
-    <div class="brand" id="brandTitle">宏观政治 × 全球半导体 情报终端<small id="syncLbl">BASELINE 2026-11-24 · v2 · FULL · 4.1</small></div>
+    <div class="brand" id="brandTitle">宏观政治 × 全球半导体 情报终端<small id="syncLbl">BASELINE 2026-11-24 · v2 · FULL · 4.2</small></div>
     <div class="spacer"></div>
     <div class="tools">
       <button id="btnNote" title="Shift+N">+ 快速记录</button><button id="btnWeekly">◷ 3分钟周报</button><button class="primary" id="btnPrompt">⧉ 复制今日更新指令</button><button id="btnImport">⇪ 导入增量 JSON</button><button class="ghost" id="btnGloss">[? 体制与级别图鉴]</button>
@@ -928,7 +928,7 @@ function openImport(){
       }catch(e){res.innerHTML='<div class="box"><h4 class="red">✕ 解析失败</h4><p class="mono" style="font-size:12px">'+esc(e.message)+'</p><p class="dim">检查是否为合法 JSON（引号、逗号、括号）。</p></div>';}
     };}});
 }
-function updateSyncLbl(){$('#syncLbl').textContent='BASELINE '+BASELINE+' · SYNC '+(S.lastSync||BASELINE)+' · v2 · FULL 4.1';}
+function updateSyncLbl(){$('#syncLbl').textContent='BASELINE '+BASELINE+' · SYNC '+(S.lastSync||BASELINE)+' · v2 · FULL 4.2';}
 
 /* ---------- 快速记录 ---------- */
 function openQuickNote(edit){
@@ -2198,7 +2198,7 @@ function ecoLine(mode){
 function ecoBars(){
   return '<table class="t" style="font-size:12.5px"><tr><th style="width:190px">指标（2024）</th><th>美国 / 中国 / 日本</th><th style="width:170px">备注</th></tr>'+ECO_KPI.map(function(r){
     var mx=Math.max(r[1],r[2],r[3]);
-    return '<tr><td><b>'+r[0]+'</b></td><td>'+['us','cn','jp'].map(function(k,j){var v=r[j+1];return '<div style="display:flex;align-items:center;gap:6px;margin:2px 0"><span style="width:28px;color:'+ECO_C[k][1]+';font-size:11px">'+ECO_C[k][0]+'</span><div style="flex:1;background:var(--bg3);height:10px;border-radius:5px"><div style="width:'+(v/mx*100)+'%;height:100%;border-radius:5px;background:'+ECO_C[k][1]+'"></div></div><span class="mono" style="width:44px;text-align:right">'+v+'</span></div>';}).join('')+'</td><td class="dim" style="font-size:11.5px">'+r[4]+'</td></tr>';}).join('')+'</table>';
+    return '<tr><td><a href="#" data-ecok="'+ECO_KPI.indexOf(r)+'"><b>'+r[0]+'</b> ⤢</a></td><td>'+['us','cn','jp'].map(function(k,j){var v=r[j+1];return '<div style="display:flex;align-items:center;gap:6px;margin:2px 0"><span style="width:28px;color:'+ECO_C[k][1]+';font-size:11px">'+ECO_C[k][0]+'</span><div style="flex:1;background:var(--bg3);height:10px;border-radius:5px"><div style="width:'+(v/mx*100)+'%;height:100%;border-radius:5px;background:'+ECO_C[k][1]+'"></div></div><span class="mono" style="width:44px;text-align:right">'+v+'</span></div>';}).join('')+'</td><td class="dim" style="font-size:11.5px">'+r[4]+'</td></tr>';}).join('')+'</table>';
 }
 function econHTML(){
   var mode=(S.ui.ecoMode)||'abs';
@@ -2207,10 +2207,68 @@ function econHTML(){
    '<li><b>中国：</b>2021 年名义 GDP 一度达到美国的约 75%，之后停在 18 万亿美元附近。原因是低通胀甚至通缩，加上人民币走弱，2024 年回落到美国的约 64%。<b>实际增速 5%，但美元计价几乎没涨。</b></li>'+
    '<li><b>日本：</b>2010 年被中国超过，2023 年又被德国超过、排到世界第四；日元大幅贬值是主要原因。2024 年体量只有中国的约 1/5。</li>'+
    '<li><b>美国：</b>2020 年后名义 GDP 增长最快（通胀 + 强美元 + AI 投资），中美差距从 2021 年的约 6 万亿美元拉大到 2024 年的约 10 万亿美元。但按购买力平价计算，中国早已第一。</li></ul></div></div>'+
-   '<h3 style="margin-top:12px">2024 关键指标并排</h3>'+ecoBars()+
+   '<h3 style="margin-top:12px">2024 关键指标并排（点指标名看拆解）</h3>'+ecoBars()+ecoTopicsHTML()+
    '<div class="note">数据来源为 IMF《世界经济展望》、世界银行和各国统计局口径的近似值，截至 2024 年全年；不同机构和不同版本的数字略有出入，引用前请核对原始来源。</div></section>';
 }
-function bindEcon(m){$$('[data-eco]',m).forEach(function(b){b.onclick=function(){S.ui.ecoMode=b.getAttribute('data-eco');save();renderMain();};});}
+function bindEcon(m){$$('[data-ecok]',m).forEach(function(a){a.onclick=function(e){e.preventDefault();openEcoK(+a.getAttribute('data-ecok'));};});$$('[data-ecot]',m).forEach(function(el){el.onclick=el.ondblclick=function(){openEcoT(el.getAttribute('data-ecot'));};});$$('[data-eco]',m).forEach(function(b){b.onclick=function(){S.ui.ecoMode=b.getAttribute('data-eco');save();renderMain();};});}
+
+/* ---- 经济抽屉：指标拆解 + 专题 ---- */
+var ECO_KDEEP=[
+ ['美国约 29 万亿美元，中国约 18.7 万亿，日本约 4 万亿。','名义 GDP 的计算方式是“产量 × 价格 ÷ 汇率”。中国的产量在增长，但价格在跌（GDP 平减指数连续多个季度为负），人民币又走弱，<b>三个因素互相抵消</b>，所以美元计价几乎不动。日本更极端：日元从 2021 年的约 110 跌到约 150 兑 1 美元，体量就跟着缩水了约四分之一。','中国“追上美国”的时间表被大幅推后。2010 年代很多机构预测 2030 年前后超过美国，现在主流预测已经改成“很久以后”或“可能不会”。','人民币汇率；中国 GDP 平减指数什么时候转正（这是摆脱通缩的标志）。'],
+ ['中国约 37 万亿国际元，比美国高约 27%。','购买力平价（PPP）衡量的是“在本国能买到多少东西”：同样 1 美元，在中国能买到的理发、饭菜、地铁票比在美国多。所以 <b>PPP 更能反映国内生活和生产规模，名义 GDP 更能反映国际购买力</b>——买芯片、买石油、买军火，用的都是美元。','两种口径各有立场：强调“中国已经第一”的人用 PPP，强调“差距在拉大”的人用名义值。都对，问的问题不一样。','IMF 每年 4 月、10 月更新的《世界经济展望》。'],
+ ['美国约 8.6 万美元，日本约 3.3 万，中国约 1.3 万。','中国人均约为美国的 1/6，世界银行的“高收入国家”门槛约为 1.4 万美元，<b>中国就差临门一脚</b>。但居民实际拿到手的更少：中国居民消费只占 GDP 的约 40%，美国接近 70%——中国经济的果实更多流向投资和政府，而不是家庭。','“跨过高收入门槛”会是北京的一个政治里程碑；但如果人民币继续走弱，门槛线会一直往后移。','居民可支配收入增速 vs GDP 增速（收入跑不赢 GDP，说明消费更难起来）。'],
+ ['中国 5.0%，美国 2.8%，日本约 0.1%。','中国的 5% 是“目标”，几乎每年都精准达标，市场普遍怀疑存在平滑处理。一些外部机构（如荣鼎咨询）估算的实际增速更低。另外，<b>增速高不等于日子好过</b>：通缩环境下，企业利润和工资涨得比实际增速慢。','美国在高利率下仍有 2.8% 增长，靠的是消费和 AI 投资；日本几乎零增长，但工资在 30 年来第一次明显上涨。','中国的发电量、货运量、税收收入等“硬数据”与官方增速是否一致。'],
+ ['中国约 0.2%，美国约 2.9%，日本约 2.7%。','中国是三国里唯一面临<b>通缩</b>压力的。PPI（工厂出厂价格）从 2022 年底起长期为负，原因是产能过剩 + 房地产拖累 + 消费疲弱。“内卷”价格战就是这个现象在企业层面的表现。<br><br>日本反过来：几十年通缩后，终于出现了 2% 以上的通胀，日本央行因此在 2024 年结束负利率。','通缩会自我强化：大家都等着降价再买，企业就更不敢投资和加薪。债务的实际负担也会因此变重。','中国 PPI 什么时候转正；“反内卷”政策能否把价格托起来。'],
+ ['中国 5.1%，美国 4.0%，日本 2.5%。','中国的 5.1% 是“城镇调查失业率”，不包括农村和大量灵活就业的人。<b>更值得看的是青年失业率</b>（16–24 岁，不含在校生），近年在 15–20% 区间波动。2023 年曾因数字过高暂停公布，之后修改口径才恢复。日本 2.5% 很低，但这是劳动力短缺的结果，不全是好事。','每年 1000 万以上的大学毕业生，是中国社会稳定最敏感的一根弦。','每年 7–8 月毕业季的青年失业率峰值。'],
+ ['日本约 237%，美国约 121%，中国约 88%（IMF 政府总债务口径）。','中国的 88% <b>严重低估了真实负担</b>，因为它基本不包含地方政府融资平台（城投）的债务。IMF 用“广义政府债务”口径，把城投等算进去，中国大约在 GDP 的 110–120% 以上。详情见专题“中国隐性债务”。<br><br>日本的 237% 看起来最吓人，但它的国债绝大部分由本国人和日本央行持有（日本央行持有约一半），而且以日元计价，很难发生外债危机。','真正要看的是“谁借的、借给谁、能不能付利息”，不是一个比例。美国的问题在于利息支出——已经超过国防开支。','美国国债利息支出占财政收入的比例；日本 10 年期国债收益率；中国城投债利差。'],
+ ['中国约 3.6 万亿美元，美国约 2.1 万亿，日本约 0.7 万亿。','中国是全球最大的货物出口国，制造业增加值约占全球的 30%。贸易顺差约 1 万亿美元，<b>是有史以来最大的</b>。内需不足的产能只能往外卖，这正是美欧加关税的原因：他们把中国的出口看成“输出通缩”。','出口是中国经济现在最强的一条腿，也是最容易被关税打击的一条腿。对美出口下降的部分，正在转向东南亚、拉美、中东和“一带一路”国家（以及经东南亚转口）。','中国对东盟、墨西哥的出口增速；美国从越南、墨西哥进口中的“中国含量”。'],
+ ['中国约 14.1 亿，美国约 3.4 亿，日本约 1.24 亿。','中国人口从 2022 年起连续下降，2024 年出生约 954 万人，不到 2016 年的一半；印度在 2023 年超过中国成为人口第一。日本已经连续十几年人口减少。美国靠移民仍在增长，这也是美国长期增长最大的结构性优势。','人口减少的直接后果：劳动力减少、养老金压力上升、房地产需求长期萎缩。中国的应对是延迟退休（2025 年起渐进实施）、育儿补贴，以及用自动化和 AI 替代劳动力。','中国每年 1 月公布的出生人口；育儿补贴政策的力度。']
+];
+var ECO_TOPICS=[
+ {id:'lgfv',n:'中国隐性债务（城投）',tag:'核心专题',parts:[
+  '官方口径：2024 年 11 月，财政部长蓝佛安披露，2023 年底地方政府隐性债务约 14.3 万亿元。同月人大批准了 <b>10 万亿元化债方案</b>：6 万亿元提高地方债限额、分三年置换隐性债务，另外每年从新增专项债中拿出 8000 亿元、连续五年用于化债。',
+  '<b>城投是什么：</b>地方政府不能随便借钱，于是成立“城市建设投资公司”（城投）替自己借，修路、建新区、搞园区。钱借进来，地方政府用卖地收入来还——<b>土地财政</b>是整个模式的发动机。<br><br><b>为什么爆了：</b>2021 年后房地产下行，土地出让收入从高峰大幅下跌，发动机熄火；而很多城投项目本身不赚钱（偏远新区、空置园区），只能借新还旧。<br><br><b>真实规模：</b>14.3 万亿是“官方认定”的口径；IMF 估算城投债务总额约 60 万亿元（约为 GDP 的一半），差距来自定义不同——大量城投债务没有被正式认定为“政府隐性债务”。',
+  '化债方案的本质是<b>“以时间换空间”</b>：把高利率、短期的城投债，换成低利率、长期的地方政府债，降低利息、避免违约，但债务本身并没有消失，只是从“隐性”变成“显性”。代价是：地方政府把精力和资金用于还债，就没有余力刺激经济，基层公务员欠薪、压缩开支的报道时有出现。',
+  '地方政府土地出让收入能否止跌；城投“退出平台”的进度；欠发达省份（贵州、云南、天津等）的城投债利差；有没有城投公开违约。']},
+ {id:'prop',n:'中国房地产',tag:'风险源',parts:[
+  '2021 年“三道红线”收紧开发商融资后，恒大、碧桂园、融创等相继违约；2024 年 1 月香港法院对恒大下达清盘令。全国新房销售额比 2021 年高峰下跌了大约一半。',
+  '房地产在中国不只是一个行业：它连着<b>约 70% 的居民财富</b>（城镇家庭资产大多在房子里）、地方政府的土地收入、银行的抵押贷款、以及上下游的钢铁、水泥、家电。房价下跌 → 居民感觉变穷 → 不敢消费 → 通缩，这是中国内需不振的根源。',
+  '政策从“托底”逐步加码：降低首付和房贷利率、取消限购、收购存量房改作保障房、“保交楼”。但市场普遍认为，只要居民对房价的预期没扭转，政策就只能减缓下跌，无法扭转趋势。',
+  '70 个大中城市二手房价格的环比降幅是否收窄；新房销售面积；万科等“国资背景”开发商的债务处理。']},
+ {id:'rmb',n:'人民币与资本管制',tag:'',parts:[
+  '人民币兑美元在 2022–2025 年大致在 6.7–7.35 区间，整体走弱。人民银行通过每天的“中间价”和国有银行入市来控制波动。',
+  '中国利率低、美国利率高，钱天然想往外流；人民币贬值压力就是这样来的。北京的应对是<b>资本管制</b>：个人每年换汇额度 5 万美元，企业大额汇出要审批。贬值对出口有利，但会加剧“输出通缩”的指控，也会让人均 GDP 跨过高收入门槛的时间往后推。',
+  '人民币国际化在推进（跨境支付系统 CIPS、对俄贸易、石油人民币结算），但在全球外汇储备中的占比仍只有约 2%，远低于美元的近 60%。',
+  '在岸与离岸人民币的价差（价差扩大说明贬值压力大）；外汇储备变化；人民币在 SWIFT 全球支付中的占比。']},
+ {id:'usfisc',n:'美国财政赤字与利息',tag:'',parts:[
+  '美国联邦赤字长期在 GDP 的 6% 左右，在没有战争或衰退的时期这非常罕见。2025 年 5 月，穆迪把美国主权信用评级从 Aaa 下调到 Aa1，三大评级机构至此都已不再给美国最高评级。',
+  '关键不在债务比例，而在<b>利息</b>：利率上升后，美国国债的净利息支出已经超过国防开支。借新还旧的成本越来越高，挤占其他支出，这也是特朗普公开施压美联储降息的重要原因之一。',
+  '关税收入成为新的财政来源，但规模远不够填补赤字；而且关税一旦被法院裁定无效需要退还，会形成新的缺口。',
+  '10 年期美债收益率；国债拍卖的认购倍数（需求是否减弱）；美联储的独立性。']},
+ {id:'jpboj',n:'日本：日元、国债与日本央行',tag:'',parts:[
+  '日本央行 2024 年 3 月结束负利率，是 17 年来首次加息，之后逐步上调政策利率；同时放弃了“收益率曲线控制”（YCC）。',
+  '日本政府债务约为 GDP 的 237%，但它能撑住，是因为<b>日本央行持有约一半的日本国债</b>，而且几乎全是日元债。风险在于：利率一旦上升，利息负担就会迅速增加；日本央行想加息抑制通胀和日元贬值，就会推高政府的融资成本——两难。',
+  '日元套息交易：全球投资者借低息日元、买高息美元资产。2024 年 8 月日本央行加息后，套息交易集中平仓，引发全球股市单日暴跌。这说明<b>日本的利率政策会直接传导到全球市场</b>。',
+  '日本 10 年期、30 年期国债收益率；日元兑美元是否跌破 160；春季劳资谈判（春斗）的加薪幅度。']},
+ {id:'consume',n:'中国：为什么“扩内需”这么难',tag:'',parts:[
+  '北京连续几年把“扩大内需”列为首要任务，推出了消费品以旧换新补贴、育儿补贴、提高养老金等措施。',
+  '结构性原因有三：①<b>收入分配</b>——居民可支配收入只占 GDP 约 43%，钱更多在企业和政府手里；②<b>社会保障薄弱</b>——农民的基础养老金每月只有一两百元，医疗和教育自费比例高，居民被迫高储蓄；③<b>房产缩水</b>——房子跌价让家庭资产负债表受损，更不敢花钱。',
+  '根本的解法是“把钱从政府和企业转给家庭”，这意味着改变几十年来以投资和出口拉动增长的模式，也意味着地方政府和国企要让出利益，政治阻力很大。以旧换新等短期补贴只能透支未来需求。',
+  '社会消费品零售总额增速；居民储蓄存款增速（储蓄越多，消费意愿越低）；有没有出台大规模的社保改革（这才是真正的信号）。']}
+];
+function openEcoK(i){var r=ECO_KPI[i],d=ECO_KDEEP[i];if(!d)return;openDeep({kick:'ECONOMY · 指标拆解',title:r[0],accent:'steel',labels:['官方数字说了什么','数字背后','对各方意味着什么','盯什么指标'],parts:d});}
+function openEcoT(id){var t=ECO_TOPICS.filter(function(x){return x.id===id;})[0];if(!t)return;openDeep({kick:'ECONOMY · 专题拆解',title:t.n,accent:'steel',labels:['官方口径 / 已知事实','拆开看','代价与结局','盯什么指标'],parts:t.parts});}
+function ecoTopicsHTML(){return '<h3 style="margin-top:14px">专题拆解（点击或双击打开抽屉）</h3><div class="mx" style="grid-template-columns:repeat(auto-fill,minmax(230px,1fr))">'+ECO_TOPICS.map(function(t){return '<div class="pc dd" data-ecot="'+t.id+'" style="border-left-color:'+(t.tag?'var(--red)':'var(--steel)')+'"><div class="n">'+esc(t.n)+' <span class="dim">⤢</span></div>'+(t.tag?'<span class="chip red">'+t.tag+'</span>':'')+'<div class="r dim" style="font-size:11.5px;margin-top:4px">'+esc(t.parts[3].slice(0,40))+'…</div></div>';}).join('')+'</div>';}
+
+/* ---- 每日增量自动拉取（仅在网页托管时生效） ---- */
+function autoPullLatest(){
+  if(!/^https?:/.test(location.protocol))return;
+  fetch('data/latest.json',{cache:'no-store'}).then(function(r){return r.ok?r.text():null;}).then(function(t){
+    if(!t)return;var j=parseIncoming(t);var stamp=j.generatedAt||j.date||t.length;
+    if(S.ui.lastAutoPull===stamp)return;
+    var r=mergeIncoming(j);rebuildP();S.ui.lastAutoPull=stamp;save();renderAll();toast('已自动导入今日增量'+(r&&r.added!=null?'：新增 '+r.added+' 条':''));
+  }).catch(function(){});
+}
 
 /* =========================================================
    10. 路由 / 渲染 / 事件
@@ -2280,6 +2338,7 @@ document.addEventListener('keydown',function(e){
 window.addEventListener('scroll',function(){tip.classList.remove('on');},{passive:true});
 
 renderAll();
+autoPullLatest();
 })();
 </script>
 </body>
