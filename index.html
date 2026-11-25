@@ -202,7 +202,7 @@ body.boss main svg{filter:grayscale(1)}
 <body>
 <header>
   <div class="topbar">
-    <div class="brand" id="brandTitle">宏观政治 × 全球半导体 情报终端<small id="syncLbl">BASELINE 2026-11-24 · v2 · FULL · 4.0</small></div>
+    <div class="brand" id="brandTitle">宏观政治 × 全球半导体 情报终端<small id="syncLbl">BASELINE 2026-11-24 · v2 · FULL · 4.1</small></div>
     <div class="spacer"></div>
     <div class="tools">
       <button id="btnNote" title="Shift+N">+ 快速记录</button><button id="btnWeekly">◷ 3分钟周报</button><button class="primary" id="btnPrompt">⧉ 复制今日更新指令</button><button id="btnImport">⇪ 导入增量 JSON</button><button class="ghost" id="btnGloss">[? 体制与级别图鉴]</button>
@@ -928,7 +928,7 @@ function openImport(){
       }catch(e){res.innerHTML='<div class="box"><h4 class="red">✕ 解析失败</h4><p class="mono" style="font-size:12px">'+esc(e.message)+'</p><p class="dim">检查是否为合法 JSON（引号、逗号、括号）。</p></div>';}
     };}});
 }
-function updateSyncLbl(){$('#syncLbl').textContent='BASELINE '+BASELINE+' · SYNC '+(S.lastSync||BASELINE)+' · v2 · FULL 4.0';}
+function updateSyncLbl(){$('#syncLbl').textContent='BASELINE '+BASELINE+' · SYNC '+(S.lastSync||BASELINE)+' · v2 · FULL 4.1';}
 
 /* ---------- 快速记录 ---------- */
 function openQuickNote(edit){
@@ -2166,6 +2166,53 @@ function bindScore(m){
 }
 
 /* =========================================================
+   36. 中美日经济对照
+   ========================================================= */
+var ECO_Y=[2000,2005,2010,2015,2020,2021,2022,2023,2024];
+var ECO_GDP={us:[10.25,13.04,15.05,18.30,21.35,23.68,26.01,27.72,29.18],cn:[1.21,2.29,6.09,11.06,14.69,17.82,17.88,17.79,18.74],jp:[4.97,4.83,5.76,4.44,5.05,5.04,4.26,4.21,4.03]};
+var ECO_C={us:['美国','#5b8fd6'],cn:['中国','#c81e2b'],jp:['日本','#d9a441']};
+var ECO_KPI=[
+ ['名义 GDP（万亿美元）',29.2,18.7,4.0,'市场汇率口径'],
+ ['购买力平价 GDP（万亿国际元）',29.2,37.1,6.6,'按 PPP 中国早已第一'],
+ ['人均 GDP（千美元）',85.8,13.3,32.5,''],
+ ['实际增速（%）',2.8,5.0,0.1,''],
+ ['CPI 通胀（%）',2.9,0.2,2.7,'中国接近通缩'],
+ ['失业率（%）',4.0,5.1,2.5,'中国为城镇调查失业率'],
+ ['政府总债务 / GDP（%）',121,88,237,'IMF 口径，中国不含大部分地方隐性债务'],
+ ['货物出口（万亿美元）',2.06,3.58,0.71,''],
+ ['人口（亿）',3.4,14.1,1.24,'中日均在减少']
+];
+function ecoLine(mode){
+  var W=760,H=260,L=46,R=70,T=14,B=28,n=ECO_Y.length;
+  var val=function(k,i){return mode==='rel'?ECO_GDP[k][i]/ECO_GDP.us[i]*100:ECO_GDP[k][i];};
+  var max=mode==='rel'?100:32,x=function(i){return L+i*(W-L-R)/(n-1);},y=function(v){return T+(H-T-B)*(1-v/max);};
+  var s='<svg viewBox="0 0 '+W+' '+H+'" style="width:100%;max-width:900px">';
+  for(var g=0;g<=4;g++){var v=max*g/4;s+='<line x1="'+L+'" x2="'+(W-R)+'" y1="'+y(v)+'" y2="'+y(v)+'" stroke="#2a2f36"/><text x="'+(L-6)+'" y="'+(y(v)+4)+'" fill="#7d8590" font-size="11" text-anchor="end">'+(mode==='rel'?v.toFixed(0):'$'+v.toFixed(0)+'T')+'</text>';}
+  ECO_Y.forEach(function(yr,i){s+='<text x="'+x(i)+'" y="'+(H-8)+'" fill="#7d8590" font-size="11" text-anchor="middle">'+yr+'</text>';});
+  ['us','cn','jp'].forEach(function(k){var c=ECO_C[k][1],pts=ECO_Y.map(function(_,i){return x(i)+','+y(val(k,i));}).join(' ');
+    s+='<polyline points="'+pts+'" fill="none" stroke="'+c+'" stroke-width="2.5"/>';
+    ECO_Y.forEach(function(_,i){s+='<circle cx="'+x(i)+'" cy="'+y(val(k,i))+'" r="3" fill="'+c+'"><title>'+ECO_C[k][0]+' '+ECO_Y[i]+'：'+(mode==='rel'?val(k,i).toFixed(0)+'（美国=100）':'$'+val(k,i).toFixed(2)+' 万亿')+'</title></circle>';});
+    var lv=val(k,n-1);s+='<text x="'+(x(n-1)+8)+'" y="'+(y(lv)+4)+'" fill="'+c+'" font-size="12" font-weight="600">'+ECO_C[k][0]+' '+(mode==='rel'?lv.toFixed(0):lv.toFixed(1))+'</text>';});
+  return s+'</svg>';
+}
+function ecoBars(){
+  return '<table class="t" style="font-size:12.5px"><tr><th style="width:190px">指标（2024）</th><th>美国 / 中国 / 日本</th><th style="width:170px">备注</th></tr>'+ECO_KPI.map(function(r){
+    var mx=Math.max(r[1],r[2],r[3]);
+    return '<tr><td><b>'+r[0]+'</b></td><td>'+['us','cn','jp'].map(function(k,j){var v=r[j+1];return '<div style="display:flex;align-items:center;gap:6px;margin:2px 0"><span style="width:28px;color:'+ECO_C[k][1]+';font-size:11px">'+ECO_C[k][0]+'</span><div style="flex:1;background:var(--bg3);height:10px;border-radius:5px"><div style="width:'+(v/mx*100)+'%;height:100%;border-radius:5px;background:'+ECO_C[k][1]+'"></div></div><span class="mono" style="width:44px;text-align:right">'+v+'</span></div>';}).join('')+'</td><td class="dim" style="font-size:11.5px">'+r[4]+'</td></tr>';}).join('')+'</table>';
+}
+function econHTML(){
+  var mode=(S.ui.ecoMode)||'abs';
+  return '<section class="panel"><div class="panel-head"><h2 class="steel">中美日经济对照</h2><span class="sub">2000–2024 名义 GDP · 2024 关键指标 · 悬停圆点看数值</span><div class="right"><button class="'+(mode==='abs'?'':'ghost')+'" data-eco="abs">美元绝对值</button><button class="'+(mode==='rel'?'':'ghost')+'" data-eco="rel">以美国 = 100</button></div></div>'+
+   '<div class="grid2"><div>'+ecoLine(mode)+'</div><div class="box meat" style="margin:0"><h4>🔍 三句话读图</h4><ul style="font-size:12.5px">'+
+   '<li><b>中国：</b>2021 年名义 GDP 一度达到美国的约 75%，之后停在 18 万亿美元附近。原因是低通胀甚至通缩，加上人民币走弱，2024 年回落到美国的约 64%。<b>实际增速 5%，但美元计价几乎没涨。</b></li>'+
+   '<li><b>日本：</b>2010 年被中国超过，2023 年又被德国超过、排到世界第四；日元大幅贬值是主要原因。2024 年体量只有中国的约 1/5。</li>'+
+   '<li><b>美国：</b>2020 年后名义 GDP 增长最快（通胀 + 强美元 + AI 投资），中美差距从 2021 年的约 6 万亿美元拉大到 2024 年的约 10 万亿美元。但按购买力平价计算，中国早已第一。</li></ul></div></div>'+
+   '<h3 style="margin-top:12px">2024 关键指标并排</h3>'+ecoBars()+
+   '<div class="note">数据来源为 IMF《世界经济展望》、世界银行和各国统计局口径的近似值，截至 2024 年全年；不同机构和不同版本的数字略有出入，引用前请核对原始来源。</div></section>';
+}
+function bindEcon(m){$$('[data-eco]',m).forEach(function(b){b.onclick=function(){S.ui.ecoMode=b.getAttribute('data-eco');save();renderMain();};});}
+
+/* =========================================================
    10. 路由 / 渲染 / 事件
    ========================================================= */
 function setTab(k){if(S.ui.tab!==k){S.ui.tab=k;save();renderMain();}$$('#tabs button').forEach(function(b){b.classList.toggle('on',b.getAttribute('data-tab')===k);});}
@@ -2182,7 +2229,7 @@ function renderMain(){
     $('#wReset').onclick=function(){S.weights=Object.assign({},DEFAULT_W);save();$$('input[data-w]',m).forEach(function(i){i.value=S.weights[i.getAttribute('data-w')];});renderRadar();renderKPI();toast('已恢复默认权重 25/25/15/15/10/10');};
     post(m);renderFeed();renderDiff();renderRadar();
   }else if(k==='m2'){m.innerHTML=renderM2();bindWires(m);bindM2(m);post(m);}
-  else if(k==='m3'){m.innerHTML=renderM3();bindWires(m);bindM3(m);bindScore(m);post(m);}
+  else if(k==='m3'){m.innerHTML=renderM3()+econHTML();bindWires(m);bindM3(m);bindScore(m);bindEcon(m);post(m);}
   else if(k==='m4'){m.innerHTML=twHTML()+electionHTML()+twjpPeopleHTML()+kcardsHTML()+renderM4();bindM4(m);bindTW(m);bindElection(m);bindTWJP(m);$$('[data-k]',m).forEach(function(el){el.onclick=function(){openKCard(el.getAttribute('data-k'));};});post(m);}
   else if(k==='m5'){m.innerHTML=renderM5();bindM5(m);bindSummit(m);post(m);}
   else if(k==='m6'){m.innerHTML=renderM6();bindM6(m);post(m);renderM6List();}
