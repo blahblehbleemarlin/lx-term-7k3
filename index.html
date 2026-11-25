@@ -202,7 +202,7 @@ body.boss main svg{filter:grayscale(1)}
 <body>
 <header>
   <div class="topbar">
-    <div class="brand" id="brandTitle">宏观政治 × 全球半导体 情报终端<small id="syncLbl">BASELINE 2026-11-24 · v2 · FULL · 4.2</small></div>
+    <div class="brand" id="brandTitle">宏观政治 × 全球半导体 情报终端<small id="syncLbl">BASELINE 2026-11-24 · v2 · FULL · 4.3</small></div>
     <div class="spacer"></div>
     <div class="tools">
       <button id="btnNote" title="Shift+N">+ 快速记录</button><button id="btnWeekly">◷ 3分钟周报</button><button class="primary" id="btnPrompt">⧉ 复制今日更新指令</button><button id="btnImport">⇪ 导入增量 JSON</button><button class="ghost" id="btnGloss">[? 体制与级别图鉴]</button>
@@ -220,6 +220,7 @@ body.boss main svg{filter:grayscale(1)}
     <button data-tab="m4">④ 台海与军事态势</button>
     <button data-tab="m5">⑤ 元首外交雷达</button>
     <button data-tab="m6">⑥ 跨轨时间轴 & 周报</button>
+    <button data-tab="m7">⑦ 中国体温计</button>
   </nav>
 </header>
 
@@ -862,12 +863,14 @@ function buildPrompt(){
   '7. 官员状态变化（被查、双开、晋升、免职）写入 memberUpdates；已有人物请沿用下列 id，新人物用拼音缩写新建 id。',
   '8. 公报/会议提法前后变化，在对应 item 中加 communiqueDiff 字段（A=旧原文，B=新原文，read=解读）。',
   '9. 四巨头财报或指引有更新时写入 tickerUpdates。',
+  '10. 国家统计局/民政部/海关等发布新月度或季度数据时，写入 thermoUpdates（id 取 home|retail|fai|dev|job|cpi|gdp|ext，value 写带单位的最新值，light 取 r|y|g，note 一句话说明变化）。',
   '',
   'JSON Schema：',
   '{',
   '  "meta": {"syncDate": "'+today()+'", "note": "本次检索范围说明"},',
   '  "items": [{"id":"","date":"YYYY-MM-DD","line":"cn|semi|ai|tw|dip","title":"","explainer":"","noiseLevel":"L2|L3|L4","direction":"widen|narrow|neutral","actor":"","move":"policy|counter","dir":"tighten|loosen|bj-block|bj-open","loophole":"","tags":[],"source":"https://...",',
   '             "communiqueDiff": {"name":"会议A → 会议B","a":"旧版出处","b":"新版出处","A":"旧原文","B":"新原文","read":"解读"} }],',
+  '  "thermoUpdates": [{"id":"home|retail|fai|dev|job|cpi|gdp|ext","value":"","date":"YYYY-MM","light":"r|y|g","note":""}],',
   '  "tickerUpdates": [{"ticker":"NVDA|AMD|ASML|MU","asOf":"YYYY-MM-DD","revenue":"","yoy":"","guidance":"","margin":"","catalyst":"","risk":"","note":""}],',
   '  "memberUpdates": [{"id":"","name":"","role":"","status":"ok|fallen|promoted","fall":"YYYY-MM-DD 简述","cat":"party|mil|fin|retired","date":"YYYY-MM-DD","note":"白话说明","factors":{"F1":0,"F2":0}}]',
   '}',
@@ -905,6 +908,7 @@ function mergeIncoming(j){
   });
   (Array.isArray(j.communiqueDiff)?j.communiqueDiff:[]).forEach(function(d){if(d&&d.A!=null&&d.B!=null){addDiff(d);r.diff++;}});
   (j.tickerUpdates||[]).forEach(function(u){if(!u||!u.ticker)return;var T=String(u.ticker).toUpperCase();o.tickers[T]=Object.assign(o.tickers[T]||{},u,{ticker:T});(o.tickerHist[T]=o.tickerHist[T]||[]).push(Object.assign({importedAt:new Date().toISOString()},u));r.tick++;});
+  (j.thermoUpdates||[]).forEach(function(u){if(!u||!u.id)return;o.thermo=o.thermo||{};o.thermo[u.id]=Object.assign(o.thermo[u.id]||{},u);r.th=(r.th||0)+1;});
   (j.memberUpdates||[]).forEach(function(u){if(!u||!u.id){r.bad++;return;}o.members[u.id]=Object.assign(o.members[u.id]||{},u);r.mem++;});
   S.lastSync=(j.meta&&j.meta.syncDate)||today();
   S.imports.push({at:new Date().toISOString(),syncDate:S.lastSync,result:r,note:(j.meta&&j.meta.note)||''});
@@ -928,7 +932,7 @@ function openImport(){
       }catch(e){res.innerHTML='<div class="box"><h4 class="red">✕ 解析失败</h4><p class="mono" style="font-size:12px">'+esc(e.message)+'</p><p class="dim">检查是否为合法 JSON（引号、逗号、括号）。</p></div>';}
     };}});
 }
-function updateSyncLbl(){$('#syncLbl').textContent='BASELINE '+BASELINE+' · SYNC '+(S.lastSync||BASELINE)+' · v2 · FULL 4.2';}
+function updateSyncLbl(){$('#syncLbl').textContent='BASELINE '+BASELINE+' · SYNC '+(S.lastSync||BASELINE)+' · v2 · FULL 4.3';}
 
 /* ---------- 快速记录 ---------- */
 function openQuickNote(edit){
@@ -2271,6 +2275,114 @@ function autoPullLatest(){
 }
 
 /* =========================================================
+   37. ⑦ 中国体温计：雷区仪表盘 + 婚育人口 + 另类指标
+   ========================================================= */
+var TH_TILES=[
+ {id:'home',g:'雷区',n:'70 城新房价格（同比）',v:'−2.4%',d:'2026-10',lt:'r',sub:'连续第 40 个月同比下跌；降幅为 11 个月来最小',
+  parts:['10 月 70 城新房价格同比下跌 2.4%，9 月为 −2.8%；环比 −0.1%。<b>上海是例外</b>，同比上涨 2.7%。二手房跌得更深，很多城市比高点低 20% 以上。',
+   '“降幅收窄”不等于“止跌”。分化正在变成常态：上海等一线城市核心区在企稳，三四线城市还在阴跌。对普通家庭来说，<b>房子是 70% 左右的财富</b>，房价每跌一年，“变穷”的感觉就加深一层，这正是零售疲软的根源。',
+   '地方政府卖地收入继续萎缩（化债更难）；银行按揭违约风险上升；家庭提前还贷、不敢消费。',
+   '环比何时转正（比同比更早反映拐点）；二手房价格指数；一线城市的限购是否全面取消。']},
+ {id:'retail',g:'雷区',n:'社会消费品零售总额（同比）',v:'+0.4%',d:'2026-10',lt:'r',sub:'低于预期的 0.8%；9 月为 1.1%',
+  parts:['10 月社零同比只增长 0.4%，包含国庆黄金周在内。城镇 +0.2%，农村 +1.5%，餐饮 +0.7%。',
+   '以旧换新补贴从“顺风”变成“逆风”：前两年用补贴把家电、汽车需求提前透支了，今年同期基数高、补贴退坡，数字自然难看。服务消费（旅游、演出）比商品好一些，但规模撑不起整体。',
+   '这是 2026 年“K 形经济”最直观的一边：工厂在开工、出口在增长，但老百姓不花钱。',
+   '11 月“双十一”后的数据（12 月中旬公布）；居民存款增速；是否出台新一轮直接发钱类刺激。']},
+ {id:'fai',g:'雷区',n:'固定资产投资（1–10 月累计同比）',v:'−8.1%',d:'2026-10',lt:'r',sub:'市场预期 −7.0%；1–9 月为 −7.2%',
+  parts:['1–10 月固定资产投资同比下降 8.1%，比 1–9 月的 −7.2% 进一步恶化，也比市场预期更差。民间投资和住宅投资是主要拖累。',
+   '这是过去几十年中国经济的“发动机”在熄火：房地产投资持续下滑，地方政府忙着化债没钱搞基建，民营企业对前景没信心不敢扩产。“反内卷”政策压产能，也在压低制造业投资。',
+   '投资下滑 → 钢铁、水泥等“旧经济”行业萎缩 → 相关地区就业和财政恶化。',
+   '超长期特别国债和专项债的发行节奏；明年两会的投资目标。']},
+ {id:'dev',g:'雷区',n:'房企债务：万科',v:'技术性违约',d:'2026-01',lt:'r',sub:'国资背景的“最安全房企”也没守住',
+  parts:['万科曾是中国销售额最大的开发商，大股东是深圳地铁集团（深圳国资）。2025 年深圳地铁向它提供了超过 290 亿元股东借款，2025 年底一笔 20 亿元债券靠展期勉强避免违约，2026 年 1 月仍出现“技术性违约”。',
+   '万科的意义在于<b>信号</b>：市场一直假设“国资背景 = 政府兜底”。万科出事说明，北京的底线已经从“救开发商”变成“保交楼、保社会稳定”——楼必须交给买房人，但公司本身和债权人可以受损。',
+   '境外债权人可能接近血本无归；国内银行对房企的风险评估全面收紧；剩下的民营房企融资更难。',
+   '万科境内债的展期与重组方案；其他国资房企（如华侨城、绿地）的债券价格。']},
+ {id:'job',g:'雷区',n:'城镇调查失业率',v:'5.1%',d:'2026-10',lt:'y',sub:'比 9 月下降 0.1 个百分点',
+  parts:['10 月城镇调查失业率 5.1%，9 月为 5.2%。',
+   '总失业率看起来平稳，但它不反映<b>“灵活就业”</b>——外卖、网约车、直播带货吸纳了大量本来失业的人，收入和保障都很低。真正敏感的是 16–24 岁青年失业率，每月单独公布，近年在 15–20% 区间波动（最新数据请以每日增量为准）。',
+   '就业压力在年轻人身上最集中，这也是“考公热”、“考研热”的根源（见下方另类指标）。',
+   '青年失业率在 7–8 月毕业季的峰值；外卖骑手等平台就业人数。']},
+ {id:'cpi',g:'雷区',n:'CPI（同比）',v:'+0.7%',d:'2026-10',lt:'y',sub:'仍远低于 2% 左右的健康水平',
+  parts:['10 月 CPI 同比上涨 0.7%。另有报道称 10 月 PPI 同比 +5.7%，与过去几年持续为负的走势反差很大，<b>本终端暂列为待核</b>：可能与中东局势推高能源价格和“反内卷”限产有关，需看国家统计局原文确认。',
+   'CPI 长期低于 1%，说明终端需求不足。如果 PPI 真的大幅转正、而 CPI 起不来，意味着<b>上游涨价、下游无法转嫁</b>，中游制造企业的利润会被挤压。',
+   '“输入型涨价 + 内需疲软”是最难受的组合：既不能放手刺激（怕通胀），又不能不刺激（需求太弱）。',
+   '国家统计局 PPI 原文；核心 CPI（剔除食品和能源）。']},
+ {id:'gdp',g:'雷区',n:'GDP 实际增速（三季度同比）',v:'4.5%',d:'2026-Q3',lt:'y',sub:'二季度为 4.3%；IMF 全年预测约 4.5%',
+  parts:['三季度 GDP 同比增长 4.5%，略高于二季度的 4.3%。2025 年全年增长 5.0%，精准达成目标。',
+   '增长主要靠<b>工业生产和出口</b>：10 月工业增加值 +4.8%，其中高技术制造业 +17.6%。消费和投资都在拖后腿。这就是“K 形”：新经济、外需强；旧经济、内需弱。',
+   '2027 年的增长目标会不会从“5% 左右”下调，是明年两会最大的看点之一。',
+   '12 月中央经济工作会议对明年目标的措辞。']},
+ {id:'ext',g:'支柱',n:'外需与贸易顺差',v:'创纪录',d:'2026',lt:'g',sub:'目前唯一强劲的引擎，但依赖中美休战',
+  parts:['2025 年中国贸易顺差首次超过 1 万亿美元，2026 年继续扩大。工业生产和出口是经济中最亮的部分。',
+   '强劲出口的另一面：国内消化不了的产能只能往外卖，美欧把它看成“输出通缩”。对美出口下降的部分转向东南亚、拉美、中东，部分经东南亚转口。',
+   '<b>最大的风险在 1 月 10 日</b>：中美关税休战到期。顺差越大，被重新加征关税的理由就越充分。',
+   '迈阿密 G20 前后中美是否续约；欧盟对中国电动车、钢铁的反倾销行动。']}
+];
+var TH_BIRTH={y:[2016,2017,2018,2019,2020,2021,2022,2023,2024,2025],v:[1786,1723,1523,1465,1200,1062,956,902,954,792]};
+var TH_MARRY={y:[2013,2015,2017,2019,2021,2022,2023,2024,2025],v:[1347,1225,1063,927,764,684,768,611,676]};
+var TH_DIV={y:[2024,2025],v:[351,274]};
+function thLights(c){return {r:'var(--red)',y:'var(--amber)',g:'#3fb950'}[c];}
+function thBars(o,unit,color,hiIdx){
+  var W=560,H=200,L=40,B=24,T=16,n=o.y.length,mx=Math.max.apply(null,o.v)*1.1,bw=(W-L-10)/n;
+  var s='<svg viewBox="0 0 '+W+' '+H+'" style="width:100%">';
+  o.v.forEach(function(v,i){var h=(H-B-T)*v/mx,x=L+i*bw+bw*0.15,y=H-B-h;s+='<rect x="'+x+'" y="'+y+'" width="'+(bw*0.7)+'" height="'+h+'" fill="'+(i===hiIdx?'var(--red)':color)+'" rx="2"><title>'+o.y[i]+'：'+v+' '+unit+'</title></rect><text x="'+(x+bw*0.35)+'" y="'+(y-4)+'" fill="#c9d1d9" font-size="10.5" text-anchor="middle">'+v+'</text><text x="'+(x+bw*0.35)+'" y="'+(H-8)+'" fill="#7d8590" font-size="10.5" text-anchor="middle">'+o.y[i]+'</text>';});
+  return s+'</svg>';
+}
+var TH_DEEP={
+ birth:['2025 年出生人口 792 万，比 2024 年减少约 17%，是 1949 年以来的最低值；死亡 1131 万，总人口减少 339 万，是除三年大饥荒外有记录以来最大的年度降幅。总和生育率约 0.96，60 岁以上人口占 23%。',
+  '<b>几个关键数字放在一起看：</b>2016 年“全面二孩”当年出生 1786 万，不到十年腰斩还多。2024 年的小反弹（954 万）是龙年效应，2025 年立刻回落。人口学者易富贤说，2025 年的出生数大约相当于 1738 年的水平，而那时中国人口只有约 1.5 亿。<br><br>生育率 0.96 意味着：每一代人比上一代少一半以上。韩国是 0.7 左右，中国正在走向同一条路，只是体量大得多。',
+  '①劳动力减少、养老金压力上升（2025 年起渐进式延迟退休）；②房地产需求长期萎缩（没有足够的年轻人买房）；③幼儿园、小学已经在大规模关停，接下来是中学和大学；④每年数百亿元的育儿补贴（每个孩子每年 3600 元，连续三年）效果有限。',
+  '2027 年 1 月公布的 2026 年出生人口：2025 年结婚登记回升，理论上 2026 年出生会小幅反弹；如果没有反弹，说明政策基本失效。'],
+ marry:['结婚登记在 2013 年达到 1347 万对的峰值后连续下降。2024 年只有 611 万对，同比下降约 20%，是 1980 年以来最低。2025 年回升到 676 万对（+10.8%），但 <b>2026 年又转跌</b>：上半年 327.5 万对，同比 −7.5%；前三季度 464.8 万对。',
+  '2025 年的回升有三个短期因素：①农历“双春年”的婚嫁传统；②2025 年 5 月起结婚登记“全国通办”、不再需要户口本，释放了积压的异地登记需求；③各地发结婚补贴、延长婚假（29 个省份延长婚假，最长 30 天）。<b>2026 年回落说明这些都是一次性红利</b>，结构性原因——房价、就业、育儿成本、女性对婚姻的期望变化——都没变。<br><br>结婚是生育的领先指标（中国非婚生育极少），所以结婚数下降几乎必然意味着几年后出生数继续下降。',
+  '“520”“七夕”这类特殊日期登记仍然火爆，说明想结婚的人还是会结；问题是想结婚的人越来越少，而且越来越晚。',
+  '2026 年全年结婚登记（2027 年 2 月左右公布）是否跌回 650 万对以下。'],
+ div:['离婚登记：2024 年 351 万对，2025 年 274 万对（−77 万对），2026 年前三季度 208 万对；2026 年上半年 138.3 万对，同比 +3.9%。',
+  '<b>数字背后有一个政策开关：</b>2021 年起实施“离婚冷静期”——协议离婚申请后要等 30 天，再在 30 天内双方一起去确认，否则视为撤回。这直接把协议离婚的登记数压了下来，一部分人转去法院诉讼离婚（法院判决离婚不计入民政部的登记数据）。所以民政部的离婚数下降，<b>不能简单理解为婚姻更稳定了</b>。<br><br>一个更有意思的比值是“离结比”（离婚登记 ÷ 结婚登记）：2024 年约 58%，2025 年约 41%，2026 年前三季度约 45%。',
+  '离婚数下降而结婚数下降更快，说明婚姻这个制度本身在“缩水”。',
+  '2026 年全年离结比；法院诉讼离婚案件数（最高法工作报告）。']};
+var TH_ALT=[
+ {id:'civil',n:'“考公热”降温了？',v:'345 万',sub:'2027 国考过审人数，较上年 −26.8 万，多年来首次回落',
+  parts:['2027 年国考网上报名 393.5 万人，通过资格审查 345 万人，比上年的 371.8 万减少 26.8 万（约 −7.2%），是连续多年上涨后的首次回落。但招录人数也减少到 3.57 万人，平均竞争比反而从约 95:1 升到 97:1；最热岗位竞争比超过 5000:1。',
+   '<b>为什么这是一个“另类经济指标”：</b>年轻人蜂拥考公，说明市场化工作不稳定、不吸引人——考公热度是年轻人<b>风险厌恶程度</b>的温度计。今年过审人数下降，官方解释是考生更理性、以及严打“公考围岗”（培训机构组织多人围堵同一岗位制造假热度），今年起报名要求电子社保卡实名认证。',
+   '真实需求可能没降多少，部分是“挤水分”。而招录名额在减少，说明地方财政紧张也在影响公务员编制。',
+   '各省省考报名人数；“考研”报名人数（同样是避险需求的指标）。']},
+ {id:'ratio',n:'离结比',v:'约 45%',sub:'2026 前三季度：离婚 208.2 万 ÷ 结婚 464.8 万',parts:null,ref:'div'},
+ {id:'sh',n:'上海 vs 全国房价',v:'+2.7% vs −2.4%',sub:'10 月新房同比：上海逆势上涨',
+  parts:['10 月上海新房价格同比上涨 2.7%（9 月为 +2.8%），同期 70 城整体下跌 2.4%。',
+   '“核心城市核心地段”和其他地方正在变成两个市场。资源在向少数超大城市集中：人口、高端产业、优质学校都在往那里流。这也意味着<b>“全国房价”这个概念正在失去意义</b>，三四线城市的房子可能长期没有流动性。',
+   '对地方财政而言：上海、北京还能卖地，很多中西部城市的土地流拍会持续。',
+   '一线城市二手房成交量；三四线城市土地流拍率。']},
+ {id:'k',n:'K 形分化指数',v:'+17.6% vs +0.4%',sub:'10 月高技术制造业增加值 vs 社零',
+  parts:['10 月高技术制造业增加值同比 +17.6%，装备制造业 +10.6%；而社会消费品零售总额只增长 0.4%。',
+   '这一组对比是“十五五”战略的缩影：北京把资源集中投向芯片、AI、新能源、高端装备（“新质生产力”），而不是直接给家庭发钱刺激消费。好处是产业升级快、在中美科技竞争里有底气；代价是老百姓的获得感弱、内需起不来，<b>多出来的产能只能出口</b>，又加剧了贸易摩擦。',
+   '这是一个有意识的政治选择，而不是政策失误。理解了这一点，才能理解为什么“扩内需”喊了多年却一直不见大动作。',
+   '中央经济工作会议对“投资于人”的措辞是否加重。']}
+];
+function thHTML(){
+  var ov=S.overlay.thermo||{};
+  var h='<section class="panel"><div class="panel-head"><h2 class="red">中国体温计 · 雷区仪表盘</h2><span class="sub">红 = 正在恶化 · 黄 = 需警惕 · 绿 = 支撑项 · 点任一卡片 → 抽屉拆解 · 数值可由每日增量自动更新</span></div><div class="mx" style="grid-template-columns:repeat(auto-fill,minmax(225px,1fr))">'+
+   TH_TILES.map(function(t){var u=ov[t.id]||{},v=u.value||t.v,d=u.date||t.d,lt=u.light||t.lt;return '<div class="pc dd" data-th="'+t.id+'" style="border-left-color:'+thLights(lt)+'"><div style="display:flex;justify-content:space-between"><span class="dim" style="font-size:11px">'+esc(t.n)+'</span><span style="width:10px;height:10px;border-radius:50%;background:'+thLights(lt)+';flex:none;margin-top:3px"></span></div><div class="mono" style="font-size:22px;margin:4px 0;color:'+thLights(lt)+'">'+esc(v)+'</div><div class="dim" style="font-size:11px">'+esc(d)+(u.value?' · 已更新':'')+'</div><div style="font-size:11.5px;margin-top:3px">'+esc(u.note||t.sub)+'</div></div>';}).join('')+'</div>';
+  h+='<div class="note">读法：<b>四红三黄一绿</b>——中国经济现在是“一条腿走路”，外需撑着，内需和房地产在拖。最大的观察窗口是 1/10 中美关税休战到期：那条“绿腿”一旦被关税打到，整张表就没有支撑了。</div></section>';
+  h+='<section class="panel"><div class="panel-head"><h2>人口与婚育：最慢、也最确定的那颗雷</h2><span class="sub">点图表标题 → 抽屉拆解</span></div><div class="grid2">'+
+   '<div><h3><a href="#" data-thd="birth">出生人口（万人）⤢</a> <span class="chip red">总和生育率约 0.96</span></h3>'+thBars(TH_BIRTH,'万人','var(--steel)',9)+'<div class="dim" style="font-size:11.5px">2025 年 792 万，1949 年以来最低；死亡 1131 万，总人口 −339 万。</div></div>'+
+   '<div><h3><a href="#" data-thd="marry">结婚登记（万对）⤢</a> <span class="chip amber">2026 年又转跌</span></h3>'+thBars(TH_MARRY,'万对','#8b6fc9',7)+'<div class="dim" style="font-size:11.5px">2026 前三季度 464.8 万对；上半年同比 −7.5%。结婚是生育的领先指标。</div></div></div>'+
+   '<div class="box" style="margin-top:10px"><h4><a href="#" data-thd="div">离婚与“离婚冷静期” ⤢</a></h4><p style="font-size:12.5px">离婚登记 2024 年 351 万对 → 2025 年 274 万对 → 2026 前三季度 208 万对。<b>注意：</b>2021 年起的“冷静期”把协议离婚压下来了，一部分转去法院，所以登记数下降不等于婚姻更稳定。</p></div></section>';
+  h+='<section class="panel"><div class="panel-head"><h2 class="amber">另类温度计：从生活细节看中国</h2><span class="sub">官方大数据之外，几个更“接地气”的信号</span></div><div class="mx" style="grid-template-columns:repeat(auto-fill,minmax(240px,1fr))">'+TH_ALT.map(function(a){return '<div class="pc dd" data-tha="'+a.id+'" style="border-left-color:var(--amber)"><div class="n">'+esc(a.n)+' <span class="dim">⤢</span></div><div class="mono amber" style="font-size:20px;margin:3px 0">'+esc(a.v)+'</div><div class="dim" style="font-size:11.5px">'+esc(a.sub)+'</div></div>';}).join('')+'</div>'+
+   '<div class="note">待接入（由每日增量补充）：青年失业率、土地出让收入、电影票房、航班客运量、茅台批发价、考研报名人数。来源：国家统计局、民政部、国家公务员局，以及 Reuters、ING、Caixin 等报道；“待核”项请以官方原文为准。</div></section>';
+  return h;
+}
+function openTh(id){var t=TH_TILES.filter(function(x){return x.id===id;})[0];if(!t)return;var u=(S.overlay.thermo||{})[id]||{};openDeep({kick:'CHINA THERMOMETER · '+(u.date||t.d),title:t.n+'：'+(u.value||t.v),accent:t.lt==='g'?'steel':'red',labels:['最新数字','数字背后','连锁反应','盯什么指标'],parts:t.parts,meta:u.note?'<div class="box" style="border-color:var(--amber)"><b>最新增量：</b>'+esc(u.note)+'</div>':''});}
+function openThd(k){var n={birth:'出生人口与生育率',marry:'结婚登记',div:'离婚登记与“冷静期”'}[k];openDeep({kick:'CHINA THERMOMETER · 人口与婚育',title:n,accent:'red',labels:['最新数字','拆开看','连锁反应','盯什么指标'],parts:TH_DEEP[k]});}
+function openTha(id){var a=TH_ALT.filter(function(x){return x.id===id;})[0];if(!a)return;if(a.ref)return openThd(a.ref);openDeep({kick:'CHINA THERMOMETER · 另类指标',title:a.n+'：'+a.v,accent:'amber',labels:['数字','为什么值得看','意味着什么','盯什么指标'],parts:a.parts});}
+function bindTh(m){
+  $$('[data-th]',m).forEach(function(el){el.onclick=el.ondblclick=function(){openTh(el.getAttribute('data-th'));};});
+  $$('[data-tha]',m).forEach(function(el){el.onclick=el.ondblclick=function(){openTha(el.getAttribute('data-tha'));};});
+  $$('[data-thd]',m).forEach(function(a){a.onclick=function(e){e.preventDefault();openThd(a.getAttribute('data-thd'));};});
+}
+
+/* =========================================================
    10. 路由 / 渲染 / 事件
    ========================================================= */
 function setTab(k){if(S.ui.tab!==k){S.ui.tab=k;save();renderMain();}$$('#tabs button').forEach(function(b){b.classList.toggle('on',b.getAttribute('data-tab')===k);});}
@@ -2291,6 +2403,7 @@ function renderMain(){
   else if(k==='m4'){m.innerHTML=twHTML()+electionHTML()+twjpPeopleHTML()+kcardsHTML()+renderM4();bindM4(m);bindTW(m);bindElection(m);bindTWJP(m);$$('[data-k]',m).forEach(function(el){el.onclick=function(){openKCard(el.getAttribute('data-k'));};});post(m);}
   else if(k==='m5'){m.innerHTML=renderM5();bindM5(m);bindSummit(m);post(m);}
   else if(k==='m6'){m.innerHTML=renderM6();bindM6(m);post(m);renderM6List();}
+  else if(k==='m7'){m.innerHTML=thHTML();bindTh(m);post(m);}
   else{m.innerHTML=renderPH(k);post(m);}
 }
 function renderFoot(){$('#foot').innerHTML='本地键名 <span class="mono">'+KEY+'</span> · schema v'+SCHEMA+' · 基线 '+BASELINE+' · 单文件离线，无任何外部依赖 · 人物因子为主观示意值，仅供研究复盘';post($('#foot'));}
@@ -2299,7 +2412,7 @@ function renderAll(){
   document.body.classList.toggle('boss',!!S.ui.boss);
   document.title=S.ui.boss?'Global Macro & Semi Tracker':'宏观与半导体情报终端 · Macro Intel Terminal v2';
   $('#brandTitle').firstChild.nodeValue=S.ui.boss?'Global Macro & Semi Tracker':'宏观政治 × 全球半导体 情报终端';
-  var tabNames=S.ui.boss?['① Policy Cycle','② Chip Controls','③ AI Scorecard','④ Regional Security','⑤ Diplomacy','⑥ Timeline']:['① 政治周期 & 人事反腐','② 芯片博弈：谁卡谁','③ 中美 AI 国运计分板','④ 台海与军事态势','⑤ 元首外交雷达','⑥ 跨轨时间轴 & 周报'];
+  var tabNames=S.ui.boss?['① Policy Cycle','② Chip Controls','③ AI Scorecard','④ Regional Security','⑤ Diplomacy','⑥ Timeline','⑦ Macro Pulse']:['① 政治周期 & 人事反腐','② 芯片博弈：谁卡谁','③ 中美 AI 国运计分板','④ 台海与军事态势','⑤ 元首外交雷达','⑥ 跨轨时间轴 & 周报','⑦ 中国体温计'];
   $$('#tabs button').forEach(function(b,i){b.textContent=tabNames[i];});
   $('#btnGloss').textContent=S.ui.boss?'[? Glossary]':'[? 体制与级别图鉴]';
   $('#btnPrompt').textContent=S.ui.boss?'⧉ Daily Prompt':'⧉ 复制今日更新指令';$('#btnWeekly').textContent=S.ui.boss?'◷ Weekly':'◷ 3分钟周报';
