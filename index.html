@@ -202,7 +202,7 @@ body.boss main svg{filter:grayscale(1)}
 <body>
 <header>
   <div class="topbar">
-    <div class="brand" id="brandTitle">宏观政治 × 全球半导体 情报终端<small id="syncLbl">BASELINE 2026-11-24 · v2 · FULL · 4.4</small></div>
+    <div class="brand" id="brandTitle">宏观政治 × 全球半导体 情报终端<small id="syncLbl">BASELINE 2026-11-24 · v2 · FULL · 4.5</small></div>
     <div class="spacer"></div>
     <div class="tools">
       <button id="btnNote" title="Shift+N">+ 快速记录</button><button id="btnWeekly">◷ 3分钟周报</button><button class="primary" id="btnPrompt">⧉ 复制今日更新指令</button><button id="btnImport">⇪ 导入增量 JSON</button><button class="ghost" id="btnGloss">[? 体制与级别图鉴]</button>
@@ -705,6 +705,7 @@ function openPerson(id){
    '<div class="box meat"><h4>③ '+(p.st==='fallen'?'落马导火索':'当前处境')+'</h4><p>'+p.t+'</p></div>'+
    '<div class="box bottom"><h4>④ 背后的政治隐喻</h4><p>'+p.m+'</p></div></div>';
   if(XL_P2C[id])h+='<div style="margin:0 0 10px"><span class="chip btn" data-xp="c:'+XL_P2C[id]+'">↔ 跳到芯片博弈档案（态度轨迹） ⤢</span></div>';
+  h+=stanceHTML('p:'+id);
   if(PB_GOSSIP[id])h+='<div class="box" style="border-color:var(--amber)"><h4 class="amber">🍵 小八卦</h4>'+PB_GOSSIP[id].map(function(x){return '<p style="margin:0 0 8px">'+x+'</p>';}).join('')+'<div class="dim" style="font-size:11px">仅收录有可靠出处的公开轶事（本人讲述、官方/主流媒体报道、当时的公开事件）；海外未经证实的传闻不收录。</div></div>';
   if(!p.noRadar){
     h+='<div class="box"><h4>秦城六因子（0–10，可编辑，自动保存）· 当前权重下得分 <span class="red mono">'+sc.toFixed(1)+'</span>'+(p.st==='fallen'?' <span class="dim">（已落马，仅作回测参照）</span>':'')+'</h4><div class="facedit">'+
@@ -860,6 +861,7 @@ function buildPrompt(){
   '4. id 用 “YYYYMMDD-线-英文短词”，同一事件后续更新保持同一 id（我按 id 去重合并）。',
   '5. ai 线必须填 direction：widen=中美差距拉大 / narrow=缩小 / neutral=中性；其他线可省略。',
   '6. semi 线必须额外填写：actor（行动方，如 白宫/商务部/国会/司法部/国防部/北京/海关/发改委/英伟达/阿里/马来西亚）、move（policy=政策 / counter=对策规避）、dir（tighten=美方收紧 / loosen=美方放松 / bj-block=北京反卡 / bj-open=北京放行 / bj-acquire=北京暗线获取，如走私、规避、情报获取）、loophole（涉及的漏洞，如 子公司/云租用/转运走私/50%规则/香港缓冲仓，可空）；tw 线请在 tags 中标注所属方：pla / us / tw / jp。',
+  '11. 政治局常委、何立峰、张升民、陈一新等人有新的公开讲话或调研时，摘一句最能代表其议题立场的原话（不超过 30 字）写入 statements；pid 用人物 id（芯片博弈档案人物用 c:p-xxx），topic 取 mil|ai|chip|econ|tw|us|graft。',
   '7. 官员状态变化（被查、双开、晋升、免职）写入 memberUpdates；已有人物请沿用下列 id，新人物用拼音缩写新建 id。',
   '8. 公报/会议提法前后变化，在对应 item 中加 communiqueDiff 字段（A=旧原文，B=新原文，read=解读）。',
   '9. 四巨头财报或指引有更新时写入 tickerUpdates。',
@@ -870,6 +872,7 @@ function buildPrompt(){
   '  "meta": {"syncDate": "'+today()+'", "note": "本次检索范围说明"},',
   '  "items": [{"id":"","date":"YYYY-MM-DD","line":"cn|semi|ai|tw|dip","title":"","explainer":"","noiseLevel":"L2|L3|L4","direction":"widen|narrow|neutral","actor":"","move":"policy|counter","dir":"tighten|loosen|bj-block|bj-open|bj-acquire","loophole":"","tags":[],"source":"https://...",',
   '             "communiqueDiff": {"name":"会议A → 会议B","a":"旧版出处","b":"新版出处","A":"旧原文","B":"新原文","read":"解读"} }],',
+  '  "statements": [{"pid":"dxx","date":"YYYY-MM-DD","topic":"mil|ai|chip|econ|tw|us|graft","quote":"原话","source":"场合与媒体","url":"https://..."}],',
   '  "thermoUpdates": [{"id":"home|retail|fai|dev|job|cpi|gdp|ext","value":"","date":"YYYY-MM","light":"r|y|g","note":""}],',
   '  "tickerUpdates": [{"ticker":"NVDA|AMD|ASML|MU","asOf":"YYYY-MM-DD","revenue":"","yoy":"","guidance":"","margin":"","catalyst":"","risk":"","note":""}],',
   '  "memberUpdates": [{"id":"","name":"","role":"","status":"ok|fallen|promoted","fall":"YYYY-MM-DD 简述","cat":"party|mil|fin|retired","date":"YYYY-MM-DD","note":"白话说明","factors":{"F1":0,"F2":0}}]',
@@ -908,6 +911,7 @@ function mergeIncoming(j){
   });
   (Array.isArray(j.communiqueDiff)?j.communiqueDiff:[]).forEach(function(d){if(d&&d.A!=null&&d.B!=null){addDiff(d);r.diff++;}});
   (j.tickerUpdates||[]).forEach(function(u){if(!u||!u.ticker)return;var T=String(u.ticker).toUpperCase();o.tickers[T]=Object.assign(o.tickers[T]||{},u,{ticker:T});(o.tickerHist[T]=o.tickerHist[T]||[]).push(Object.assign({importedAt:new Date().toISOString()},u));r.tick++;});
+  (j.statements||[]).forEach(function(u){if(!u||!u.pid||!u.quote)return;o.stmts=o.stmts||[];if(o.stmts.some(function(x){return x.pid===u.pid&&x.date===u.date&&x.quote===u.quote;}))return;o.stmts.push(u);r.st=(r.st||0)+1;});
   (j.thermoUpdates||[]).forEach(function(u){if(!u||!u.id)return;o.thermo=o.thermo||{};o.thermo[u.id]=Object.assign(o.thermo[u.id]||{},u);r.th=(r.th||0)+1;});
   (j.memberUpdates||[]).forEach(function(u){if(!u||!u.id){r.bad++;return;}o.members[u.id]=Object.assign(o.members[u.id]||{},u);r.mem++;});
   S.lastSync=(j.meta&&j.meta.syncDate)||today();
@@ -932,7 +936,7 @@ function openImport(){
       }catch(e){res.innerHTML='<div class="box"><h4 class="red">✕ 解析失败</h4><p class="mono" style="font-size:12px">'+esc(e.message)+'</p><p class="dim">检查是否为合法 JSON（引号、逗号、括号）。</p></div>';}
     };}});
 }
-function updateSyncLbl(){$('#syncLbl').textContent='BASELINE '+BASELINE+' · SYNC '+(S.lastSync||BASELINE)+' · v2 · FULL 4.4';}
+function updateSyncLbl(){$('#syncLbl').textContent='BASELINE '+BASELINE+' · SYNC '+(S.lastSync||BASELINE)+' · v2 · FULL 4.5';}
 
 /* ---------- 快速记录 ---------- */
 function openQuickNote(edit){
@@ -1908,6 +1912,7 @@ function openCgPerson(id){
    '<div class="box"><h4>🎭 奇闻异事</h4><p>'+p.odd+'</p></div>'+(CG_GOSSIP[p.id]?'<div class="box" style="border-color:var(--amber)"><h4 class="amber">🍵 小八卦</h4>'+CG_GOSSIP[p.id].map(function(x){return '<p style="margin:0 0 8px">'+x+'</p>';}).join('')+'<div class="dim" style="font-size:11px">来源为公开报道与社交媒体流传视频；标“据报道”的内容未经当事方证实。</div></div>':'')+
    '<div class="box bottom"><h4>接下来盯他什么</h4><p>'+esc(p.watch)+'</p></div>'+
    '<div class="note">人物经历与言论来自公开报道；涉及指控的内容均标注来源与争议，未经司法证实。职务为截至 2026 年 11 月的可查信息。</div>';
+  h+=stanceHTML('c:'+p.id);
   if(XL_C2P[p.id]&&P[XL_C2P[p.id]])h+='<div style="margin-top:8px"><span class="chip btn" data-xp="p:'+XL_C2P[p.id]+'">↔ 跳到政治局档案（秦城六因子） ⤢</span></div>';
   openDrawer({kick:p.kick||'芯片博弈 · 人物档案',title:p.zh,accent:p.side==='cn'?'red':p.side==='us'?'steel':'amber',html:h});
 }
@@ -2460,6 +2465,64 @@ CG_PEOPLE.push({id:'p-chenyixin',side:'cn',zh:'陈一新',en:'Chen Yixin',dept:'
 CG_GOSSIP['p-chenyixin']=['<b>“国安部开公众号”。</b>2023 年国家安全部开设微信公众号后发文频繁，常用通俗甚至网络化的语言讲间谍案，一改情报部门的神秘形象。外界普遍认为，这与他推动的“全民国家安全”宣传思路有关。'];
 
 /* =========================================================
+   40. 人物议题立场：分管 / 原话 / 出场频率
+   ========================================================= */
+var STRGB={mil:'200,30,43',ai:'91,143,214',chip:'163,113,247',econ:'63,185,80',tw:'217,164,65',us:'91,143,214',graft:'217,130,43'};
+var STOP={mil:['军力','var(--red)'],ai:['AI/算力','var(--steel)'],chip:['卡脖子/自立','#a371f7'],econ:['经济民生','#3fb950'],tw:['台湾','var(--amber)'],us:['对美','#5b8fd6'],graft:['反腐/党纪','#d9822b']};
+var STANCE={
+ 'p:xjp':{port:'总书记、国家主席、军委主席；主持中央财经委、外事委、国家安全委等最高决策机构。所有议题的最终拍板人。',q:[
+  ['2026-01','chip','采取超常规措施，加大重点领域关键核心技术攻关力度','政治局会议讲话（2026-05-30《求是》发表）','https://www.qstheory.cn/20260530/8fa0ec6956ee4bf2ade0e366ce29a722/c.html'],
+  ['2026-03-07','mil','军中绝不能有对党怀有二心之人','人大解放军和武警部队代表团全体会议（新华社）','https://www.cssn.cn/yw/202603/t20260308_5975497.shtml'],
+  ['2026-05-14','us','中美经贸关系的本质是互利共赢','北京元首会晤（商务部发言人转述）','https://www.gov.cn/lianbo/202605/content_7069095.htm'],
+  ['2026-05','tw','台湾问题处理不好，两国就会发生碰撞乃至冲突（大意）','北京元首会晤，据会晤通稿及媒体报道',''],
+  ['2026-07','ai','召开会议研究 AI 等技术的军事意义，要求稳步推进部署（大意）','据《纽约时报》报道','']]},
+ 'p:lq':{port:'国务院总理：作政府工作报告，管经济大盘、“人工智能+”、扩内需与稳就业的落地执行。',q:[
+  ['2026-03-05','econ','全年经济社会发展主要目标任务顺利完成，“十四五”圆满收官','政府工作报告','https://www.gov.cn/yaowen/liebiao/202603/content_7062625.htm'],
+  ['2026-03-05','tw','设立台湾光复纪念日（写入政府工作报告的年度回顾）','政府工作报告','https://www.gov.cn/yaowen/liebiao/202603/content_7062625.htm']]},
+ 'p:zlj':{port:'全国人大常委会委员长：立法，包括涉外法治、反外国制裁等法律工具——北京“明线反制”的法律底座。',q:[]},
+ 'p:whn':{port:'全国政协主席：统战与对台工作，每年主讲对台工作会议。',q:[
+  ['2026-02-10','tw','牢牢把握两岸关系主导权主动权','2026 年对台工作会议（新华社）','https://www.news.cn/20260210/7220fc2392af46b8a84560a2266f15fd/c.html'],
+  ['2026-02-10','tw','坚定支持岛内爱国统一力量，坚决打击“台独”分裂势力','2026 年对台工作会议（新华社）','https://www.news.cn/20260210/7220fc2392af46b8a84560a2266f15fd/c.html'],
+  ['2026-03-04','tw','政协工作报告涉台内容只有一句：“举办第八届两岸基层治理论坛”','全国政协工作报告（据香港01梳理）','https://global.hk01.com/即时中国/60327429/']]},
+ 'p:cq':{port:'中央书记处书记、中办主任：党中央日常运转、宣传思想工作、领导人日程与安保。很少就具体政策公开表态。',q:[]},
+ 'p:dxx':{port:'国务院常务副总理；据报道牵头中央科技委员会：科技攻关、全国算力网、能源保供。',q:[
+  ['2026-05-18','ai','算力是国家综合国力的重要体现','在北京、河北、内蒙古调研算力网（新华社）','https://www.gov.cn/yaowen/liebiao/202605/content_7069298.htm'],
+  ['2026-05-18','chip','推动国产软硬件尽快从“可用”迈向“好用”','调研算力网（新华社）','https://m.c114.com.cn/w16-1310601.html']]},
+ 'p:lx':{port:'中纪委书记：反腐、党纪、政治监督；今年地方换届的“把关人”。',q:[
+  ['2026-01-12','graft','以更高标准、更实举措推进全面从严治党','二十届中央纪委五次全会工作报告','https://www.gov.cn/yaowen/liebiao/202602/content_7060074.htm']]},
+ 'p:hlf':{port:'国务院副总理：中美经贸磋商中方牵头人，主管金融与宏观经济协调。',q:[
+  ['2025-10-26','us','合则两利、斗则俱伤','吉隆坡中美经贸磋商（新华社）','https://www.news.cn/world/20251026/3b1e5f359c3241cca38a9e3ceba61d24/c.html'],
+  ['2026-03-16','us','敦促美方彻底取消单边关税等限制措施','巴黎中美经贸磋商（新华社）','https://www.news.cn/world/20260316/81dfe963211943e7b7fa418c1f332fdc/c.html']]},
+ 'p:zsm':{port:'中央军委副主席（2025-10 起），五中全会增补为政治局委员：军队纪律、政治整训，清洗后的军队“守门人”。',q:[
+  ['2026-01-16','graft','以彻底的自我革命精神深化政治整训','中央军委纪委扩大会议（新华社）','https://www.thepaper.cn/newsDetail_forward_32400619'],
+  ['2026-02-11','mil','加强练兵备战','慰问驻京部队（新华社）','https://www.news.cn/politics/leaders/20261030/984b848ddd1a4d24b9995ac4de9c5508/c.html']]},
+ 'c:p-chenyixin':{port:'国家安全部部长：情报、反间谍；据外媒报道领导“反封锁”工作组。',q:[
+  ['2026-11','chip','成立“反封锁”工作组，协助获取先进芯片（大意）','据《纽约时报》援引外国官员，未经中方证实','']]}
+};
+function stRef(id){return id.indexOf(':')>0?id:'p:'+id;}
+function stQuotes(ref){var base=(STANCE[ref]&&STANCE[ref].q)||[];var add=(S.overlay.stmts||[]).filter(function(s){return stRef(s.pid)===ref;}).map(function(s){return [s.date,s.topic,s.quote,s.source||'',s.url||'',1];});return base.concat(add).sort(function(a,b){return a[0]<b[0]?1:-1;});}
+function stanceHTML(ref){
+  var st=STANCE[ref],qs=stQuotes(ref);if(!st&&!qs.length)return '';
+  var cnt={};qs.forEach(function(q){cnt[q[1]]=(cnt[q[1]]||0)+1;});
+  return '<div class="box" style="border-color:var(--steel)"><h4>🧭 议题立场：分管 · 原话 · 出场</h4>'+
+   (st?'<p style="font-size:12.5px"><b>分管：</b>'+esc(st.port)+'</p>':'')+
+   '<div style="margin:4px 0">'+Object.keys(STOP).map(function(k){var n=cnt[k]||0;return '<span class="chip" style="'+(n?'border-color:'+STOP[k][1]+';color:'+STOP[k][1]:'opacity:.4')+'">'+STOP[k][0]+' '+n+'</span>';}).join('')+'</div>'+
+   (qs.length?'<ul style="font-size:12.5px;margin:6px 0 0;padding-left:18px">'+qs.map(function(q){var T=STOP[q[1]]||['其他','var(--tx3)'];return '<li style="margin-bottom:5px"><span class="mono dim">'+esc(q[0])+'</span> <span class="chip" style="border-color:'+T[1]+';color:'+T[1]+'">'+T[0]+'</span> “'+esc(q[2])+'” <span class="dim">— '+(q[4]?'<a href="'+esc(q[4])+'" target="_blank" rel="noopener">'+esc(q[3])+'</a>':esc(q[3]))+(q[5]?' · 增量':'')+'</span></li>';}).join('')+'</ul>':'<p class="dim" style="font-size:12px">暂无收录的公开原话，每日增量会自动补充。</p>')+
+   '<div class="dim" style="font-size:11px;margin-top:6px">说明：政治局常委几乎不会公开表达与习近平不同的个人观点，这里记录的是“分管什么、公开说过什么、在哪些议题上出场多”，不是推测的个人立场。标“大意”的是转述，不是原话。</div></div>';
+}
+function stanceMatrixHTML(){
+  var refs=Object.keys(STANCE);(S.overlay.stmts||[]).forEach(function(s){var r=stRef(s.pid);if(refs.indexOf(r)<0)refs.push(r);});
+  var keys=Object.keys(STOP);
+  var h='<section class="panel"><div class="panel-head"><h2 class="steel">议题反查：谁在管、谁在讲</h2><span class="sub">格子里的数字 = 收录的公开表态条数（基线 + 每日增量）· 点格子看原话 · 点人名看档案</span></div><table class="t" style="font-size:12.5px;text-align:center"><tr><th style="text-align:left;width:120px">人物</th>'+keys.map(function(k){return '<th style="text-align:center;color:'+STOP[k][1]+'">'+STOP[k][0]+'</th>';}).join('')+'</tr>';
+  refs.forEach(function(r){var qs=stQuotes(r),cnt={};qs.forEach(function(q){cnt[q[1]]=(cnt[q[1]]||0)+1;});var nm=xpName(r)||r;
+    h+='<tr><td style="text-align:left"><a href="#" data-xp="'+r+'">'+esc(nm)+'</a></td>'+keys.map(function(k){var n=cnt[k]||0;return '<td'+(n?' class="dd" data-stc="'+r+'|'+k+'" style="cursor:pointer;background:rgba('+STRGB[k]+','+Math.min(0.15+n*0.15,0.6)+')"':'')+'>'+(n?'<b>'+n+'</b>':'<span class="dim">·</span>')+'</td>';}).join('')+'</tr>';});
+  h+='</table><div class="note">读法：一行看一个人管哪几块；一列看一个议题由谁出面。比如“AI/算力”和“卡脖子”主要由丁薛祥出面，“对美”由何立峰出面，“台湾”由王沪宁定调——<b>出面的人就是这项工作的第一责任人</b>，他的下一次调研或讲话往往预示政策动向。</div></section>';
+  return h;
+}
+function bindStance(m){$$('[data-stc]',m).forEach(function(td){td.onclick=function(){var p=td.getAttribute('data-stc').split('|'),ref=p[0],k=p[1];var qs=stQuotes(ref).filter(function(q){return q[1]===k;});
+  openDrawer({kick:'议题反查 · '+STOP[k][0],title:(xpName(ref)||ref)+' 在“'+STOP[k][0]+'”上的公开表态',accent:'steel',html:'<ul style="padding-left:18px">'+qs.map(function(q){return '<li style="margin-bottom:8px"><span class="mono dim">'+esc(q[0])+'</span> “'+esc(q[2])+'”<br><span class="dim" style="font-size:12px">'+(q[4]?'<a href="'+esc(q[4])+'" target="_blank" rel="noopener">'+esc(q[3])+'</a>':esc(q[3]))+'</span></li>';}).join('')+'</ul><div style="margin-top:8px"><span class="chip btn" data-xp="'+ref+'">打开人物档案 ⤢</span></div>'});};});}
+
+/* =========================================================
    10. 路由 / 渲染 / 事件
    ========================================================= */
 function setTab(k){if(S.ui.tab!==k){S.ui.tab=k;save();renderMain();}$$('#tabs button').forEach(function(b){b.classList.toggle('on',b.getAttribute('data-tab')===k);});}
@@ -2467,7 +2530,7 @@ function renderMain(){
   var m=$('#main'),k=S.ui.tab;
   $$('#tabs button').forEach(function(b){b.classList.toggle('on',b.getAttribute('data-tab')===k);});
   if(k==='m1'){
-    m.innerHTML=renderM1();
+    m.innerHTML=renderM1()+stanceMatrixHTML();bindStance(m);
     $$('.tl-node',m).forEach(function(el){el.onclick=function(){openTL(el.getAttribute('data-tl'));};});
     $$('.pc',m).forEach(function(el){el.onclick=function(){openPerson(el.getAttribute('data-pid'));};});
     $$('[data-tf]',m).forEach(function(el){el.onclick=function(){S.ui.tigerFilter=el.getAttribute('data-tf');save();$$('[data-tf]',m).forEach(function(x){x.classList.toggle('on',x===el);});renderFeed();};});
