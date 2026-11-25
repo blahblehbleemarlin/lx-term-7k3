@@ -202,7 +202,7 @@ body.boss main svg{filter:grayscale(1)}
 <body>
 <header>
   <div class="topbar">
-    <div class="brand" id="brandTitle">宏观政治 × 全球半导体 情报终端<small id="syncLbl">BASELINE 2026-11-24 · v2 · FULL · 4.5</small></div>
+    <div class="brand" id="brandTitle">宏观政治 × 全球半导体 情报终端<small id="syncLbl">BASELINE 2026-11-24 · v2 · FULL · 4.6</small></div>
     <div class="spacer"></div>
     <div class="tools">
       <button id="btnNote" title="Shift+N">+ 快速记录</button><button id="btnWeekly">◷ 3分钟周报</button><button class="primary" id="btnPrompt">⧉ 复制今日更新指令</button><button id="btnImport">⇪ 导入增量 JSON</button><button class="ghost" id="btnGloss">[? 体制与级别图鉴]</button>
@@ -861,6 +861,7 @@ function buildPrompt(){
   '4. id 用 “YYYYMMDD-线-英文短词”，同一事件后续更新保持同一 id（我按 id 去重合并）。',
   '5. ai 线必须填 direction：widen=中美差距拉大 / narrow=缩小 / neutral=中性；其他线可省略。',
   '6. semi 线必须额外填写：actor（行动方，如 白宫/商务部/国会/司法部/国防部/北京/海关/发改委/英伟达/阿里/马来西亚）、move（policy=政策 / counter=对策规避）、dir（tighten=美方收紧 / loosen=美方放松 / bj-block=北京反卡 / bj-open=北京放行 / bj-acquire=北京暗线获取，如走私、规避、情报获取）、loophole（涉及的漏洞，如 子公司/云租用/转运走私/50%规则/香港缓冲仓，可空）；tw 线请在 tags 中标注所属方：pla / us / tw / jp。',
+  '12. 党和政府重要文件（全会公报、政治局会议通稿、《求是》文章、政府工作报告、中央经济工作会议）对“卡脖子/科技自立（chip）”“人工智能（ai）”“军力（mil）”有新提法时，写入 formulations，level 取 1 提及 / 2 部署 / 3 加速（加快、全面实施、全链条）/ 4 超常规（超常规措施、决定性突破）。',
   '11. 政治局常委、何立峰、张升民、陈一新等人有新的公开讲话或调研时，摘一句最能代表其议题立场的原话（不超过 30 字）写入 statements；pid 用人物 id（芯片博弈档案人物用 c:p-xxx），topic 取 mil|ai|chip|econ|tw|us|graft。',
   '7. 官员状态变化（被查、双开、晋升、免职）写入 memberUpdates；已有人物请沿用下列 id，新人物用拼音缩写新建 id。',
   '8. 公报/会议提法前后变化，在对应 item 中加 communiqueDiff 字段（A=旧原文，B=新原文，read=解读）。',
@@ -872,6 +873,7 @@ function buildPrompt(){
   '  "meta": {"syncDate": "'+today()+'", "note": "本次检索范围说明"},',
   '  "items": [{"id":"","date":"YYYY-MM-DD","line":"cn|semi|ai|tw|dip","title":"","explainer":"","noiseLevel":"L2|L3|L4","direction":"widen|narrow|neutral","actor":"","move":"policy|counter","dir":"tighten|loosen|bj-block|bj-open|bj-acquire","loophole":"","tags":[],"source":"https://...",',
   '             "communiqueDiff": {"name":"会议A → 会议B","a":"旧版出处","b":"新版出处","A":"旧原文","B":"新原文","read":"解读"} }],',
+  '  "formulations": [{"theme":"chip|ai|mil","doc":"文件名","date":"YYYY-MM-DD","level":1,"quote":"原文","url":"https://..."}],',
   '  "statements": [{"pid":"dxx","date":"YYYY-MM-DD","topic":"mil|ai|chip|econ|tw|us|graft","quote":"原话","source":"场合与媒体","url":"https://..."}],',
   '  "thermoUpdates": [{"id":"home|retail|fai|dev|job|cpi|gdp|ext","value":"","date":"YYYY-MM","light":"r|y|g","note":""}],',
   '  "tickerUpdates": [{"ticker":"NVDA|AMD|ASML|MU","asOf":"YYYY-MM-DD","revenue":"","yoy":"","guidance":"","margin":"","catalyst":"","risk":"","note":""}],',
@@ -911,6 +913,7 @@ function mergeIncoming(j){
   });
   (Array.isArray(j.communiqueDiff)?j.communiqueDiff:[]).forEach(function(d){if(d&&d.A!=null&&d.B!=null){addDiff(d);r.diff++;}});
   (j.tickerUpdates||[]).forEach(function(u){if(!u||!u.ticker)return;var T=String(u.ticker).toUpperCase();o.tickers[T]=Object.assign(o.tickers[T]||{},u,{ticker:T});(o.tickerHist[T]=o.tickerHist[T]||[]).push(Object.assign({importedAt:new Date().toISOString()},u));r.tick++;});
+  (j.formulations||[]).forEach(function(u){if(!u||!u.theme||!u.quote)return;o.fmls=o.fmls||[];if(o.fmls.some(function(x){return x.theme===u.theme&&x.quote===u.quote;}))return;o.fmls.push(u);r.fm=(r.fm||0)+1;});
   (j.statements||[]).forEach(function(u){if(!u||!u.pid||!u.quote)return;o.stmts=o.stmts||[];if(o.stmts.some(function(x){return x.pid===u.pid&&x.date===u.date&&x.quote===u.quote;}))return;o.stmts.push(u);r.st=(r.st||0)+1;});
   (j.thermoUpdates||[]).forEach(function(u){if(!u||!u.id)return;o.thermo=o.thermo||{};o.thermo[u.id]=Object.assign(o.thermo[u.id]||{},u);r.th=(r.th||0)+1;});
   (j.memberUpdates||[]).forEach(function(u){if(!u||!u.id){r.bad++;return;}o.members[u.id]=Object.assign(o.members[u.id]||{},u);r.mem++;});
@@ -936,7 +939,7 @@ function openImport(){
       }catch(e){res.innerHTML='<div class="box"><h4 class="red">✕ 解析失败</h4><p class="mono" style="font-size:12px">'+esc(e.message)+'</p><p class="dim">检查是否为合法 JSON（引号、逗号、括号）。</p></div>';}
     };}});
 }
-function updateSyncLbl(){$('#syncLbl').textContent='BASELINE '+BASELINE+' · SYNC '+(S.lastSync||BASELINE)+' · v2 · FULL 4.5';}
+function updateSyncLbl(){$('#syncLbl').textContent='BASELINE '+BASELINE+' · SYNC '+(S.lastSync||BASELINE)+' · v2 · FULL 4.6';}
 
 /* ---------- 快速记录 ---------- */
 function openQuickNote(edit){
@@ -2426,7 +2429,7 @@ TRK.a={n:'暗线',c:'#a371f7'};
 var CN_TEAM=[
  {k:'dir',n:'定方向',who:'政治局 · 中央科技委员会',tools:'定调“超常规攻关”、确定攻关清单',refs:['p:xjp','p:dxx'],
   parts:['<b>政治局：</b>根据官方发布的讲话记录，习近平在 2026 年 1 月的政治局会议上要求“采取超常规措施，加大重点领域关键核心技术攻关力度”，“尽快解决制约未来产业发展的‘卡脖子’问题”。这篇讲话 5 月 30 日才在《求是》全文发表。<br><br><b>中央科技委员会：</b>2023 年党和国家机构改革时成立的党中央决策议事协调机构，统筹国家科技战略。据报道由丁薛祥牵头。',
-   '<b>“超常规”是罕见的高级别用词。</b>党的文件用词有梯度：“加强”<“加快”<“超常规措施”。用到“超常规”，等于最高级别的动员令。<br><br><b>发表时机也是信号：</b>1 月的讲话，在 5 月北京特朗普峰会之后两周才公开。峰会刚握完手，就把“超常规攻关卡脖子”公开，等于对内表态：谈归谈，自主可控不变。',
+   '<b>“超常规”是罕见的高级别用词，最早出现在 2025 年 10 月的“十五五”规划建议里</b>（“采取超常规措施，全链条推动集成电路……取得决定性突破”），1 月讲话是重申。党的文件用词有梯度：“加强”<“加快”<“超常规措施”。用到“超常规”，等于最高级别的动员令。<br><br><b>发表时机也是信号：</b>1 月的讲话，在 5 月北京特朗普峰会之后两周才公开。峰会刚握完手，就把“超常规攻关卡脖子”公开，等于对内表态：谈归谈，自主可控不变。',
    '这一层不直接出招，但决定了下面四层的力度和预算。丁薛祥 2026 年 5 月视察北京及周边算力设施时说“算力是国家综合国力的重要体现”，这些设施属于全国 AI 算力网。',
    '《求是》发表哪篇旧讲话、什么时候发；中央经济工作会议对“科技自立自强”的排序。']},
  {k:'money',n:'出钱',who:'大基金 · 发改委 · 财政部 · 地方政府',tools:'国家集成电路产业投资基金、专项补贴、地方产业基金',refs:['p:lq'],
@@ -2523,6 +2526,65 @@ function bindStance(m){$$('[data-stc]',m).forEach(function(td){td.onclick=functi
   openDrawer({kick:'议题反查 · '+STOP[k][0],title:(xpName(ref)||ref)+' 在“'+STOP[k][0]+'”上的公开表态',accent:'steel',html:'<ul style="padding-left:18px">'+qs.map(function(q){return '<li style="margin-bottom:8px"><span class="mono dim">'+esc(q[0])+'</span> “'+esc(q[2])+'”<br><span class="dim" style="font-size:12px">'+(q[4]?'<a href="'+esc(q[4])+'" target="_blank" rel="noopener">'+esc(q[3])+'</a>':esc(q[3]))+'</span></li>';}).join('')+'</ul><div style="margin-top:8px"><span class="chip btn" data-xp="'+ref+'">打开人物档案 ⤢</span></div>'});};});}
 
 /* =========================================================
+   41. 提法热力图：军力 / AI / 卡脖子 × 关键文件
+   ========================================================= */
+var FM_LV=['未见','提及','部署','加速','超常规'];
+var FM_LVC=['transparent','rgba(91,143,214,.18)','rgba(91,143,214,.38)','rgba(217,164,65,.45)','rgba(200,30,43,.6)'];
+var FM_DOCS=[
+ ['d20','二十大报告','2022-10'],
+ ['d3p','三中全会《决定》','2024-07'],
+ ['d15','“十五五”规划建议（四中全会）','2025-10'],
+ ['dgw','2026 政府工作报告','2026-03'],
+ ['dxi','习近平讲话（2026）','2026'],
+ ['d5p','五中全会公报','2026-10']
+];
+var FM_ROWS=[['chip','卡脖子 / 科技自立'],['ai','人工智能'],['mil','军力']];
+// [主题, 文件, 等级0-4, 原话, 出处说明, 链接, 核验: 1=本次检索核对 0=基线待逐字复核]
+var FM=[
+ ['chip','d20',3,'坚决打赢关键核心技术攻坚战','二十大报告（科教兴国部分）','',0],
+ ['chip','d3p',3,'全链条推进技术攻关、成果应用（点名集成电路、工业母机等重点产业链）','三中全会《决定》','',0],
+ ['chip','d15',4,'采取超常规措施，全链条推动集成电路……关键核心技术攻关取得决定性突破','“十五五”规划建议（新华社）','https://www.news.cn/20251028/173fc0f611654fc899e337e8faad7595/c.html',1],
+ ['chip','dgw',3,'发挥新型举国体制优势，全链条推进关键核心技术攻关；集成电路列新兴支柱产业首位','2026 政府工作报告（据中国经营报等梳理）','https://finance.eastmoney.com/a/202603123669925145.html',1],
+ ['chip','dxi',4,'采取超常规措施，加大重点领域关键核心技术攻关力度','1 月政治局会议讲话，5-30《求是》发表','https://www.qstheory.cn/20260530/8fa0ec6956ee4bf2ade0e366ce29a722/c.html',1],
+ ['ai','d20',1,'构建新一代信息技术、人工智能、生物技术……一批新的增长引擎','二十大报告','',0],
+ ['ai','d3p',2,'建立人工智能安全监管制度','三中全会《决定》（国家安全部分）','',0],
+ ['ai','d15',3,'全面实施“人工智能+”行动……抢占人工智能产业应用制高点','“十五五”规划建议（新华社）','https://cpc.people.com.cn/n1/2025/1208/c461139-40619450.html',1],
+ ['ai','dgw',2,'国产大模型引领全球开源生态（年度回顾）','2026 政府工作报告','https://www.gov.cn/yaowen/liebiao/202603/content_7062625.htm',1],
+ ['ai','dxi',2,'召开会议研究 AI 等技术的军事意义，要求稳步推进部署（大意）','7 月会议，据《纽约时报》报道','',1],
+ ['mil','d20',3,'如期实现建军一百年奋斗目标，加快把人民军队建成世界一流军队','二十大报告','',0],
+ ['mil','d3p',2,'持续深化国防和军队改革（专章）','三中全会《决定》','',0],
+ ['mil','d15',2,'到二〇三五年实现……国防实力……大幅跃升','四中全会公报','https://global.hk01.com/即时中国/60287780/',1],
+ ['mil','dgw',1,'首艘国产电磁弹射型航母福建舰正式入列（年度回顾）','2026 政府工作报告','https://www.gov.cn/yaowen/liebiao/202603/content_7062625.htm',1],
+ ['mil','dxi',3,'军中绝不能有对党怀有二心之人','3-7 人大解放军和武警部队代表团（新华社）','https://www.cssn.cn/yw/202603/t20260308_5975497.shtml',1]
+];
+function fmCell(t,d){return FM.filter(function(x){return x[0]===t&&x[1]===d;})[0];}
+function fmExtra(t){return (S.overlay.fmls||[]).filter(function(x){return x.theme===t;}).sort(function(a,b){return a.date<b.date?1:-1;});}
+function heatHTML(){
+  var h='<section class="panel"><div class="panel-head"><h2 class="red">提法热力图：北京在三件事上“加码”到了哪一级</h2><span class="sub">颜色 = 用词力度：提及 → 部署（加强、推进）→ 加速（加快、全面实施、全链条）→ 超常规（超常规措施、决定性突破）· 点格子看原话</span></div>';
+  h+='<div style="display:flex;gap:6px;margin-bottom:8px;flex-wrap:wrap">'+FM_LV.map(function(n,i){return '<span class="chip" style="background:'+FM_LVC[i]+'">'+i+' '+n+'</span>';}).join('')+'<span class="chip">✓ 本次逐字核对</span><span class="chip">◌ 基线，待逐字复核</span></div>';
+  h+='<table class="t" style="font-size:12.5px;text-align:center;table-layout:fixed"><tr><th style="text-align:left;width:130px">主题</th>'+FM_DOCS.map(function(d){return '<th style="text-align:center">'+d[1]+'<div class="mono dim" style="font-size:10.5px;font-weight:400">'+d[2]+'</div></th>';}).join('')+'<th style="text-align:center;width:120px">最新增量</th></tr>';
+  FM_ROWS.forEach(function(r){
+    h+='<tr><td style="text-align:left"><b>'+r[1]+'</b></td>'+FM_DOCS.map(function(d){var c=fmCell(r[0],d[0]);if(!c)return '<td class="dim" style="font-size:11px">—</td>';return '<td class="dd" data-fm="'+r[0]+'|'+d[0]+'" style="cursor:pointer;background:'+FM_LVC[c[2]]+';height:46px"><b>'+FM_LV[c[2]]+'</b> <span class="dim">'+(c[6]?'✓':'◌')+'</span></td>';}).join('');
+    var ex=fmExtra(r[0])[0];h+=ex?'<td class="dd" data-fmx="'+r[0]+'" style="cursor:pointer;background:'+FM_LVC[Math.max(0,Math.min(4,+ex.level||0))]+'"><b>'+FM_LV[Math.max(0,Math.min(4,+ex.level||0))]+'</b><div class="mono dim" style="font-size:10.5px">'+esc(ex.date)+'</div></td>':'<td class="dim" style="font-size:11px">暂无</td>';
+    h+='</tr>';});
+  h+='</table>';
+  h+='<div class="grid2" style="margin-top:10px"><div class="box meat" style="margin:0"><h4>🔍 读图：三条曲线，三种性格</h4><ul style="font-size:12.5px">'+
+   '<li><b>卡脖子：一路加码到顶。</b>二十大“打赢攻坚战”→ 三中全会点名集成电路、提出“全链条”→ “十五五”建议首次把“超常规措施 + 决定性突破”组合在一起（官方学者称之为新提法）→ 政府工作报告把集成电路列为新兴支柱产业之首 → 习近平 1 月讲话重申“超常规”，峰会后才在《求是》公开。</li>'+
+   '<li><b>AI：从“清单里的一项”变成独立战略。</b>二十大里只是一串新兴产业中的一个词；“十五五”建议里“人工智能”出现 8 次（“十四五”建议只有 2 次），“十五五”规划纲要更达到约 30 次。</li>'+
+   '<li><b>军力：目标稳定，重心变了。</b>“建军一百年”的目标一直没变，但 2026 年的讲话重心明显转向政治忠诚和反腐（“绝不能有对党怀有二心之人”），说明军队当前的头号任务是整肃，而不是扩张表态。</li></ul></div>'+
+   '<div class="box" style="margin:0"><h4>怎么用这张图</h4><p style="font-size:12.5px">①<b>看升级词：</b>下一份文件里如果“人工智能”也出现“超常规”，说明 AI 被提到和芯片同等的动员级别。<br>②<b>看降级：</b>某个主题从“加速”退回“部署”，往往比升级更值得注意。<br>③<b>五中全会为什么是空白：</b>这次全会的主题是《关于持之以恒推进全面从严治党若干重大问题的决定》，公报没有把这三个主题作为重点——空白本身也是信息。<br>④<b>◌ 格子：</b>来自二十大报告和三中全会《决定》的基线摘录，我没有在本次逐字核对，引用前请核对原文。</p></div></div>';
+  var ex=(S.overlay.fmls||[]).slice().sort(function(a,b){return a.date<b.date?1:-1;});
+  if(ex.length)h+='<h3 style="margin-top:10px">增量提法记录</h3><ul style="font-size:12.5px">'+ex.slice(0,12).map(function(x){return '<li><span class="mono dim">'+esc(x.date)+'</span> <span class="chip">'+esc((FM_ROWS.filter(function(r){return r[0]===x.theme;})[0]||['',''])[1])+'</span> <span class="chip" style="background:'+FM_LVC[Math.max(0,Math.min(4,+x.level||0))]+'">'+FM_LV[Math.max(0,Math.min(4,+x.level||0))]+'</span> “'+esc(x.quote)+'” <span class="dim">— '+(x.url?'<a href="'+esc(x.url)+'" target="_blank" rel="noopener">'+esc(x.doc||'')+'</a>':esc(x.doc||''))+'</span></li>';}).join('')+'</ul>';
+  return h+'</section>';
+}
+function bindHeat(m){
+  $$('[data-fm]',m).forEach(function(td){td.onclick=function(){var p=td.getAttribute('data-fm').split('|'),c=fmCell(p[0],p[1]),d=FM_DOCS.filter(function(x){return x[0]===p[1];})[0],r=FM_ROWS.filter(function(x){return x[0]===p[0];})[0];
+    openDrawer({kick:'提法热力图 · '+r[1],title:d[1]+'（'+d[2]+'）：'+FM_LV[c[2]],accent:c[2]>=4?'red':'steel',html:'<div class="box"><p style="font-size:15px">“'+esc(c[3])+'”</p><p class="dim" style="font-size:12px">'+(c[5]?'<a href="'+esc(c[5])+'" target="_blank" rel="noopener">'+esc(c[4])+'</a>':esc(c[4]))+' · '+(c[6]?'✓ 本次已核对':'◌ 基线摘录，待逐字复核')+'</p></div>'+
+      '<div class="box"><h4>同一主题的前后对比</h4><ul style="font-size:12.5px">'+FM_DOCS.map(function(dd){var cc=fmCell(p[0],dd[0]);return '<li'+(dd[0]===p[1]?' style="font-weight:700"':'')+'><span class="mono dim">'+dd[2]+'</span> '+dd[1]+'：'+(cc?'<span class="chip" style="background:'+FM_LVC[cc[2]]+'">'+FM_LV[cc[2]]+'</span> “'+esc(cc[3])+'”':'<span class="dim">未见</span>')+'</li>';}).join('')+'</ul></div>'});};});
+  $$('[data-fmx]',m).forEach(function(td){td.onclick=function(){var ex=fmExtra(td.getAttribute('data-fmx'));openDrawer({kick:'提法热力图 · 增量',title:'最新增量提法',accent:'steel',html:'<ul>'+ex.map(function(x){return '<li style="margin-bottom:6px"><span class="mono dim">'+esc(x.date)+'</span> '+FM_LV[Math.max(0,Math.min(4,+x.level||0))]+' “'+esc(x.quote)+'” — '+esc(x.doc||'')+'</li>';}).join('')+'</ul>'});};});
+}
+
+/* =========================================================
    10. 路由 / 渲染 / 事件
    ========================================================= */
 function setTab(k){if(S.ui.tab!==k){S.ui.tab=k;save();renderMain();}$$('#tabs button').forEach(function(b){b.classList.toggle('on',b.getAttribute('data-tab')===k);});}
@@ -2530,7 +2592,7 @@ function renderMain(){
   var m=$('#main'),k=S.ui.tab;
   $$('#tabs button').forEach(function(b){b.classList.toggle('on',b.getAttribute('data-tab')===k);});
   if(k==='m1'){
-    m.innerHTML=renderM1()+stanceMatrixHTML();bindStance(m);
+    m.innerHTML=renderM1()+heatHTML()+stanceMatrixHTML();bindStance(m);bindHeat(m);
     $$('.tl-node',m).forEach(function(el){el.onclick=function(){openTL(el.getAttribute('data-tl'));};});
     $$('.pc',m).forEach(function(el){el.onclick=function(){openPerson(el.getAttribute('data-pid'));};});
     $$('[data-tf]',m).forEach(function(el){el.onclick=function(){S.ui.tigerFilter=el.getAttribute('data-tf');save();$$('[data-tf]',m).forEach(function(x){x.classList.toggle('on',x===el);});renderFeed();};});
