@@ -202,7 +202,7 @@ body.boss main svg{filter:grayscale(1)}
 <body>
 <header>
   <div class="topbar">
-    <div class="brand" id="brandTitle">宏观政治 × 全球半导体 情报终端<small id="syncLbl">BASELINE 2026-11-24 · v2 · FULL · 4.3</small></div>
+    <div class="brand" id="brandTitle">宏观政治 × 全球半导体 情报终端<small id="syncLbl">BASELINE 2026-11-24 · v2 · FULL · 4.4</small></div>
     <div class="spacer"></div>
     <div class="tools">
       <button id="btnNote" title="Shift+N">+ 快速记录</button><button id="btnWeekly">◷ 3分钟周报</button><button class="primary" id="btnPrompt">⧉ 复制今日更新指令</button><button id="btnImport">⇪ 导入增量 JSON</button><button class="ghost" id="btnGloss">[? 体制与级别图鉴]</button>
@@ -859,7 +859,7 @@ function buildPrompt(){
   '3. 每条必须附可访问的 source 链接；无法核实的事件不要写，不要编造数字。',
   '4. id 用 “YYYYMMDD-线-英文短词”，同一事件后续更新保持同一 id（我按 id 去重合并）。',
   '5. ai 线必须填 direction：widen=中美差距拉大 / narrow=缩小 / neutral=中性；其他线可省略。',
-  '6. semi 线必须额外填写：actor（行动方，如 白宫/商务部/国会/司法部/国防部/北京/海关/发改委/英伟达/阿里/马来西亚）、move（policy=政策 / counter=对策规避）、dir（tighten=美方收紧 / loosen=美方放松 / bj-block=北京反卡 / bj-open=北京放行）、loophole（涉及的漏洞，如 子公司/云租用/转运走私/50%规则/香港缓冲仓，可空）；tw 线请在 tags 中标注所属方：pla / us / tw / jp。',
+  '6. semi 线必须额外填写：actor（行动方，如 白宫/商务部/国会/司法部/国防部/北京/海关/发改委/英伟达/阿里/马来西亚）、move（policy=政策 / counter=对策规避）、dir（tighten=美方收紧 / loosen=美方放松 / bj-block=北京反卡 / bj-open=北京放行 / bj-acquire=北京暗线获取，如走私、规避、情报获取）、loophole（涉及的漏洞，如 子公司/云租用/转运走私/50%规则/香港缓冲仓，可空）；tw 线请在 tags 中标注所属方：pla / us / tw / jp。',
   '7. 官员状态变化（被查、双开、晋升、免职）写入 memberUpdates；已有人物请沿用下列 id，新人物用拼音缩写新建 id。',
   '8. 公报/会议提法前后变化，在对应 item 中加 communiqueDiff 字段（A=旧原文，B=新原文，read=解读）。',
   '9. 四巨头财报或指引有更新时写入 tickerUpdates。',
@@ -868,7 +868,7 @@ function buildPrompt(){
   'JSON Schema：',
   '{',
   '  "meta": {"syncDate": "'+today()+'", "note": "本次检索范围说明"},',
-  '  "items": [{"id":"","date":"YYYY-MM-DD","line":"cn|semi|ai|tw|dip","title":"","explainer":"","noiseLevel":"L2|L3|L4","direction":"widen|narrow|neutral","actor":"","move":"policy|counter","dir":"tighten|loosen|bj-block|bj-open","loophole":"","tags":[],"source":"https://...",',
+  '  "items": [{"id":"","date":"YYYY-MM-DD","line":"cn|semi|ai|tw|dip","title":"","explainer":"","noiseLevel":"L2|L3|L4","direction":"widen|narrow|neutral","actor":"","move":"policy|counter","dir":"tighten|loosen|bj-block|bj-open|bj-acquire","loophole":"","tags":[],"source":"https://...",',
   '             "communiqueDiff": {"name":"会议A → 会议B","a":"旧版出处","b":"新版出处","A":"旧原文","B":"新原文","read":"解读"} }],',
   '  "thermoUpdates": [{"id":"home|retail|fai|dev|job|cpi|gdp|ext","value":"","date":"YYYY-MM","light":"r|y|g","note":""}],',
   '  "tickerUpdates": [{"ticker":"NVDA|AMD|ASML|MU","asOf":"YYYY-MM-DD","revenue":"","yoy":"","guidance":"","margin":"","catalyst":"","risk":"","note":""}],',
@@ -932,7 +932,7 @@ function openImport(){
       }catch(e){res.innerHTML='<div class="box"><h4 class="red">✕ 解析失败</h4><p class="mono" style="font-size:12px">'+esc(e.message)+'</p><p class="dim">检查是否为合法 JSON（引号、逗号、括号）。</p></div>';}
     };}});
 }
-function updateSyncLbl(){$('#syncLbl').textContent='BASELINE '+BASELINE+' · SYNC '+(S.lastSync||BASELINE)+' · v2 · FULL 4.3';}
+function updateSyncLbl(){$('#syncLbl').textContent='BASELINE '+BASELINE+' · SYNC '+(S.lastSync||BASELINE)+' · v2 · FULL 4.4';}
 
 /* ---------- 快速记录 ---------- */
 function openQuickNote(edit){
@@ -1018,7 +1018,7 @@ function openWeekly(){
   var h='<div class="note">统计窗口：<span class="mono">'+from+' → '+today()+'</span>。数据越多，周报越有用——每天导入一次增量即可。</div>';
   h+='<div class="box meat"><h4>① 本周最高价值硬消息（L3/L4）</h4>'+(hot.length?'<ul>'+hot.slice(0,8).map(function(i){return '<li><span class="chip'+(i.noiseLevel==='L4'?' red':' amber')+'">'+i.noiseLevel+'</span><span class="chip">'+(LINES[i.line]||{}).n+'</span> <b>'+esc(i.title)+'</b><div class="dim" style="font-size:12px">'+esc(i.explainer)+'</div></li>';}).join('')+'</ul>':'<p class="dim">本周尚无导入的 L3/L4 消息。</p>')+'</div>';
   h+='<div class="box"><h4>② 秦城风险跳涨榜 Top3 <span class="dim">（按默认权重，对比 '+(base||'—')+'）</span></h4>'+(jumps.length?'<ul>'+jumps.map(function(j){return '<li><b>'+esc(P[j.id]?P[j.id].name:j.id)+'</b> 现 '+j.now.toFixed(1)+' <span class="'+(j.d>0?'red':'dim')+'">'+(j.d>0?'▲ +':'')+j.d+'</span></li>';}).join('')+'</ul>':'<p class="dim">历史快照不足（终端每天打开时自动记录一次），7 天后可看到跳涨榜。当前 Top3：'+radarRank().slice(0,3).map(function(x){return esc(P[x.id].name)+' '+x.s;}).join('、')+'</p>')+'</div>';
-  h+='<div class="box"><h4 class="steel">③ 芯片博弈本周动作（谁出招、谁接招）</h4>'+(semi.length?'<ul>'+semi.slice(0,8).map(function(i){var D=DIRN[i.dir==='tighten'?'t':i.dir==='loosen'?'l':i.dir==='bj-block'?'b':i.dir==='bj-open'?'o':'']||{n:'—'};return '<li><span class="chip">'+esc(i.actor||'?')+'</span><span class="chip">'+D.n+'</span> '+esc(i.title)+'</li>';}).join('')+'</ul>':'<p class="dim">本周暂无芯片博弈线导入。</p>')+'</div>';
+  h+='<div class="box"><h4 class="steel">③ 芯片博弈本周动作（谁出招、谁接招）</h4>'+(semi.length?'<ul>'+semi.slice(0,8).map(function(i){var D=DIRN[i.dir==='tighten'?'t':i.dir==='loosen'?'l':i.dir==='bj-block'?'b':i.dir==='bj-open'?'o':i.dir==='bj-acquire'?'a':'']||{n:'—'};return '<li><span class="chip">'+esc(i.actor||'?')+'</span><span class="chip">'+D.n+'</span> '+esc(i.title)+'</li>';}).join('')+'</ul>':'<p class="dim">本周暂无芯片博弈线导入。</p>')+'</div>';
   if(wires.length)h+='<div class="box meat"><h4>⚠ 本周被触发的证伪绊索</h4><ul>'+wires.map(function(k){return '<li>'+esc(wireLabel(k))+'</li>';}).join('')+'</ul></div>';
   h+='<div class="box"><h4>④ 我本周的笔记（'+notes.length+'）</h4>'+(notes.length?'<ul>'+notes.slice(-6).map(function(n){return '<li>'+esc(n.text.slice(0,80))+'</li>';}).join('')+'</ul>':'<p class="dim">—</p>')+'</div>';
   h+='<button id="wkCopy">⧉ 复制周报纯文本</button>';
@@ -1708,19 +1708,19 @@ function cgGateHTML(){
   return h+'</table>';
 }
 function cgWin(){return S.ui.cgWin==null?6:+S.ui.cgWin;}
-function cgAllEvents(){return CG_EVENTS.map(function(e){return {d:e[0],dir:e[2]};}).concat(S.overlay.items.filter(function(i){return i.line==='semi'&&i.dir;}).map(function(i){return {d:i.date,dir:i.dir==='tighten'?'t':i.dir==='loosen'?'l':i.dir==='bj-block'?'b':i.dir==='bj-open'?'o':''};}));}
+function cgAllEvents(){return CG_EVENTS.map(function(e){return {d:e[0],dir:e[2]};}).concat(S.overlay.items.filter(function(i){return i.line==='semi'&&i.dir;}).map(function(i){return {d:i.date,dir:i.dir==='tighten'?'t':i.dir==='loosen'?'l':i.dir==='bj-block'?'b':i.dir==='bj-open'?'o':i.dir==='bj-acquire'?'a':''};}));}
 function cgYearly(){
-  var ys={},cur=new Date().getFullYear();for(var y=2022;y<=cur;y++)ys[y]={us:0,bj:0,usT:0,usL:0,bjB:0,bjO:0};
-  cgAllEvents().forEach(function(e){var y=+nd(e.d).slice(0,4);if(!ys[y])return;if(e.dir==='t'){ys[y].us--;ys[y].usT++;}else if(e.dir==='l'){ys[y].us++;ys[y].usL++;}else if(e.dir==='b'){ys[y].bj--;ys[y].bjB++;}else if(e.dir==='o'){ys[y].bj++;ys[y].bjO++;}});
+  var ys={},cur=new Date().getFullYear();for(var y=2022;y<=cur;y++)ys[y]={us:0,bj:0,usT:0,usL:0,bjB:0,bjO:0,bjA:0};
+  cgAllEvents().forEach(function(e){var y=+nd(e.d).slice(0,4);if(!ys[y])return;if(e.dir==='t'){ys[y].us--;ys[y].usT++;}else if(e.dir==='l'){ys[y].us++;ys[y].usL++;}else if(e.dir==='b'){ys[y].bj--;ys[y].bjB++;}else if(e.dir==='o'){ys[y].bj++;ys[y].bjO++;}else if(e.dir==='a'){ys[y].bjA++;}});
   var keys=Object.keys(ys),W=600,H=40+keys.length*44,mid=300,sc=22;
   var s='<svg viewBox="0 0 '+W+' '+H+'" width="100%" style="max-width:640px;display:block"><line x1="'+mid+'" x2="'+mid+'" y1="16" y2="'+(H-6)+'" stroke="var(--line2)"/><text x="'+(mid-8)+'" y="12" text-anchor="end" font-size="10" fill="var(--tx3)">← 收紧 / 反卡</text><text x="'+(mid+8)+'" y="12" font-size="10" fill="var(--tx3)">放松 / 放行 →</text>';
   keys.forEach(function(y,i){var r=ys[y],y0=24+i*44;function bar(v,yy,cN,cP,lab,det){var w=Math.min(Math.abs(v)*sc,mid-70),x=v<0?mid-w:mid;return '<rect x="'+x+'" y="'+yy+'" width="'+Math.max(w,1)+'" height="14" fill="'+(v<0?cN:cP)+'" opacity=".85"/><text x="'+(v<0?x-4:x+w+4)+'" y="'+(yy+11)+'" text-anchor="'+(v<0?'end':'start')+'" font-size="10" fill="var(--tx2)">'+lab+' '+(v>0?'+':'')+v+' <tspan fill="var(--tx3)">('+det+')</tspan></text>';}
-    s+='<text x="8" y="'+(y0+18)+'" font-size="12" font-weight="700" fill="var(--tx)">'+y+'</text>'+bar(r.us,y0,'var(--red)','var(--steel)','美','紧'+r.usT+'/松'+r.usL)+bar(r.bj,y0+17,'var(--amber)','#5fa47e','京','卡'+r.bjB+'/放'+r.bjO);});
+    s+='<text x="8" y="'+(y0+18)+'" font-size="12" font-weight="700" fill="var(--tx)">'+y+'</text>'+bar(r.us,y0,'var(--red)','var(--steel)','美','紧'+r.usT+'/松'+r.usL)+bar(r.bj,y0+17,'var(--amber)','#5fa47e','京','卡'+r.bjB+'/放'+r.bjO+(r.bjA?'/暗'+r.bjA:''));});
   return s+'</svg>';
 }
 function cgPendulum(){
   var win=cgWin(),from=win?daysAgo(Math.round(win*30.5)):'0000-00-00',us=0,bj=0,n=0;
-  var evs=CG_EVENTS.map(function(e){return {d:e[0],dir:e[2]};}).concat(S.overlay.items.filter(function(i){return i.line==='semi'&&i.dir;}).map(function(i){return {d:i.date,dir:i.dir==='tighten'?'t':i.dir==='loosen'?'l':i.dir==='bj-block'?'b':i.dir==='bj-open'?'o':''};}));
+  var evs=CG_EVENTS.map(function(e){return {d:e[0],dir:e[2]};}).concat(S.overlay.items.filter(function(i){return i.line==='semi'&&i.dir;}).map(function(i){return {d:i.date,dir:i.dir==='tighten'?'t':i.dir==='loosen'?'l':i.dir==='bj-block'?'b':i.dir==='bj-open'?'o':i.dir==='bj-acquire'?'a':''};}));
   evs.forEach(function(e){if(nd(e.d)<from)return;n++;if(e.dir==='t')us--;else if(e.dir==='l')us++;else if(e.dir==='b')bj--;else if(e.dir==='o')bj++;});
   var maxA=Math.max(5,Math.round(n*0.45));
   function gauge(v,lbl,cL,cR,tL,tR){var ang=Math.max(-70,Math.min(70,v/maxA*70));
@@ -1744,7 +1744,7 @@ function renderM2(){
   h+='<section class="panel"><div class="panel-head"><h2>④ 猫鼠账本：上有政策，下有对策</h2><span class="sub">漏洞开了多久 = 执法有多弱；点任意一行看门道</span></div><table class="t"><tr><th>对策 / 漏洞</th><th>开启</th><th>补丁</th><th>窗口</th><th>规模线索</th><th>现状</th></tr>'+
    CG_LEDGER.map(function(r,i){var c=r.st==='已补'?'steel':r.st==='刚补'?'amber':'red';return '<tr class="dd" data-ledger="'+i+'"><td><b>'+esc(r.n)+'</b> <span class="dim">⤢</span></td><td class="mono">'+esc(r.open)+'</td><td class="mono">'+esc(r.fix)+'</td><td>'+(r.m?'<div class="bar" style="width:'+Math.min(100,r.m*7)+'px;display:inline-block;vertical-align:middle"><i style="width:100%"></i></div> <span class="mono">'+r.m+' 个月</span>':'<span class="dim">—</span>')+'</td><td class="muted">'+esc(r.est)+'</td><td><span class="chip '+c+'">'+esc(r.st)+'</span></td></tr>';}).join('')+'</table></section>';
   // 时间轴
-  var imp=S.overlay.items.filter(function(i){return i.line==='semi';}).map(function(i){var d=i.dir==='tighten'?'t':i.dir==='loosen'?'l':i.dir==='bj-block'?'b':i.dir==='bj-open'?'o':'';return [i.date,i.actor||'增量',d,i.title,i.explainer,true,i.id];});
+  var imp=S.overlay.items.filter(function(i){return i.line==='semi';}).map(function(i){var d=i.dir==='tighten'?'t':i.dir==='loosen'?'l':i.dir==='bj-block'?'b':i.dir==='bj-open'?'o':i.dir==='bj-acquire'?'a':'';return [i.date,i.actor||'增量',d,i.title,i.explainer,true,i.id];});
   var all=CG_EVENTS.map(function(e,i){return e.concat([false,'e'+i]);}).concat(imp).sort(function(a,b){return nd(a[0])<nd(b[0])?1:-1;});
   h+='<section class="panel"><div class="panel-head"><h2>⑤ 政策时间轴（2022–2026）</h2><span class="sub">'+Object.keys(DIRN).map(function(k){return '<span class="chip" style="border-color:'+DIRN[k].c+';color:'+DIRN[k].c+'">'+DIRN[k].n+'</span>';}).join('')+' · 标“增量”的来自每日导入</span></div><div class="feed" style="max-height:460px">'+
    all.map(function(e){var D=DIRN[e[2]]||{n:'中性',c:'var(--tx3)'};return '<div class="fi dd" data-cge="'+esc(e[6])+'"><div class="dt">'+esc(e[0])+'</div><div><span class="chip" style="border-color:'+D.c+';color:'+D.c+'">'+D.n+'</span><span class="chip">'+esc(e[1])+'</span>'+(e[5]?'<span class="chip steel">增量</span>':'')+' <span class="nm">'+esc(e[3])+'</span><div class="ds">'+esc(e[4])+'</div></div></div>';}).join('')+'</div></section>';
@@ -2383,6 +2383,83 @@ function bindTh(m){
 }
 
 /* =========================================================
+   38. ③ AI × 核威慑
+   ========================================================= */
+var NUKE_CHAIN=[
+ ['美国芯片优势','先进芯片和算力领先，AI 更快进入军事体系'],
+ ['AI 侦察与打击','更快发现、追踪、摧毁机动导弹和发射井'],
+ ['北京的恐惧','遭到首次打击后，可能没剩足够的导弹反击'],
+ ['扩充核武库','约 620 枚 → 2030 年约 1000 枚；约 320 个发射井；潜射导弹'],
+ ['拒绝军控','深圳峰会只谈原则：“核战争打不赢”，无时间表'],
+ ['芯片更难谈','出口管制在北京眼里从经济问题变成核生存问题']
+];
+var NUKE_WATCH=[
+ ['中美是否重启 AI 与核指挥系统的磋商','2024-11 利马 APEC：习近平与拜登同意在核武器使用决定上保持人类控制；此后没有正式磋商。2026-11 深圳三边峰会也没有提到 AI 与核武器。','一旦宣布专门对话（哪怕是二轨），说明北京认为“先谈规则”比“先追平”划算。'],
+ ['美国科学家联合会（FAS）对中国核弹头的年度估计','最新约 620 枚（陆基、潜射、轰炸机）；普遍预测 2030 年约 1000 枚。美、俄各自部署约 1800 枚，另有数千枚储备。','增速如果明显快于预测，说明“AI 恐惧”正在转化为实际扩军。'],
+ ['五角大楼《中国军力报告》','通常年底前后发布；2026 年版待发布。','看三件事：弹头数量估计、发射井装填情况、是否首次专门评估解放军在核指挥系统中使用 AI。']
+];
+function nukeHTML(){
+  return '<section class="panel"><div class="panel-head"><h2 class="red">AI × 核威慑：芯片管制为什么变成了核问题</h2><span class="sub">点标题看完整拆解 · 来源：《纽约时报》2026-11 对 100 多篇中国军方与民间研究的梳理</span><div class="right"><button class="ghost" id="nukeOpen">⤢ 展开拆解</button></div></div>'+
+   '<div style="display:flex;flex-wrap:wrap;align-items:stretch;gap:4px">'+NUKE_CHAIN.map(function(c,i){return '<div class="box" style="margin:0;flex:1;min-width:140px;'+(i>=3?'border-color:var(--red)':'')+'"><div class="mono dim" style="font-size:10.5px">'+(i+1)+'</div><b style="font-size:13px">'+c[0]+'</b><div style="font-size:11.5px;margin-top:3px" class="muted">'+c[1]+'</div></div>'+(i<NUKE_CHAIN.length-1?'<div style="align-self:center;color:var(--tx3)">→</div>':'');}).join('')+'</div>'+
+   '<h3 style="margin-top:12px">三个“不撒谎”的验证指标</h3><table class="t" style="font-size:12.5px"><tr><th style="width:220px">指标</th><th>目前状态</th><th style="width:300px">怎么读</th></tr>'+NUKE_WATCH.map(function(w){return '<tr><td><b>'+w[0]+'</b></td><td>'+w[1]+'</td><td class="muted">'+w[2]+'</td></tr>';}).join('')+'</table>'+
+   '<div class="note">打折扣：军方研究不等于决策层立场，军事院校论文有“渲染威胁、争取资源”的动机（美国国防圈也一样）；“100 多篇”是报道方自己选的。</div></section>';
+}
+function openNuke(){
+  openDeep({kick:'AI × NUCLEAR DETERRENCE',title:'AI 会不会削弱中国的核报复能力',accent:'red',labels:['北京在担心什么','拆开看','双方都在加码','打折扣与盯什么'],parts:[
+   '据《纽约时报》梳理，中国军方研究人员担心：美国把 AI 用于侦察、目标选择和决策，可能让美军更容易发现并摧毁中国的核导弹，从而削弱中国“挨打之后还能反击”的能力——这是中国核威慑的根基。军事科学院研究人员在一篇综述中认为，美国可能把核决策流程从传统的 15–30 分钟压缩到 90 秒以内。<br><br><b>注意：</b>“90 秒”是中方研究人员对美国的判断，反映的是北京的担忧，不是美方已证实的事实。',
+   '<b>为什么是芯片：</b>新美国安全中心的研究员认为，美国在先进芯片制造上的优势，加剧了中国对“美国能更快把 AI 融入军事体系”的担心。这就把 ② 芯片博弈和核问题连了起来：<b>在北京看来，算力差距 = 核生存能力差距。</b><br><br><b>历史记忆：</b>中国军官研究过朝鲜战争和 1950 年代台海危机——当时美国暗示可能对还没有核武器的中国使用原子弹。这段历史是北京坚持“确保报复能力”的心理根源。<br><br><b>结果：</b>北京的选择是扩军而不是军控——更多弹头、更多发射井（让对手猜不出哪些井里有导弹）、潜艇发射（更难被发现）。7 月中国从潜艇试射远程导弹。',
+   '这不是单向的恐惧。中国火箭军的研究显示，他们也在用强化学习训练高超音速滑翔飞行器躲避导弹防御（模拟场景之一是阿拉斯加周边），以及用 AI 帮助弹道导弹在机动规避后重回航线。7 月习近平召开会议研究 AI 等技术的军事意义，要求稳步推进部署。<br><br>这是典型的<b>安全困境</b>：你用 AI 找我的导弹，我用 AI 让导弹更难找、更难拦——双方都觉得自己是在防御。<br><br>解放军内部也有警告声音：国防科技大学和军事科学院的研究人员认为，AI 放大的错误信息会带来巨大的决策风险，是 AI 深度用于指挥控制的核心障碍。',
+   '<b>打折扣：</b>①军方研究不等于决策层立场；②军事院校有渲染威胁的动机；③报道所选的研究是报道方自己挑的。<br><br><b>盯什么：</b>本页上方三个验证指标；另外看 12 月迈阿密 G20 是否出现任何关于“AI 不进入核指挥”的表述，以及 ② 芯片博弈里北京对高端算力的态度是否更强硬。'],
+   meta:'<div style="margin-bottom:6px">'+xpChips(['p:xjp','c:p-trump'])+'</div>'});
+}
+
+/* =========================================================
+   39. ② 中方国家队作战图 + “暗线获取”方向
+   ========================================================= */
+DIRN.a={n:'北京暗线获取',c:'#a371f7'};
+TRK.a={n:'暗线',c:'#a371f7'};
+var CN_TEAM=[
+ {k:'dir',n:'定方向',who:'政治局 · 中央科技委员会',tools:'定调“超常规攻关”、确定攻关清单',refs:['p:xjp','p:dxx'],
+  parts:['<b>政治局：</b>根据官方发布的讲话记录，习近平在 2026 年 1 月的政治局会议上要求“采取超常规措施，加大重点领域关键核心技术攻关力度”，“尽快解决制约未来产业发展的‘卡脖子’问题”。这篇讲话 5 月 30 日才在《求是》全文发表。<br><br><b>中央科技委员会：</b>2023 年党和国家机构改革时成立的党中央决策议事协调机构，统筹国家科技战略。据报道由丁薛祥牵头。',
+   '<b>“超常规”是罕见的高级别用词。</b>党的文件用词有梯度：“加强”<“加快”<“超常规措施”。用到“超常规”，等于最高级别的动员令。<br><br><b>发表时机也是信号：</b>1 月的讲话，在 5 月北京特朗普峰会之后两周才公开。峰会刚握完手，就把“超常规攻关卡脖子”公开，等于对内表态：谈归谈，自主可控不变。',
+   '这一层不直接出招，但决定了下面四层的力度和预算。丁薛祥 2026 年 5 月视察北京及周边算力设施时说“算力是国家综合国力的重要体现”，这些设施属于全国 AI 算力网。',
+   '《求是》发表哪篇旧讲话、什么时候发；中央经济工作会议对“科技自立自强”的排序。']},
+ {k:'money',n:'出钱',who:'大基金 · 发改委 · 财政部 · 地方政府',tools:'国家集成电路产业投资基金、专项补贴、地方产业基金',refs:['p:lq'],
+  parts:['国家集成电路产业投资基金（“大基金”）是主要的出资工具，2024 年成立的三期注册资本约 3440 亿元，比前两期更大。地方政府也设有大量配套基金。',
+   '大基金一期、二期曾因腐败案受挫（多名高管被查），三期更强调投向“卡脖子”环节，如光刻、设备、材料、HBM。<b>钱能解决产能，但解决不了 EUV 光刻机这类“买不到也造不出”的问题。</b>',
+   '资金的方向就是北京眼中的短板。三期重仓哪里，哪里就是下一轮攻关重点。',
+   '大基金三期的投资项目公告；长鑫、中芯国际、华为供应链企业的融资和上市。']},
+ {k:'rule',n:'出规则（明线反制）',who:'商务部 · 海关 · 网信办 · 市场监管总局',tools:'出口管制、不可靠实体清单、网络安全审查、反垄断调查、限制采购',refs:[],
+  parts:['这是北京公开亮出来的“反卡”工具：①商务部对镓、锗、石墨、稀土等关键矿产实施出口管制；②不可靠实体清单；③网信办对美光做网络安全审查（2023 年认定其产品存在安全风险，限制关键基础设施采购）；④据报道，监管部门要求企业停止或减少采购英伟达 H20 等特供芯片；⑤据报道，海关加强对英伟达芯片进口的检查。',
+   '<b>北京的反制有两个目的，经常互相矛盾：</b>一是对美施压、换取谈判筹码（稀土最有效）；二是逼国内企业用国产芯片（限制采购 H20）。前者希望美国开门，后者却是自己关门——这就是“要算力 vs 保国产”的拉锯。',
+   '在 ② 的摆锤里，这一层的动作记作“北京反卡/反制”或“北京放行”。',
+   '商务部和海关公告；稀土出口许可的审批速度（最直接的松紧信号）。']},
+ {k:'dark',n:'暗线获取',who:'国家安全部（据报道）',tools:'“反封锁”工作组、协助获取先进芯片、走私渠道',refs:['c:p-chenyixin'],dark:true,
+  parts:['据《纽约时报》援引多名外国官员（2026-11），国家安全部部长陈一新成立了一个工作组领导这项工作，直接向他汇报。任务包括协助中国开展“反封锁”，突破美国及其盟友的出口管制，帮助中国企业获取先进芯片并走私入境。<br><br><b>这条信息北京不可能证实，本终端标记为“据外媒报道”。</b>',
+   '<b>为什么这条最值得追：</b>如果属实，芯片走私就从“商人逐利”变成了“国家行动”。这会改变美方的应对：<br>①司法部的走私起诉书可能开始点名国家背景；<br>②商务部可能以“与国安部有关联”为由把中间商列入实体清单；<br>③马来西亚、新加坡、泰国等中转地的执法压力会上升。<br><br>这正是“上有政策，下有对策”最隐秘的那一层。',
+   '在 ② 的摆锤里，新增第五种方向“北京暗线获取”（紫色）。它不计入北京摆锤的“卡/放”，因为它不改变北京的公开立场，只改变芯片实际能不能进来。',
+   '①美国司法部走私起诉书中是否提及国家安全部或国家背景；②实体清单的列入理由；③国家安全部微信公众号的发文（它经常公开间谍案，发什么、什么时候发，本身就是信号）；④英伟达等公司对“流向不明”的表态。']},
+ {k:'do',n:'落地',who:'工信部 · 国资委 · 华为 · 中芯国际 · 长鑫 · 寒武纪',tools:'国产替代目录、政府和国企采购、产能建设',refs:[],
+  parts:['真正把芯片造出来、用起来的一层：华为昇腾、中芯国际先进制程、长鑫 HBM、寒武纪等。工信部和国资委通过采购目录、国企采购要求推动国产替代。',
+   '这一层的成绩单就是 ③ 页的“六维打分卡”：制程、HBM、软件生态。北京的五层体系是否有效，最终看这里的数字。',
+   '国产替代越成功，北京对放行美国芯片的兴趣就越低，“反卡”和“放行”的天平就越往“反卡”倾斜。',
+   '国产 AI 芯片在大厂训练集群中的占比；华为昇腾出货量；中芯国际先进制程产能。']}
+];
+function cnTeamHTML(){
+  return '<section class="panel"><div class="panel-head"><h2 class="amber">中方国家队作战图：北京怎么调动整套体制打“卡脖子”</h2><span class="sub">不用记部委名字，只要记每一层干什么 · 点任一层 → 抽屉拆解</span></div>'+
+   '<div style="display:flex;flex-direction:column;gap:6px">'+CN_TEAM.map(function(t,i){return '<div class="pc dd" data-cnt="'+t.k+'" style="display:grid;grid-template-columns:110px 1fr 1.3fr auto;gap:10px;align-items:center;border-left-color:'+(t.dark?'#a371f7':'var(--amber)')+(t.dark?';background:rgba(163,113,247,.06)':'')+'"><div><span class="mono dim" style="font-size:11px">L'+(i+1)+'</span> <b style="color:'+(t.dark?'#a371f7':'var(--amber)')+'">'+t.n+'</b></div><div style="font-size:12.5px">'+esc(t.who)+'</div><div class="muted" style="font-size:12px">'+esc(t.tools)+'</div><div>'+(t.refs.length?xpChips(t.refs):'')+' <span class="dim">⤢</span></div></div>';}).join('')+'</div>'+
+   '<div class="note">读法：L1–L3 和 L5 是“明线”，北京公开做、公开说；L4 是“暗线”，只能从美方执法和外媒报道里间接看到。美方的行动方见上方角色棋盘。</div></section>';
+}
+function bindCnTeam(m){$$('[data-cnt]',m).forEach(function(el){el.onclick=el.ondblclick=function(e){if(e.target.closest('[data-xp]'))return;var t=CN_TEAM.filter(function(x){return x.k===el.getAttribute('data-cnt');})[0];openDeep({kick:'中方国家队 · L'+(CN_TEAM.indexOf(t)+1),title:t.n+'：'+t.who,accent:t.dark?'red':'amber',labels:['已知事实','拆开看','和摆锤/记分的关系','盯什么指标'],parts:t.parts,meta:t.refs.length?'<div style="margin-bottom:6px">'+xpChips(t.refs)+'</div>':''});};});}
+
+CG_PEOPLE.push({id:'p-chenyixin',side:'cn',zh:'陈一新',en:'Chen Yixin',dept:'国家安全部部长 · 中央委员',job:'主管国家安全部，负责情报、反间谍。据外媒报道，他领导一个“反封锁”工作组，协助突破美国芯片出口管制。',
+ track:[['2000s','n','在浙江任职期间成为习近平的下属（习时任浙江省委书记），后任温州市委书记。属于“之江新军”。'],['2017','n','任武汉市委书记。'],['2018','n','任中央政法委秘书长，此后主导政法队伍教育整顿，一批政法系统高官落马。'],['2022-10','n','出任国家安全部部长。'],['2023','b','国家安全部开设微信公众号，从“看不见的部门”变成高调发声的部门，频繁公开间谍案。'],['2026-11','a','据《纽约时报》援引外国官员：成立“反封锁”工作组，直接向他汇报，任务包括帮助获取并走私先进芯片（未经中方证实）。']],
+ why:'陈一新是习近平信任的“自己人”：浙江共事的经历，加上在政法委主导整顿的表现，让他被放在国家安全这个最敏感的位置上。<b>如果“反封锁”工作组的报道属实，说明北京把获取芯片提升到了国家安全层级</b>，由情报系统直接负责，而不只是商业或产业问题。',
+ odd:'在他任内，过去几乎从不公开露面的国家安全部开始在微信上高调发文，内容从间谍案到提醒公众“小心境外 App”，风格接地气，在网上常被转发讨论。',
+ watch:'美国司法部的走私起诉书是否提到国安部背景；国家安全部公众号是否针对“美国芯片管制”发文。'});
+CG_GOSSIP['p-chenyixin']=['<b>“国安部开公众号”。</b>2023 年国家安全部开设微信公众号后发文频繁，常用通俗甚至网络化的语言讲间谍案，一改情报部门的神秘形象。外界普遍认为，这与他推动的“全民国家安全”宣传思路有关。'];
+
+/* =========================================================
    10. 路由 / 渲染 / 事件
    ========================================================= */
 function setTab(k){if(S.ui.tab!==k){S.ui.tab=k;save();renderMain();}$$('#tabs button').forEach(function(b){b.classList.toggle('on',b.getAttribute('data-tab')===k);});}
@@ -2398,8 +2475,8 @@ function renderMain(){
     $$('input[data-w]',m).forEach(function(inp){inp.oninput=function(){S.weights[inp.getAttribute('data-w')]=+inp.value;save();renderRadar();renderKPI();};});
     $('#wReset').onclick=function(){S.weights=Object.assign({},DEFAULT_W);save();$$('input[data-w]',m).forEach(function(i){i.value=S.weights[i.getAttribute('data-w')];});renderRadar();renderKPI();toast('已恢复默认权重 25/25/15/15/10/10');};
     post(m);renderFeed();renderDiff();renderRadar();
-  }else if(k==='m2'){m.innerHTML=renderM2();bindWires(m);bindM2(m);post(m);}
-  else if(k==='m3'){m.innerHTML=renderM3()+econHTML();bindWires(m);bindM3(m);bindScore(m);bindEcon(m);post(m);}
+  }else if(k==='m2'){m.innerHTML=renderM2()+cnTeamHTML();bindWires(m);bindM2(m);bindCnTeam(m);post(m);}
+  else if(k==='m3'){m.innerHTML=renderM3()+nukeHTML()+econHTML();bindWires(m);bindM3(m);bindScore(m);bindEcon(m);var nb=$('#nukeOpen',m);if(nb)nb.onclick=openNuke;post(m);}
   else if(k==='m4'){m.innerHTML=twHTML()+electionHTML()+twjpPeopleHTML()+kcardsHTML()+renderM4();bindM4(m);bindTW(m);bindElection(m);bindTWJP(m);$$('[data-k]',m).forEach(function(el){el.onclick=function(){openKCard(el.getAttribute('data-k'));};});post(m);}
   else if(k==='m5'){m.innerHTML=renderM5();bindM5(m);bindSummit(m);post(m);}
   else if(k==='m6'){m.innerHTML=renderM6();bindM6(m);post(m);renderM6List();}
