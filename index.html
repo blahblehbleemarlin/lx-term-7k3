@@ -202,7 +202,7 @@ body.boss main svg{filter:grayscale(1)}
 <body>
 <header>
   <div class="topbar">
-    <div class="brand" id="brandTitle">宏观政治 × 全球半导体 情报终端<small id="syncLbl">BASELINE 2026-11-24 · v2 · FULL · 4.6</small></div>
+    <div class="brand" id="brandTitle">宏观政治 × 全球半导体 情报终端<small id="syncLbl">BASELINE 2026-11-24 · v2 · FULL · 4.7</small></div>
     <div class="spacer"></div>
     <div class="tools">
       <button id="btnNote" title="Shift+N">+ 快速记录</button><button id="btnWeekly">◷ 3分钟周报</button><button class="primary" id="btnPrompt">⧉ 复制今日更新指令</button><button id="btnImport">⇪ 导入增量 JSON</button><button class="ghost" id="btnGloss">[? 体制与级别图鉴]</button>
@@ -939,7 +939,7 @@ function openImport(){
       }catch(e){res.innerHTML='<div class="box"><h4 class="red">✕ 解析失败</h4><p class="mono" style="font-size:12px">'+esc(e.message)+'</p><p class="dim">检查是否为合法 JSON（引号、逗号、括号）。</p></div>';}
     };}});
 }
-function updateSyncLbl(){$('#syncLbl').textContent='BASELINE '+BASELINE+' · SYNC '+(S.lastSync||BASELINE)+' · v2 · FULL 4.6';}
+function updateSyncLbl(){$('#syncLbl').textContent='BASELINE '+BASELINE+' · SYNC '+(S.lastSync||BASELINE)+' · v2 · FULL 4.7';}
 
 /* ---------- 快速记录 ---------- */
 function openQuickNote(edit){
@@ -1588,9 +1588,9 @@ var CG_ACTORS=[
  {id:'doj',side:'us',n:'司法部',role:'抓走私',want:'用刑事案件制造威慑',stance:80,
   last:['2026','起诉加州商人 Greg Lui，指控其经马来西亚、新加坡向中国转运约 3 亿美元的英伟达服务器。'],
   deep:'走私案是“下有对策”最直接的证据。每一起案件都会暴露一种转运路线（东南亚空壳公司、假报关、假设备应付审计），也会反过来推动商务部收紧对转运国的许可要求。'},
- {id:'nvidia',side:'us',n:'英伟达（黄仁勋 → 克雷斯）',role:'游说方 / 当事方',want:'保住中国市场；现在首先要自保',stance:15,
+ {id:'nvidia',side:'us',n:'英伟达（黄仁勋 → 克雷斯 → 黄仁勋复职）',role:'游说方 / 当事方',want:'保住中国市场；现在首先要自保',stance:15,
   last:['2026-11-17','临时 CEO 克雷斯宣布停止向中国发运获许可的 Hopper 数据中心芯片。'],
-  deep:'英伟达曾是推动放宽的最大力量。黄仁勋因与 Megaspeed 高管的关系卷入间谍疑云并于 11 月 12 日辞职后，公司立场明显逆转：从“争取卖”变成“主动不卖”，甚至要求数据中心客户的中国租户占比不得超过一半。<b>游说者变成了嫌疑人</b>，这是本轮政策收紧最重要的推力之一。'},
+  deep:'英伟达曾是推动放宽的最大力量。黄仁勋卷入间谍疑云并于 11 月 12 日辞职后（11 月 22 日复职），公司立场明显逆转：从“争取卖”变成“主动不卖”，甚至要求数据中心客户的中国租户占比不得超过一半。<b>游说者变成了嫌疑人</b>，这是本轮政策收紧最重要的推力之一。'},
  // 中方
  {id:'center',side:'cn',n:'中央决策层',role:'定方向',want:'科技自立自强；不被“卡脖子”；给国产芯片留成长窗口',stance:80,
   last:['2026','对 H200 采取“有限、有条件”放行，同时推动国产算力替代。'],
@@ -1843,7 +1843,7 @@ var CG_PEOPLE=[
   watch:'是否就 Megaspeed、Speedmatrix 提起刑事指控。'},
  // ---------- 英伟达 / Megaspeed ----------
  {id:'p-jensen',actor:'nvidia',side:'us',zh:'黄仁勋',en:'Jensen Huang',dept:'英伟达联合创始人 · 前总裁兼 CEO（2026-11-12 辞职）',job:'曾是华盛顿最有分量的“放宽派”游说者，与特朗普私交甚好。',
-  track:[['2025','l','持续游说解除 H20 禁令，并争取更先进芯片对华出口。'],['2025-06','l','公开说华为的 AI 芯片已能与英伟达高端产品竞争——用来论证“不卖就是把市场让给华为”。'],['2026-01','l','访华期间，北京据报道批准了首批 H200 进口。'],['2026-10-29','t','《纽约时报》报道美国情报评估认为，与他关系密切的 Megaspeed 高管黄乐是中国国家安全部发展的情报人员（中方否认，英伟达称相关指控此前已调查并被推翻）。'],['2026-11-12','t','承认婚外情四天后辞去 CEO 和董事职务，结束 33 年任期。']],
+  track:[['2025','l','持续游说解除 H20 禁令，并争取更先进芯片对华出口。'],['2025-06','l','公开说华为的 AI 芯片已能与英伟达高端产品竞争——用来论证“不卖就是把市场让给华为”。'],['2026-01','l','访华期间，北京据报道批准了首批 H200 进口。'],['2026-10-29','t','《纽约时报》报道美国情报评估认为，一名与他关系密切的新加坡科技公司高管可能与中国国家安全部有联系（中方否认，英伟达称相关指控此前已调查并被推翻）。'],['2026-11-12','t','承认婚外情四天后辞去 CEO 和董事职务，结束 33 年任期。']],
   why:'他的“态度”从未改变——一直主张卖。改变的是<b>他的可信度</b>：当游说者本人被卷入情报疑云，所有“放宽”的论点都失去了说服力。这是本轮政策急转向收紧的最大单一推力。',
   odd:'他曾多次公开表示，中国军方不会依赖美国芯片，因为华盛顿随时可以断供。英伟达董事会 11 月 8 日宣布，就他“被外国情报机构针对”的报道启动独立调查；四天后他辞职，公司还首次设立了独立的董事会主席一职。',
   watch:'新任 CEO 人选与英伟达对华路线。'},
@@ -1852,12 +1852,6 @@ var CG_PEOPLE=[
   why:'从 CFO 角度看，<b>中国业务的风险收益比已经变了</b>：24 亿美元的季度收入，换来的是国会调查、司法风险和品牌损害。主动比规则走得更远，是在为公司“止血”。',
   odd:'她没有解释停运的原因，也没说会不会恢复——在一场财报会上，“不解释”本身就是最大的信息。',
   watch:'下一季度英伟达是否恢复对华指引。'},
- {id:'p-alice',actor:'sea',side:'third',zh:'黄乐（Alice Huang）',en:'Alice Huang / Huang Le',dept:'新加坡 Megaspeed 前高管（至少 2023 年前任董事总经理）',job:'Megaspeed 是英伟达的云合作伙伴，据报道买入超过 40 亿美元的英伟达芯片，阿里巴巴是其锚定客户和资金支持方。',
-  track:[['2025-10','n','《纽约时报》报道 Megaspeed 及其与英伟达的关系，美国商务部开始调查。'],['2026-10-29','t','《纽约时报》报道美国情报机构对她进行了至少一年的电子监控，认为她在向北京传递信息。'],['2026-11','t','后续报道称美国情报评估认为她由中国国家安全部发展，目标包括了解美国 AI 芯片、推动英伟达向中国提供最先进芯片。']],
-  why:'在这个故事里，她代表的是“<b>人</b>”这条渠道：如果报道属实，北京试图影响的不只是规则，而是规则游说者本人。',
-  odd:'《纽约时报》记者 2025 年走访 Megaspeed 位于新加坡的办公室，工作日只看到两名员工——一家买了几十亿美元芯片的公司。<br><span class="dim">⚠ 以上指控均来自匿名信源，尚未经法庭证实；中方称报道是“毫无根据的猜测”，英伟达称 Megaspeed 等客户只获得“普通商业信息”。</span>',
-  watch:'美国与新加坡对 Megaspeed 的调查结果。'},
- // ---------- 中方 ----------
  {id:'p-helifeng',actor:'center',side:'cn',zh:'何立峰',en:'He Lifeng',dept:'国务院副总理 · 中美经贸中方牵头人 · 中央财办/金融委办公室主任',job:'对口贝森特，与美方谈判一揽子经贸议题；中方一直把“放宽出口管制”列为核心诉求。',
   track:[['2025','n','日内瓦、伦敦、马德里、吉隆坡多轮谈判，促成釜山休战（中方暂停扩大的稀土管制，美方暂停 50% 规则）。'],['2026-03-16','n','巴黎经合组织总部会谈。'],['2026-09-20','n','纽约摩根大通总部会谈约 8 小时，中美首次 AI 对话；离场时未对媒体发言。']],
   why:'何立峰的筹码是稀土和市场准入，诉求是放宽芯片管制。釜山的“对等暂停”说明双方都在用<b>“我收回一张牌，你也收回一张”</b>的方式交易。',
@@ -1900,7 +1894,6 @@ var CG_GOSSIP={
   '<b>“没有这样的对话”。</b>关于贝森特在白宫战情室当面质问他一事，商务部发言人对 CNBC 的回应只有一句：两位部长“没有这样的对话”。'],
  'p-mast':['<b>被自己人围攻。</b>推出 AI OVERWATCH 法案后，他遭到极右翼活动人士劳拉·卢默等 MAGA 阵营网红的攻击，理由是：如果民主党 2026 年拿回众议院，民主党领袖杰弗里斯就可能用这个否决权“放行对华芯片”。马斯特回击说，这些话“是英伟达的游说话术”。'],
  'p-sacks':['<b>“特朗普同意之前，谁都不觉得有问题”。</b>面对鹰派批评，他反驳说拜登政府当年也批准过 H20，现在的反对只是因为同意它的是特朗普。'],
- 'p-alice':['<b>两个人的办公室。</b>《纽约时报》记者 2025 年走访 Megaspeed 位于新加坡的办公室，工作日只看到两名员工；新加坡警方也表示正在调查这家公司是否违反当地法律。'],
  'p-ren':['<b>80 岁的“示弱”。</b>接受《人民日报》专访时，他已经 80 岁。谈到芯片困境，他说：不要老想着困难，干就完了，一步一步往前走。']
 };
 
@@ -2571,8 +2564,8 @@ function heatHTML(){
   h+='<div class="grid2" style="margin-top:10px"><div class="box meat" style="margin:0"><h4>🔍 读图：三条曲线，三种性格</h4><ul style="font-size:12.5px">'+
    '<li><b>卡脖子：一路加码到顶。</b>二十大“打赢攻坚战”→ 三中全会点名集成电路、提出“全链条”→ “十五五”建议首次把“超常规措施 + 决定性突破”组合在一起（官方学者称之为新提法）→ 政府工作报告把集成电路列为新兴支柱产业之首 → 习近平 1 月讲话重申“超常规”，峰会后才在《求是》公开。</li>'+
    '<li><b>AI：从“清单里的一项”变成独立战略。</b>二十大里只是一串新兴产业中的一个词；“十五五”建议里“人工智能”出现 8 次（“十四五”建议只有 2 次），“十五五”规划纲要更达到约 30 次。</li>'+
-   '<li><b>军力：目标稳定，重心变了。</b>“建军一百年”的目标一直没变，但 2026 年的讲话重心明显转向政治忠诚和反腐（“绝不能有对党怀有二心之人”），说明军队当前的头号任务是整肃，而不是扩张表态。</li></ul></div>'+
-   '<div class="box" style="margin:0"><h4>怎么用这张图</h4><p style="font-size:12.5px">①<b>看升级词：</b>下一份文件里如果“人工智能”也出现“超常规”，说明 AI 被提到和芯片同等的动员级别。<br>②<b>看降级：</b>某个主题从“加速”退回“部署”，往往比升级更值得注意。<br>③<b>五中全会为什么是空白：</b>这次全会的主题是《关于持之以恒推进全面从严治党若干重大问题的决定》，公报没有把这三个主题作为重点——空白本身也是信息。<br>④<b>◌ 格子：</b>来自二十大报告和三中全会《决定》的基线摘录，我没有在本次逐字核对，引用前请核对原文。</p></div></div>';
+   '<li><b>从严治党：五中全会把它升到顶。</b>整次全会就是为它开的——审议通过《关于持之以恒推进全面从严治党若干重大问题的决定》，这就是为什么五中全会在另外三行是空白。注：外媒常引的“‘病树’该拔就拔、该伐就伐”出自新华社评论，习近平在四中全会上引用的是古诗“沉舟侧畔千帆过，病树前头万木春”。</li><li><b>军力：目标稳定，重心变了。</b>“建军一百年”的目标一直没变，但 2026 年的讲话重心明显转向政治忠诚和反腐（“绝不能有对党怀有二心之人”），说明军队当前的头号任务是整肃，而不是扩张表态。</li></ul></div>'+
+   '<div class="box" style="margin:0"><h4>怎么用这张图</h4><p style="font-size:12.5px">①<b>看升级词：</b>下一份文件里如果“人工智能”也出现“超常规”，说明 AI 被提到和芯片同等的动员级别。<br>②<b>看降级：</b>某个主题从“加速”退回“部署”，往往比升级更值得注意。<br>③<b>五中全会只亮一格：</b>只在“从严治党”一行亮红，在芯片、AI、军力上都是空白——北京在二十一大前一年把全部政治能量投向了整党。<br>④<b>◌ 格子：</b>来自二十大报告和三中全会《决定》的基线摘录，我没有在本次逐字核对，引用前请核对原文。</p></div></div>';
   var ex=(S.overlay.fmls||[]).slice().sort(function(a,b){return a.date<b.date?1:-1;});
   if(ex.length)h+='<h3 style="margin-top:10px">增量提法记录</h3><ul style="font-size:12.5px">'+ex.slice(0,12).map(function(x){return '<li><span class="mono dim">'+esc(x.date)+'</span> <span class="chip">'+esc((FM_ROWS.filter(function(r){return r[0]===x.theme;})[0]||['',''])[1])+'</span> <span class="chip" style="background:'+FM_LVC[Math.max(0,Math.min(4,+x.level||0))]+'">'+FM_LV[Math.max(0,Math.min(4,+x.level||0))]+'</span> “'+esc(x.quote)+'” <span class="dim">— '+(x.url?'<a href="'+esc(x.url)+'" target="_blank" rel="noopener">'+esc(x.doc||'')+'</a>':esc(x.doc||''))+'</span></li>';}).join('')+'</ul>';
   return h+'</section>';
@@ -2585,6 +2578,109 @@ function bindHeat(m){
 }
 
 /* =========================================================
+   42. 批次 7：AI 安全对话 / 华盛顿权力地图 / 减员曲线 / 王岐山系 / 增补
+   ========================================================= */
+// ---- 人物与事件增补 ----
+(function(){
+  var j=CG_PEOPLE.filter(function(p){return p.id==='p-jensen';})[0];
+  if(j){j.dept='英伟达联合创始人 · 总裁兼 CEO（2026-11-12 辞职，11-22 复职）';
+    j.track.push(['2026-11-17','n','董事会称“无意让其复职”，并成立委员会监督国家安全政策、出口管制合规；此前贝森特呼吁对英伟达“彻底清理”，特朗普次日表态支持他回归。']);
+    j.track.push(['2026-11-22','n','董事会一致决定恢复其总裁兼 CEO 及董事职务（11-23 公告），克雷斯回任 CFO，琼斯继续任董事长。']);
+    j.watch='复职后新设的国家安全与出口合规委员会如何约束他的游说；美方对英伟达芯片是否流入中国的调查进展。';}
+  var k=CG_PEOPLE.filter(function(p){return p.id==='p-kress';})[0];
+  if(k){k.dept='英伟达首席财务官（11-12 至 11-22 曾任临时 CEO）';k.track.push(['2026-11-22','n','黄仁勋复职，克雷斯回任 CFO。']);}
+  var c=CG_PEOPLE.filter(function(p){return p.id==='p-chenyixin';})[0];
+  if(c){c.track.splice(c.track.length-1,0,['2026-09-13','b','在《中国网信》发表署名文章《全面筑牢人工智能安全屏障 推动人工智能健康有序发展》，列出 AI 六大风险，第一条就是“系统性影响政治安全环境”。']);}
+  CG_EVENTS.push(['2026-10-01','黑客 TA419','a','Proofpoint：与中国有关的黑客冒充美国 AI 政策人物钓鱼','7 月起冒充白宫科技政策办公室前副主任等人，以“AI 政策咨询委员会”“出口管制报告”为诱饵，窃取智库、大学、律所里研究 AI 监管和出口管制人员的账号；2 月还冒充过 Anthropic 员工。']);
+  CG_EVENTS.push(['2026-11-22','英伟达','n','黄仁勋复职','董事会 11 月 17 日还说无意让他复职，五天后一致改口；同时新设国家安全与出口合规委员会。']);
+  STANCE['c:p-chenyixin'].q.unshift(['2026-09-13','ai','直接威胁我政治安全、制度安全、意识形态安全','《中国网信》署名文章（列 AI 六大风险）','https://www.secrss.com/articles/93912']);
+  STANCE['p:xjp'].q.push(['2026-09','ai','确保人工智能发展始终受控于人、造福于民','白宫会晤时的讲话（据《纽约时报》）','']);
+  TIGERS.unshift({d:'2026-10-22',pid:'',n:'夏林茂',r:'北京市委常委、常务副市长，二十届中央候补委员',c:'party',x:'五中全会前一周落马；在任的中央候补委员，直接拉低候补出席数。'});
+  var dk=CN_TEAM.filter(function(t){return t.k==='dark';})[0];
+  if(dk)dk.parts[0]+='<br><br><b>有公开来源的佐证：</b>网络安全公司 Proofpoint 2026-10-01 发布报告，与中国有关的黑客组织 TA419 冒充美国 AI 政策人物，钓鱼攻击研究 AI 监管和出口管制的专家。国安部部长陈一新 9 月的署名文章则把 AI 视为对党的执政安全的直接威胁。';
+  var rl=CN_TEAM.filter(function(t){return t.k==='rule';})[0];
+  if(rl)rl.parts[1]+='<br><br><b>网信办的双重身份：</b>它既是互联网监管机构，也是 AI 的监管者（生成式 AI 备案等）。陈一新那篇 AI 风险文章就发表在网信办主管的《中国网信》杂志上——安全部门和网信部门在 AI 上的口径是统一的。';
+  var mi=SUMMITS.filter(function(s){return s.id==='mia';})[0];
+  if(mi)mi.parts[3]+='<br><br><b>中期选举后的新变量：</b>民主党 11 月 3 日拿下参众两院。人民大学时殷弘预测，5 月峰会达成的“建设性战略稳定”谅解可能破裂，因为特朗普“突然变得远非无所不能”。北京要判断：跛脚鸭特朗普的承诺还值多少钱。';
+  var ex=TH_TILES.filter(function(t){return t.id==='ext';})[0];
+  if(ex)ex.parts[2]+='<br><br><b>选后新风险：</b>中期选举压力解除后，美国可能对产能过剩的国家重新加征关税，中国、日本、越南都是潜在目标；新国会也可能推动更多豁免，但对华强硬是两党共识。';
+  var cp=TH_TILES.filter(function(t){return t.id==='cpi';})[0];
+  if(cp)cp.parts[1]+='<br><br><b>能源背景：</b>美国对伊朗的“史诗愤怒行动”从 2026 年 2 月 28 日开始，霍尔木兹海峡航运受影响、油价高企，这可能是 PPI 大幅转正的主要原因。';
+  TH_ALT.push({id:'flat',n:'基层“不敢干”',v:'反腐的代价',sub:'常态化审查下，基层官员不敢担责、有时弄虚作假',parts:['据《纽约时报》引述澳大利亚国立大学的研究：地方政府，尤其是农村地方政府，没有能力和资源满足中央层层下达的所有要求，官员往往不敢承担风险，有时彻底失去干劲，甚至“弄虚作假”。',
+   '这是反腐常态化的另一面：维也纳大学学者李玲的说法是，“胡萝卜”变小了（腐败机会少了），“大棒”越来越重。结果是官员<b>宁可不做，也不犯错</b>。这和习近平批评的“躺平”“老好人”形成了一个死循环：越查越不敢干，越不敢干越要整。',
+   '对经济的直接影响：地方政府本来就因卖地收入下降而缺钱，执行力再打折扣，稳增长、化债、扩内需的政策都会在“最后一公里”变形。',
+   '习近平是否继续强调“敢于斗争、不当老好人”；各地对干部“容错纠错机制”的提法是否增多。']});
+})();
+NUKE_WATCH[0][1]='2024-11 利马共识后长期没有正式磋商。2026-09 起由美国财政部主导 AI 安全对话：贝森特宣布将交流模型发布前测试的最佳实践、建立“严重事件”直接通报渠道；但深圳峰会各方通稿都没有提 AI 与核武器，“严重事件”如何定义仍有分歧。';
+
+// ---- 热力图第四行：从严治党 ----
+FM_ROWS.push(['graft','从严治党']);
+FM.push(
+ ['graft','d20',3,'全面从严治党永远在路上，党的自我革命永远在路上','二十大报告','',0],
+ ['graft','d15',3,'不以铁腕反腐将后患无穷（并引“病树前头万木春”）','习近平在四中全会上的讲话（据新华社评论）','https://www.cac.gov.cn/2026-01/19/c_1770555802117098.htm',1],
+ ['graft','dxi',3,'持之以恒推进全面从严治党……保持党的队伍纯洁','《求是》2026 年第 20 期（1 月中纪委全会讲话）','https://www.news.cn/politics/leaders/20261015/b28cccebedb54aaaa9adb3472f3509d0/c.html',1],
+ ['graft','d5p',4,'审议通过《中共中央关于持之以恒推进全面从严治党若干重大问题的决定》——整次全会的主题','五中全会公报（新华社）','https://www.news.cn/politics/leaders/20261029/3dc769be3bff40aeafcbf957eb4e47bb/c.html',1]
+);
+
+// ---- ③ AI 安全对话轨道 ----
+var AIS_TL=[
+ ['2024-05','日内瓦首次中美 AI 对话','美方希望中方派出监管 AI 的机构（包括国安部），中方只派了外交部官员；几乎没有进展（据《纽约时报》）。','n'],
+ ['2024-11','利马：核武器由人类控制','拜登与习近平宣布两国核武器必须由人类而不是 AI 控制。之后没有正式磋商。','g'],
+ ['2026-05','北京峰会','贝森特称双方将就 AI 最佳实践“建立规程”，防止非国家行为体获取先进模型（据布鲁金斯学会整理）。','n'],
+ ['2026-09-13','陈一新划红线','国安部部长在《中国网信》列出 AI 六大风险，把 AI 视为对党的执政安全的直接威胁——这被解读为北京在谈判前划下的红线。','r'],
+ ['2026-09-20','纽约：美方提出 AI 事件通报机制','何立峰与贝森特在纽约会谈，美方提议建立 AI 对话，包括通报可能危及国家安全的 AI 事件的机制；芯片不在议题内。','n'],
+ ['2026-09-24','华盛顿：习近平说“受控于人”','习近平在白宫称要“确保人工智能发展始终受控于人、造福于民”；双方同意建立带沟通渠道的 AI 对话。特朗普此前曾称对 AI 威胁的担忧是“骗局”。','g'],
+ ['2026-11-10','贝森特公布框架','三项内容：交流先进模型发布前评估测试的最佳实践；让人类判断牢牢掌控这项技术；建立直接渠道，及时通报涉及 AI 模型的严重事件。没有承诺限制 AI 发展。','g'],
+ ['2026-11-18','深圳峰会','各方通稿没有提到 AI 在核武器中的作用。分析人士指出，“严重事件”怎么定义是最大障碍：美方担心失控，北京更看重稳定和内容管控。','r']
+];
+var AIS_LIGHTS=[['发布前评估测试的最佳实践','已宣布将交流，未见具体安排','y'],['人类判断掌控 AI','只有原则表态','y'],['严重事件直接通报渠道','建立中；哪些算“严重事件”、谁来报、谁来接都未定','y']];
+function aisHTML(){
+  var C={g:'#3fb950',y:'var(--amber)',r:'var(--red)',n:'var(--tx3)'};
+  var h='<section class="panel"><div class="panel-head"><h2 class="steel">中美 AI 安全对话轨道</h2><span class="sub">名义上有对话，实质很少 · 点“两种 AI 恐惧”看为什么谈不拢</span><div class="right"><button class="ghost" id="aisFear">⤢ 两种 AI 恐惧</button></div></div>';
+  h+='<div class="grid2"><div><h3>时间线</h3><div class="feed">'+AIS_TL.map(function(t){return '<div class="fi"><div class="dt">'+t[0]+'</div><div><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:'+C[t[3]]+';margin-right:6px"></span><span class="nm">'+esc(t[1])+'</span><div class="ds">'+esc(t[2])+'</div></div></div>';}).join('')+'</div></div>';
+  h+='<div><h3>贝森特三项承诺的状态灯</h3>'+AIS_LIGHTS.map(function(l){return '<div class="box" style="margin:0 0 6px;border-left:3px solid '+C[l[2]]+'"><b>'+l[0]+'</b><div class="muted" style="font-size:12px">'+l[1]+'</div></div>';}).join('')+'<div class="note">三盏灯都还没变绿。<b>“不撒谎”的验证指标：</b>第一次真实的事件通报是否发生并被公开；双方是否公布“严重事件”的共同定义；中方参会机构是否从外交部扩大到网信办、国安部等真正管 AI 的部门。</div></div></div></section>';
+  return h;
+}
+function openFear(){openDeep({kick:'AI SAFETY · 两种恐惧',title:'你想谈的“安全”，不是我想谈的“安全”',accent:'steel',labels:['美国怕什么','北京怕什么','为什么谈不拢','怎么看进展'],parts:[
+ '美国的官员、高管和研究人员担心的是：AI 可能实现自主，在不受人类控制的情况下行动，甚至反过来统治人类。所以美方想谈的是模型测试、失控风险、事故通报。<br><br>但美国内部也不统一：特朗普曾把对 AI 威胁的担忧称为“骗局”，还说要把 AI 改称“超级智能”换个好形象。',
+ '北京当然也担心失控，但更担心的是 <b>AI 被用来动摇共产党的统治</b>。陈一新的文章把“系统性影响政治安全环境”列为第一大风险：敌对势力用深度伪造、AI 生成内容、“智能水军”制造谣言、发动舆论战和认知战。第四大风险则直指美国：有关国家以“国家安全”之名，用实体清单和技术管制限制别国发展。<br><br>同时，网信办既管互联网也管 AI，北京把 AI 视为加强监控和党的控制的工具。',
+ '①<b>“严重事件”定义不同：</b>美方想通报的是模型失控、被滥用；北京眼中的严重事件可能包括“有害信息”传播。<br>②<b>信任赤字：</b>美方官员认为，即使中国签署 AI 安全协议也未必遵守——2015 年中美承诺不为窃取知识产权入侵对方企业，美国情报机构很快认定中方违约。<br>③<b>互相怀疑间谍活动：</b>双方都认为对方在刺探自己的 AI 机密（参见 ② 暗线获取：TA419 钓鱼事件）。<br>④<b>北京的戒心：</b>美国前国家安全局局长中曾根认为，中方把美方的任何接触都视为压制中国产业发展的策略。',
+ '真正的进展不会出现在峰会通稿里，而会出现在技术层面：第一次事件通报、第一份共同定义、参会机构的级别。按国务卿鲁比奥的说法，目前只是“某种程度上在技术层面”的对话，“仍是一项正在进行中的工作”。']});}
+
+// ---- ② 华盛顿权力地图（中期选举后） ----
+function dcMapHTML(){
+  var d1=daysTo('2027-01-03'),d2=daysTo('2027-01-10');
+  return '<section class="panel"><div class="panel-head"><h2 class="steel">华盛顿权力地图：中期选举之后</h2><span class="sub">过去只看白宫内部“交易派 vs 安全派”，现在要加上国会和法院</span><div class="right"><button id="dcProb">→ 记分板：“新国会推动批准 140 亿美元对台军售”</button></div></div>'+
+   '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px">'+
+   '<div class="box" style="margin:0"><h4>白宫 · 特朗普</h4><p style="font-size:12.5px">剩下两年任期，成了“跛脚鸭”。但出口管制的执行权仍在总统手里：6 月最高法院“特朗普诉斯劳特案”的裁决强化了总统对监管机构的控制。<b>风险：</b>分析人士担心他会把注意力转向海外，在关税和动武上更激进。</p></div>'+
+   '<div class="box" style="margin:0;border-color:var(--steel)"><h4>国会 · 民主党全面接管</h4><p style="font-size:12.5px">民主党拿下参众两院，这是 2006 年以来少数党首次在一夜之间同时翻转两院。新国会 <b>2027-01-03</b> 就职，比关税休战和 50% 规则暂停的“双重到期”早一周。可能发力的方向：推动 140 亿美元对台军售、芯片安全立法、对英伟达和出口管制执行的监督听证。</p></div>'+
+   '<div class="box" style="margin:0"><h4>法院</h4><p style="font-size:12.5px">2 月最高法院裁定依据《国际紧急经济权力法》加征的关税违法，特朗普随后改用《1974 年贸易法》第 122 条加征 10% 附加费。关税工具在变，但对华强硬是两党共识。</p></div></div>'+
+   '<div class="note">关键日期：新国会就职还有 <b class="mono">'+d1+'</b> 天，双重到期还有 <b class="mono">'+d2+'</b> 天。<b>中方怎么读：</b>人民大学时殷弘预测，民主党国会会让“建设性战略稳定”的谅解破裂，还会强化美国与日本等盟友的关系。对台湾则是“潜在的积极信号”（国际危机组织分析师）。</div></section>';
+}
+function bindDcMap(m){var b=$('#dcProb',m);if(b)b.onclick=function(){var id='tw-arms-14b';if(S.overlay.probs.some(function(e){return e.id===id;})){toast('记分板里已有这一项');return;}S.overlay.probs.push({id:id,q:'2027-06-30 前，美国批准此前搁置的约 140 亿美元对台军售',line:'tw',due:'2027-06-30',mkt:null,my:null,src:'',outcome:''});save();toast('已加入 ④ 页的概率记分板');};}
+
+// ---- ① 中委减员曲线 + 反腐强度 + 王岐山系 ----
+var CC_CURVE=[['一中 2022-10',205,171,0],['二中 2023-02',203,168,0],['三中 2024-07',199,165,0],['四中 2025-10',168,147,1],['五中 2026-10',162,117,1]];
+function purgeHTML(){
+  var W=560,H=210,L=40,B=30,T=22,n=CC_CURVE.length,mx=420,x=function(i){return L+i*(W-L-20)/(n-1);},y=function(v){return T+(H-T-B)*(1-v/mx);};
+  var s='<svg viewBox="0 0 '+W+' '+H+'" style="width:100%">';
+  [0,100,200,300].forEach(function(v){s+='<line x1="'+L+'" x2="'+(W-20)+'" y1="'+y(v)+'" y2="'+y(v)+'" stroke="#2a2f36"/><text x="'+(L-6)+'" y="'+(y(v)+4)+'" fill="#7d8590" font-size="10.5" text-anchor="end">'+v+'</text>';});
+  var tot=CC_CURVE.map(function(c,i){return x(i)+','+y(c[1]+c[2]);}).join(' '),ful=CC_CURVE.map(function(c,i){return x(i)+','+y(c[1]);}).join(' ');
+  s+='<polyline points="'+tot+'" fill="none" stroke="var(--red)" stroke-width="2.5"/><polyline points="'+ful+'" fill="none" stroke="var(--steel)" stroke-width="2"/>';
+  CC_CURVE.forEach(function(c,i){var t=c[1]+c[2];s+='<circle cx="'+x(i)+'" cy="'+y(t)+'" r="3.5" fill="var(--red)"><title>'+c[0]+'：中委 '+c[1]+' + 候补 '+c[2]+' = '+t+'</title></circle><text x="'+x(i)+'" y="'+(y(t)-8)+'" fill="#ff8a92" font-size="11" text-anchor="middle">'+t+'</text><text x="'+x(i)+'" y="'+(y(c[1])+15)+'" fill="#9cc0ea" font-size="10.5" text-anchor="middle">'+c[1]+'</text><text x="'+x(i)+'" y="'+(H-10)+'" fill="#7d8590" font-size="10.5" text-anchor="middle">'+c[0].split(' ')[0]+'</text>';});
+  s+='</svg>';
+  return '<section class="panel"><div class="panel-head"><h2 class="red">清洗减员曲线 · 反腐强度 · 元老网络</h2><span class="sub">红线 = 中委 + 候补出席总数；蓝线 = 正式中委</span></div><div class="grid2"><div>'+s+
+   '<div class="note">2022 年选出的中央委员会共 376 人（205 + 171）。外媒在五中全会前预测出席“约 300 人甚至更少”，实际只有 <b>279 人</b>，比预测还低。四中、五中为公报核对值；二中、三中的候补人数为基线，待逐字复核。</div></div><div>'+
+   '<div class="box" style="margin:0 0 8px"><h4>反腐强度</h4><table class="t" style="font-size:12.5px"><tr><th></th><th>2023</th><th>2025</th></tr><tr><td>处分省部级干部</td><td class="mono">49</td><td class="mono red">69</td></tr><tr><td>处分县处级干部</td><td class="mono">2.4 万</td><td class="mono red">3.5 万</td></tr></table><div class="dim" style="font-size:11px">来源：官方数据，据《纽约时报》引述。另据新华社，2025 年中纪委网站公开通报“落马”中管干部 65 名（口径不同）。2026 年前 5 个月已通报 28 名。</div></div>'+
+   '<div class="box" style="margin:0;border-color:var(--amber)"><h4><a href="#" id="wqsOpen">王岐山系：元老网络在被清理吗？⤢</a></h4><p style="font-size:12.5px">周亮（金融监管总局原副局长，2026-03 被查）、黎晓宏（中央巡视办原主任，2026-06 被查）等王岐山的老部下相继落马。<b>王岐山本人没有被指控。</b></p></div></div></div></section>';
+}
+function openWqs(){openDeep({kick:'元老网络观察',title:'王岐山系：已公开的部下案件',accent:'amber',labels:['已公开的案件','为什么值得看','另一种解读','盯什么'],parts:[
+ '①<b>周亮</b>：国家金融监督管理总局原副局长，2026-03-24 被查，4 月被免职（《纽约时报》称其为王岐山的长期助手）。<br>②<b>黎晓宏</b>：中央巡视工作领导小组办公室原主任、中信建投首任董事长，2026-06-02 被查（香港01 称其曾为王岐山“大秘”）。<br>③<b>董宏</b>：王岐山前秘书，已被判死缓。<br>④<b>田惠宇</b>：招商银行原行长，王岐山执掌建设银行时期的秘书，2024 年被判死缓。<br>⑤据《纽约时报》，今年还有两名王岐山的前下属被调离中纪委岗位。',
+ '王岐山曾主持习近平反腐运动的第一阶段，是“打虎”的总指挥。他的旧部接连出事，引发外界猜测：习近平是否对退休元老通过门生网络保留的影响力保持警惕。布鲁金斯学会的秦江南认为，王岐山“依然是少数有能力、甚至有足够胆量给习近平制造麻烦的人之一”。',
+ '也可能只是金融反腐的自然延伸：周亮、黎晓宏、田惠宇都出身金融系统，而金融是近年反腐的重点领域。<b>王岐山本人没有被指控任何违法行为</b>，这里只记录已公开的部下案件。',
+ '王岐山是否继续在公开场合露面（如国庆招待会、重要纪念活动）；是否有更高级别的王岐山旧部被查；官方是否首次在通报中点名“王岐山”。']});}
+
+/* =========================================================
    10. 路由 / 渲染 / 事件
    ========================================================= */
 function setTab(k){if(S.ui.tab!==k){S.ui.tab=k;save();renderMain();}$$('#tabs button').forEach(function(b){b.classList.toggle('on',b.getAttribute('data-tab')===k);});}
@@ -2592,7 +2688,7 @@ function renderMain(){
   var m=$('#main'),k=S.ui.tab;
   $$('#tabs button').forEach(function(b){b.classList.toggle('on',b.getAttribute('data-tab')===k);});
   if(k==='m1'){
-    m.innerHTML=renderM1()+heatHTML()+stanceMatrixHTML();bindStance(m);bindHeat(m);
+    m.innerHTML=renderM1()+purgeHTML()+heatHTML()+stanceMatrixHTML();bindStance(m);bindHeat(m);var wq=$('#wqsOpen',m);if(wq)wq.onclick=function(e){e.preventDefault();openWqs();};
     $$('.tl-node',m).forEach(function(el){el.onclick=function(){openTL(el.getAttribute('data-tl'));};});
     $$('.pc',m).forEach(function(el){el.onclick=function(){openPerson(el.getAttribute('data-pid'));};});
     $$('[data-tf]',m).forEach(function(el){el.onclick=function(){S.ui.tigerFilter=el.getAttribute('data-tf');save();$$('[data-tf]',m).forEach(function(x){x.classList.toggle('on',x===el);});renderFeed();};});
@@ -2600,8 +2696,8 @@ function renderMain(){
     $$('input[data-w]',m).forEach(function(inp){inp.oninput=function(){S.weights[inp.getAttribute('data-w')]=+inp.value;save();renderRadar();renderKPI();};});
     $('#wReset').onclick=function(){S.weights=Object.assign({},DEFAULT_W);save();$$('input[data-w]',m).forEach(function(i){i.value=S.weights[i.getAttribute('data-w')];});renderRadar();renderKPI();toast('已恢复默认权重 25/25/15/15/10/10');};
     post(m);renderFeed();renderDiff();renderRadar();
-  }else if(k==='m2'){m.innerHTML=renderM2()+cnTeamHTML();bindWires(m);bindM2(m);bindCnTeam(m);post(m);}
-  else if(k==='m3'){m.innerHTML=renderM3()+nukeHTML()+econHTML();bindWires(m);bindM3(m);bindScore(m);bindEcon(m);var nb=$('#nukeOpen',m);if(nb)nb.onclick=openNuke;post(m);}
+  }else if(k==='m2'){m.innerHTML=renderM2()+dcMapHTML()+cnTeamHTML();bindWires(m);bindM2(m);bindCnTeam(m);bindDcMap(m);post(m);}
+  else if(k==='m3'){m.innerHTML=renderM3()+nukeHTML()+aisHTML()+econHTML();var af=$('#aisFear',m);if(af)af.onclick=openFear;bindWires(m);bindM3(m);bindScore(m);bindEcon(m);var nb=$('#nukeOpen',m);if(nb)nb.onclick=openNuke;post(m);}
   else if(k==='m4'){m.innerHTML=twHTML()+electionHTML()+twjpPeopleHTML()+kcardsHTML()+renderM4();bindM4(m);bindTW(m);bindElection(m);bindTWJP(m);$$('[data-k]',m).forEach(function(el){el.onclick=function(){openKCard(el.getAttribute('data-k'));};});post(m);}
   else if(k==='m5'){m.innerHTML=renderM5();bindM5(m);bindSummit(m);post(m);}
   else if(k==='m6'){m.innerHTML=renderM6();bindM6(m);post(m);renderM6List();}
