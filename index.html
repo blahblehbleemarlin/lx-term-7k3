@@ -202,7 +202,7 @@ body.boss main svg{filter:grayscale(1)}
 <body>
 <header>
   <div class="topbar">
-    <div class="brand" id="brandTitle">宏观政治 × 全球半导体 情报终端<small id="syncLbl">BASELINE 2026-11-24 · v2 · FULL · 4.7</small></div>
+    <div class="brand" id="brandTitle">宏观政治 × 全球半导体 情报终端<small id="syncLbl">BASELINE 2026-11-24 · v2 · FULL · 4.7.1</small></div>
     <div class="spacer"></div>
     <div class="tools">
       <button id="btnNote" title="Shift+N">+ 快速记录</button><button id="btnWeekly">◷ 3分钟周报</button><button class="primary" id="btnPrompt">⧉ 复制今日更新指令</button><button id="btnImport">⇪ 导入增量 JSON</button><button class="ghost" id="btnGloss">[? 体制与级别图鉴]</button>
@@ -939,7 +939,7 @@ function openImport(){
       }catch(e){res.innerHTML='<div class="box"><h4 class="red">✕ 解析失败</h4><p class="mono" style="font-size:12px">'+esc(e.message)+'</p><p class="dim">检查是否为合法 JSON（引号、逗号、括号）。</p></div>';}
     };}});
 }
-function updateSyncLbl(){$('#syncLbl').textContent='BASELINE '+BASELINE+' · SYNC '+(S.lastSync||BASELINE)+' · v2 · FULL 4.7';}
+function updateSyncLbl(){$('#syncLbl').textContent='BASELINE '+BASELINE+' · SYNC '+(S.lastSync||BASELINE)+' · v2 · FULL 4.7.1';}
 
 /* ---------- 快速记录 ---------- */
 function openQuickNote(edit){
@@ -1589,7 +1589,7 @@ var CG_ACTORS=[
   last:['2026','起诉加州商人 Greg Lui，指控其经马来西亚、新加坡向中国转运约 3 亿美元的英伟达服务器。'],
   deep:'走私案是“下有对策”最直接的证据。每一起案件都会暴露一种转运路线（东南亚空壳公司、假报关、假设备应付审计），也会反过来推动商务部收紧对转运国的许可要求。'},
  {id:'nvidia',side:'us',n:'英伟达（黄仁勋 → 克雷斯 → 黄仁勋复职）',role:'游说方 / 当事方',want:'保住中国市场；现在首先要自保',stance:15,
-  last:['2026-11-17','临时 CEO 克雷斯宣布停止向中国发运获许可的 Hopper 数据中心芯片。'],
+  last:['2026-11-26','据《金融时报》，英伟达通知戴尔、超微停止向马来西亚、新加坡、泰国、印尼发运服务器，以符合 11-19 生效的许可证新规。'],
   deep:'英伟达曾是推动放宽的最大力量。黄仁勋卷入间谍疑云并于 11 月 12 日辞职后（11 月 22 日复职），公司立场明显逆转：从“争取卖”变成“主动不卖”，甚至要求数据中心客户的中国租户占比不得超过一半。<b>游说者变成了嫌疑人</b>，这是本轮政策收紧最重要的推力之一。'},
  // 中方
  {id:'center',side:'cn',n:'中央决策层',role:'定方向',want:'科技自立自强；不被“卡脖子”；给国产芯片留成长窗口',stance:80,
@@ -2592,6 +2592,7 @@ function bindHeat(m){
   var c=CG_PEOPLE.filter(function(p){return p.id==='p-chenyixin';})[0];
   if(c){c.track.splice(c.track.length-1,0,['2026-09-13','b','在《中国网信》发表署名文章《全面筑牢人工智能安全屏障 推动人工智能健康有序发展》，列出 AI 六大风险，第一条就是“系统性影响政治安全环境”。']);}
   CG_EVENTS.push(['2026-10-01','黑客 TA419','a','Proofpoint：与中国有关的黑客冒充美国 AI 政策人物钓鱼','7 月起冒充白宫科技政策办公室前副主任等人，以“AI 政策咨询委员会”“出口管制报告”为诱饵，窃取智库、大学、律所里研究 AI 监管和出口管制人员的账号；2 月还冒充过 Anthropic 员工。']);
+  CG_EVENTS.push(['2026-11-26','英伟达','t','英伟达叫停对东南亚四国的服务器出货','据《金融时报》：英伟达通知戴尔、超微等合作伙伴，停止向马来西亚、新加坡、泰国、印尼发运搭载其芯片的服务器。起因是商务部 11-16 发布、11-19 生效的新规，要求向这些国家出口先进芯片须申请许可证。停运持续多久不明；英伟达 2025 年经新加坡子公司入账约 1040 亿美元收入。游说者变成了执行者。']);
   CG_EVENTS.push(['2026-11-22','英伟达','n','黄仁勋复职','董事会 11 月 17 日还说无意让他复职，五天后一致改口；同时新设国家安全与出口合规委员会。']);
   STANCE['c:p-chenyixin'].q.unshift(['2026-09-13','ai','直接威胁我政治安全、制度安全、意识形态安全','《中国网信》署名文章（列 AI 六大风险）','https://www.secrss.com/articles/93912']);
   STANCE['p:xjp'].q.push(['2026-09','ai','确保人工智能发展始终受控于人、造福于民','白宫会晤时的讲话（据《纽约时报》）','']);
