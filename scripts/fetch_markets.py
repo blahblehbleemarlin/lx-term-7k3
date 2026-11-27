@@ -4,7 +4,8 @@ import json, os, urllib.request, urllib.parse, datetime
 UA = {"User-Agent": "lx-term-markets/1.0", "Accept": "application/json"}
 EN = {"chiang wan-an": "蒋万安", "puma shen": "沈伯洋", "shen pao-yang": "沈伯洋", "lee shu-chuan": "李四川",
       "lee shih-chuan": "李四川", "su chiao-hui": "苏巧慧", "johnny chiang": "江启臣", "chiang chi-chen": "江启臣",
-      "ho hsin-chun": "何欣纯", "ko chih-en": "柯志恩", "lai jui-lung": "赖瑞隆"}
+      "ho hsin-chun": "何欣纯", "ko chih-en": "柯志恩", "lai jui-lung": "赖瑞隆",
+      "shen bo-yang": "沈伯洋", "zhang jing": "张静", "chang ching": "张静"}
 PM_Q = {"party": "Taiwanese Local Elections: Party Winner", "tpe": "Taipei Mayor Election Winner",
         "ntp": "New Taipei Mayor Election Winner", "txg": "Taichung Mayor Election Winner",
         "khh": "Kaohsiung Mayor Election Winner"}
@@ -21,7 +22,7 @@ def cn(s):
     if l in EN: return EN[l]
     if "kmt" in l or "kuomintang" in l: return "国民党"
     if "dpp" in l or "democratic progressive" in l: return "民进党"
-    if "tpp" in l or "people's party" in l: return "民众党"
+    if "tpp" in l or "people's party" in l or "people’s party" in l: return "民众党"
     return s
 
 def fmt_vol(v):
@@ -44,6 +45,8 @@ def polymarket(errs):
             for m in ev.get("markets") or []:
                 try: p = float(json.loads(m.get("outcomePrices") or "[]")[0])
                 except Exception: continue
+                name = str(m.get("groupItemTitle") or "")
+                if __import__("re").match(r"^(candidate|person|option|other)\s*[a-z0-9]?$", name.strip().lower()): continue
                 if p > 0: rows.append({"n": cn(m.get("groupItemTitle") or m.get("question")), "p": round(p * 100, 1)})
             rows.sort(key=lambda x: -x["p"])
             if rows: out[mid] = {"top": rows[:3], "vol": fmt_vol(ev.get("volume")), "url": "https://polymarket.com/event/" + str(ev.get("slug", ""))}
