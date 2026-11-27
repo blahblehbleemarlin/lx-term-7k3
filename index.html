@@ -3240,7 +3240,7 @@ function nightHTML(){
   var proj=avg==null?null:NT_NTP.base+avg;
   nh+='<div style="margin-top:8px;font-size:12.5px">已填 '+sw.length+'/7 区 · 平均摆动 <b class="mono">'+ntFmt(avg)+'</b> → 推算全市 李−苏 ≈ <b class="mono" style="color:'+(proj==null?'':proj<0?'#4caf7a':'#5b8def')+'">'+ntFmt(proj)+'</b>'+(proj==null?'':proj<0?'（苏领先）':'（李领先）')+'</div>';
   var nm=ntMargin('ntp','all');nh+='<div style="margin-top:6px;font-size:12px">全市累计：李 '+ntInp('ntp','all','a','票数',84)+' 苏 '+ntInp('ntp','all','b','票数',84)+' → 李−苏 <b class="mono">'+ntFmt(nm)+'</b></div>';
-  nh+='<div class="note" style="margin-top:6px">读法：板桥、新庄、三重芦洲决定胜负；中和、永和、新店、淡水看苏“少输”多少。早期只开出几个区时，总数会被先开完的区带偏，摆动比总数可靠。不同民调差很多（TVBS 最后一份李只 +0.6），−6.8 这条线要打折扣看。</div></div>';
+  nh+='<div class="note" style="margin-top:6px">读法：板桥、新庄、三重芦洲决定胜负；中和、永和、新店、淡水看苏“少输”多少。早期只开出几个区时，总数会被先开完的区带偏，摆动比总数可靠。不同民调差很多（TVBS 最后一份是苏 43.0 比李 42.4，苏反而领先 0.6），−6.8 这条线要打折扣看。</div></div>';
   /* 台北 */
   var tw=0,ts=0,th='<div class="pc" style="border-left-color:var(--amber)"><b>台北：蒋万安 vs 沈伯洋</b><div class="dim" style="font-size:11.5px;margin:2px 0 6px">台北没有完整的分区民调基准，这里改用“各区按选民人数加权”推算全市。权重 = 2022 年各议员选区选举人数（万人）。</div><table class="t" style="font-size:12px"><tr><th>区</th><th>选民</th><th>蒋</th><th>沈</th><th>蒋−沈</th></tr>';
   NT_TPE.rows.forEach(function(r){var m=ntMargin('tpe',r[0]);if(m!=null){tw+=r[2];ts+=m*r[2];}th+='<tr title="'+esc(r[3])+'"><td>'+esc(r[1])+'</td><td class="mono">'+r[2]+'</td><td>'+ntInp('tpe',r[0],'a','%/票',58)+'</td><td>'+ntInp('tpe',r[0],'b','%/票',58)+'</td><td class="mono">'+ntFmt(m)+'</td></tr>';});
