@@ -202,7 +202,7 @@ body.boss main svg{filter:grayscale(1)}
 <body>
 <header>
   <div class="topbar">
-    <div class="brand" id="brandTitle">宏观政治 × 全球半导体 情报终端<small id="syncLbl">BASELINE 2026-11-24 · v2 · FULL · 4.10</small></div>
+    <div class="brand" id="brandTitle">宏观政治 × 全球半导体 情报终端<small id="syncLbl">BASELINE 2026-11-24 · v2 · FULL · 4.11</small></div>
     <div class="spacer"></div>
     <div class="tools">
       <button id="btnNote" title="Shift+N">+ 快速记录</button><button id="btnWeekly">◷ 3分钟周报</button><button class="primary" id="btnPrompt">⧉ 复制今日更新指令</button><button id="btnImport">⇪ 导入增量 JSON</button><button class="ghost" id="btnGloss">[? 体制与级别图鉴]</button>
@@ -221,6 +221,7 @@ body.boss main svg{filter:grayscale(1)}
     <button data-tab="m5">⑤ 元首外交雷达</button>
     <button data-tab="m6">⑥ 跨轨时间轴 & 周报</button>
     <button data-tab="m7">⑦ 中国体温计</button>
+    <button data-tab="m8">⑧ 央行工具箱</button>
   </nav>
 </header>
 
@@ -918,7 +919,7 @@ function mergeIncoming(j){
   (j.twPulse||[]).forEach(function(u){if(!u||!u.id)return;o.twpulse=o.twpulse||{};o.twpulse[u.id]=Object.assign(o.twpulse[u.id]||{},u);});
   (j.formulations||[]).forEach(function(u){if(!u||!u.theme||!u.quote)return;o.fmls=o.fmls||[];if(o.fmls.some(function(x){return x.theme===u.theme&&x.quote===u.quote;}))return;o.fmls.push(u);r.fm=(r.fm||0)+1;});
   (j.statements||[]).forEach(function(u){if(!u||!u.pid||!u.quote)return;o.stmts=o.stmts||[];if(o.stmts.some(function(x){return x.pid===u.pid&&x.date===u.date&&x.quote===u.quote;}))return;o.stmts.push(u);r.st=(r.st||0)+1;});
-  (j.thermoUpdates||[]).forEach(function(u){if(!u||!u.id)return;o.thermo=o.thermo||{};o.thermo[u.id]=Object.assign(o.thermo[u.id]||{},u);r.th=(r.th||0)+1;});
+  (j.pbocUpdates||[]).forEach(function(u){if(!u||!u.id)return;o.pboc=o.pboc||{};o.pboc[u.id]=Object.assign(o.pboc[u.id]||{},u);r.th=(r.th||0)+1;});(j.pbocEvents||[]).forEach(function(u){if(!u||!u.d||!u.t)return;o.pbev=o.pbev||[];if(!o.pbev.some(function(x){return x.d===u.d&&x.t===u.t;}))o.pbev.push(u);r.th=(r.th||0)+1;});(j.thermoUpdates||[]).forEach(function(u){if(!u||!u.id)return;o.thermo=o.thermo||{};o.thermo[u.id]=Object.assign(o.thermo[u.id]||{},u);r.th=(r.th||0)+1;});
   (j.memberUpdates||[]).forEach(function(u){if(!u||!u.id){r.bad++;return;}o.members[u.id]=Object.assign(o.members[u.id]||{},u);r.mem++;});
   S.lastSync=(j.meta&&j.meta.syncDate)||today();
   S.imports.push({at:new Date().toISOString(),syncDate:S.lastSync,result:r,note:(j.meta&&j.meta.note)||''});
@@ -942,7 +943,7 @@ function openImport(){
       }catch(e){res.innerHTML='<div class="box"><h4 class="red">✕ 解析失败</h4><p class="mono" style="font-size:12px">'+esc(e.message)+'</p><p class="dim">检查是否为合法 JSON（引号、逗号、括号）。</p></div>';}
     };}});
 }
-function updateSyncLbl(){$('#syncLbl').textContent='BASELINE '+BASELINE+' · SYNC '+(S.lastSync||BASELINE)+' · v2 · FULL 4.10';}
+function updateSyncLbl(){$('#syncLbl').textContent='BASELINE '+BASELINE+' · SYNC '+(S.lastSync||BASELINE)+' · v2 · FULL 4.11';}
 
 /* ---------- 快速记录 ---------- */
 function openQuickNote(edit){
@@ -2814,6 +2815,105 @@ function bindTwpNews(m){
    '<b>① 两岸：</b>不管哪个剧本，北京都会“解读民意”。蓝胜→统战加码、用地方交流绕开民进党中央；绿胜→军事和海警施压加码。对照本页上方三大晴雨表看选后一周。<br><br><b>② 美中：</b>约 140 亿美元对台军售和国防特别预算要过立法院这关。蓝白继续掌握立法院、又在地方赢了，预算审查会更硬；绿营在地方赢了，有本钱在预算上施压在野党。2027 年 1 月美国新国会就职后会盯这一点。<br><br><b>③ 芯片 / 能源：</b>同日核电公投关系到台湾半导体和 AI 数据中心的电力。过关（同意票过半且达约 489 万票门槛）→ 政策上为重启核电开门，电力供应不确定性降低；不过 → 继续靠燃气和绿能，供电韧性和电价问题仍在。<br><br><b>④ 中间路线的验证：</b>如果高雄、台中这种看“施政成绩”的城市照样按地方逻辑投票，就再次证明台湾选民在地方选举里看的是候选人和民生，而不是统独——这对理解 2028 很重要。<br><br><span class="dim">以上是基于公开报道的情景分析，不是预测，也不构成任何投资建议。</span>',
    '① <b>新北</b>（蓝白合的试金石）和<b>台北</b>（沈伯洋的“洋流”是真浪还是泡沫）。<br>② <b>台中差距</b>：江启臣赢多少，决定卢秀燕 2028 的含金量。<br>③ <b>高雄</b>：民调方法打架，开票后检验哪种更准。<br>④ <b>嘉义市</b>：民众党能不能靠蓝营选票拿下第二个县市；<b>彰化</b>：绿营“坐五望五”能不能实现。<br>⑤ <b>核电公投</b>是否跨过 4,887,133 票门槛。<br>⑥ <b>投票率</b>：天下杂志认为破七成是关键，越高通常对动员年轻人的一方越有利。<br>⑦ <b>选后 48 小时</b>：谁请辞党职、国台办怎么定调、美国国务院怎么表态。']});};
 }
+/* ---- 4.11 ⑧ 央行工具箱 ---- */
+var PB_TILES=[
+ {id:'omo',n:'7 天逆回购（政策利率）',v:'1.40%',d:'2025-05 起未动',l:'y',k:'omo'},
+ {id:'lpr1',n:'1 年期 LPR',v:'3.0%',d:'截至 2026-10 连续 17 个月不变',l:'y',k:'lpr'},
+ {id:'lpr5',n:'5 年期以上 LPR（房贷锚）',v:'3.5%',d:'同上',l:'y',k:'lpr'},
+ {id:'rrr',n:'存款准备金率（平均）',v:'约 6.3%',d:'2026-01 央行口径',l:'y',k:'rrr'},
+ {id:'loan',n:'实际贷款利率',v:'企业 ≈2.9% · 房贷 ≈3.1%',d:'2026-10 新发放',l:'g',k:'lpr'},
+ {id:'m2',n:'M2 增速',v:'7.1%',d:'2026-10',l:'y',k:'agg'},
+ {id:'tsf',n:'社融存量增速',v:'7.2%',d:'2026-10',l:'y',k:'agg'},
+ {id:'m1',n:'M1 增速（企业活钱）',v:'4.4%',d:'2026-10，低基数抬高',l:'r',k:'agg'},
+ {id:'newloan',n:'当月新增人民币贷款',v:'−1000 亿',d:'2026-10',l:'r',k:'agg'},
+ {id:'fed',n:'美联储利率（对照）',v:'3.75–4.00%',d:'2026-09 加息后维持',l:'r',k:'fx'}
+];
+var PB_LC={r:'#e06060',y:'#e0a84a',g:'#5cc786'};
+var PB_TOOLS=[
+ {k:'omo',n:'政策利率：7 天逆回购',tag:'价格 · 最核心',
+  what:'央行借钱给银行 7 天、收银行的债券做抵押，利率就是“央行给的批发价”。这是中国现在的<b>主要政策利率</b>，就像美联储的联邦基金利率。<br><br>比喻：央行是总水厂，这个利率是出厂水价，后面所有利率（同业、LPR、你的房贷）都在它上面加价。',
+  now:'1.40%，自 2025 年 5 月下调后一直没动。央行偏好“利率钉住、数量调节”：利率不变，但每天投放多少钱可以变（有时单日操作数千亿元）。2026 年 9 月下旬还重启了 14 天期逆回购，并在节前开展隔夜逆回购来“削峰填谷”。',
+  read:'<b>降了 = 真降息</b>，是最强的宽松信号，LPR 通常在当月 20 日跟着降。<br><b>每天“净投放/净回笼”</b>多是季节性的（税期、月末、春节取现），单日数字别过度解读。',
+  pol:'调不调由央行提出、国务院和中央金融委员会拍板，不是央行独立决定。'},
+ {k:'lpr',n:'LPR：贷款市场报价利率',tag:'价格 · 管你的贷款',
+  what:'每月 20 日由 20 家报价行报出、央行授权公布的“优质客户贷款利率”。公式≈ 政策利率（1.40%）+ 银行加点。<br><b>1 年期</b>管大多数企业和消费贷；<b>5 年期以上</b>管房贷。<br><br>比喻：出厂水价 1.40%，到了零售店（银行）标价 3.0% 和 3.5%。',
+  now:'1 年 3.0%、5 年 3.5%，截至 2026 年 10 月连续 17 个月不变，上次调整是 2025 年 5 月各降 10 个基点。实际新发放利率更低：10 月企业贷款约 2.9%，房贷约 3.1%。<br><br><b>正在改革：</b>行长潘功胜 10 月说，要让贷款定价不再只靠 LPR，资质好的企业未来可选 DR001（银行间隔夜利率）作为浮动利率基准。',
+  read:'LPR 降、政策利率没降 → 银行在自己压缩加点（通常有窗口指导）。<br>5 年期单独降 → 定向救楼市。<br>都不动 → 央行在“观察期”。',
+  pol:'<b>上有政策下有对策：</b>银行的净息差（存贷利差）只有约 1.42%，处在低位，降 LPR 等于让银行少赚，所以报价行缺乏主动降加点的动力。央行要降息，往往得先帮银行降存款成本（引导存款利率下调、降再贷款利率）。'},
+ {k:'rrr',n:'降准：存款准备金率',tag:'数量 · 一次性放水',
+  what:'银行每吸收 100 元存款，要把一部分“押”在央行不能放贷，这个比例就是准备金率。降准 0.5 个百分点，大约释放上万亿元长期资金。<br><br>比喻：水库的“死库容”，降准就是把一部分死水变成活水。',
+  now:'2026 年 1 月央行副行长邹澜说平均约 6.3%，“降准仍然还有空间”。但年内市场分析多次认为，央行用买断式逆回购、MLF 等补足了中长期资金，降准的必要性下降。',
+  read:'降准 = 数量宽松的大动作，常配合重大会议或经济数据走弱时宣布。<br>央行不降准、改用买断式逆回购 → 想要“精准滴灌”而不是“大水漫灌”。',
+  pol:'降准常由国务院常务会议或国新办发布会先放风，再由央行公告，政治时机很重要。'},
+ {k:'mlf',n:'MLF：中期借贷便利',tag:'数量 · 1 年期',
+  what:'央行借给银行 1 年的钱。过去 MLF 利率是 LPR 的定价锚，2024 年后锚改成 7 天逆回购，MLF 变成单纯的“供给中期资金”工具。',
+  now:'2026 年 1 月净投放 7000 亿元；10 月到期 9000 亿、只续做 7000 亿，净回笼 2000 亿元，是年内第三次净回笼。但同月买断式逆回购净投放 4000 亿，所以中期资金整体仍净投放约 2000 亿。',
+  read:'看 MLF 不能单看，要和买断式逆回购<b>加总</b>看“中期资金净投放”。缩量续做不等于收紧。',
+  pol:'—'},
+ {k:'ob',n:'买断式逆回购 & 国债买卖',tag:'数量 · 新工具',
+  what:'<b>买断式逆回购：</b>央行买下银行的债券、约定 3 或 6 个月后卖回，相当于给银行 3–6 个月的钱。<br><b>国债买卖：</b>央行直接在二级市场买国债，2024 年后重启。<br><br>这两样是“中国式扩表”的新渠道，比降准更灵活，也更能配合财政发债。',
+  now:'2025 年买断式逆回购净投放约 3.8 万亿元。2026 年 2 月一次做了 1 万亿元 6 个月期；10 月 3 个月期 1.2 万亿、6 个月期 7000 亿，合计净投放 4000 亿元。国债买卖在 2026 年 1 月净投放 1000 亿元，比 2025 年底每月几百亿明显放大。',
+  read:'这两个数字放大 → 央行在给政府发债“托底”。四季度是政府债发行高峰，看它们是否加量。',
+  pol:'央行买国债 = 货币和财政配合。外界常讨论这是否在走向“财政赤字货币化”，央行的说法是“基于流动性管理需要”。'},
+ {k:'str',n:'结构性工具：再贷款 / PSL',tag:'定向 · 产业政策',
+  what:'央行用低息钱定向支持特定领域：科技创新、技术改造、养老、消费、民营小微、“六张网”基建等。银行贷给这些领域，就能从央行拿到便宜的再贷款。<br><br>比喻：不是给整个城市加水，而是给指定的田浇水。',
+  now:'2026 年 1 月 19 日起结构性工具利率统一下调 0.25 个百分点：1 年期支农支小再贷款 1.25%、再贴现 1.5%、PSL 1.75%。科技创新和技术改造再贷款额度从 8000 亿元扩大到 1.2 万亿元，并纳入研发投入高的民营中小企业。年内还单设了民营企业再贷款。',
+  read:'结构性降息但不全面降息 → 央行想“只给重点领域降成本”，同时保护银行利润。<br>额度扩大的领域，就是当下的政治优先级（这次是科技自立）。',
+  pol:'这是货币政策里最像产业政策的部分，和“卡脖子”“新质生产力”直接相连，可对照 ① 页的提法热力图。'},
+ {k:'agg',n:'M2 · 社融 · M1：看钱有没有流到实体',tag:'结果指标',
+  what:'<b>M2</b>：全社会存款加现金，钱的总量。<br><b>社融</b>：实体经济从金融体系拿到的所有钱（贷款、债券、股票、政府债）。<br><b>M1</b>：企业活期存款等“随时能花的钱”，最能反映企业愿不愿意花钱。',
+  now:'2026 年 10 月：M2 增长 7.1%，社融存量增长 7.2%，M1 增长 4.4%。10 月新增人民币贷款为负约 1000 亿元；前十个月社融比上年同期少增 2.29 万亿元，其中政府债券余额增长 14.4%，远高于企业贷款。',
+  read:'<b>M2 高、M1 低</b> → 钱都存着不花（居民和企业不愿投资消费），这就是“流动性陷阱”的味道。<br><b>社融靠政府债撑</b> → 国家在加杠杆，私人部门在去杠杆。<br>贷款负增长 → 不是银行没钱，而是没人想借。',
+  pol:'这组数据说明：中国现在的问题不是“钱不够”，而是“需求不够”。所以单靠降息作用有限，要靠财政和地产政策配合。'},
+ {k:'fx',n:'汇率与美联储：降息的外部约束',tag:'约束条件',
+  what:'中国降息、美国不降 → 中美利差拉大 → 资金可能外流、人民币承压。所以美联储是人民银行的“隐形约束”。央行还有汇率工具：每日中间价、外汇风险准备金率等。',
+  now:'美联储 2026 年 9 月加息 25 个基点到 3.75–4.00%，10 月维持（两票主张再加息），美国 10 年期国债收益率一度超过 5%。中国 7 天政策利率 1.40%、10 年期国债约 1.8%，利差很大。<br>不过 2026 年人民币总体偏强，央行 3 月还把远期售汇外汇风险准备金率从 20% 降到 0——专家解读为抑制人民币单边过快升值。',
+  read:'美联储加息 + 人民币走弱 → 中国降息会更谨慎。<br>人民币偏强 → 给央行降息腾出空间。',
+  pol:'副行长邹澜 1 月曾说“美元处于降息通道，汇率不构成很强的约束”——但 9 月美联储转为加息，这个前提已经变了。'}
+];
+var PB_TL=[
+ {d:'2026-01-06',t:'央行工作会议：降准降息要“灵活高效”',dir:'ease',n:'“灵活高效”是新提法；融资成本从“稳中有降”改为“低位运行”，暗示降息空间有限。'},
+ {d:'2026-01-15',t:'结构性降息 0.25 个百分点',dir:'ease',n:'再贷款、再贴现、PSL 一起降；科技创新再贷款额度扩到 1.2 万亿。邹澜称降准降息“还有一定空间”。'},
+ {d:'2026-01-22',t:'潘功胜：会灵活运用降息降准',dir:'ease',n:'接受新华社采访，重申“适度宽松”。'},
+ {d:'2026-02-13',t:'1 万亿元 6 个月期买断式逆回购',dir:'ease',n:'连续第六个月加量续作；分析师认为降准可能性因此下降。'},
+ {d:'2026-03-02',t:'远期售汇外汇风险准备金率 20%→0',dir:'neu',n:'时隔三年半退出，用来抑制人民币过快升值。'},
+ {d:'2026-04-20',t:'LPR 连续 11 个月不变',dir:'neu',n:'一季度 GDP 5.0%、PPI 转正，央行进入“观察期”。'},
+ {d:'2026-09-16',t:'美联储加息 25 个基点',dir:'tight',n:'外部约束变紧：中美利差拉大。'},
+ {d:'2026-09-28',t:'重启 14 天逆回购 + 隔夜逆回购',dir:'ease',n:'国庆和季末“削峰填谷”。'},
+ {d:'2026-10',t:'买断式净投放 4000 亿，MLF 净回笼 2000 亿',dir:'neu',n:'中期资金整体仍净投放；分析认为降息降准短期大概率延后。'},
+ {d:'2026-10-19',t:'潘功胜：推进贷款定价基准改革',dir:'neu',n:'贷款可选 DR001 等多元基准，不再只靠 LPR。'},
+ {d:'2026-10-20',t:'LPR 连续 17 个月不变',dir:'neu',n:'三季度 GDP 4.5% 好于预期，宽松紧迫性下降。'},
+ {d:'2026-11-11',t:'三季度货币政策报告删掉“及时谋划增量政策”',dir:'tight',n:'仍维持“适度宽松”，但删掉了上季度的加码承诺（据南华早报），市场把目光转向 12 月中央经济工作会议。'},
+ {d:'2026-11-13',t:'10 月金融数据：贷款负增长',dir:'tight',n:'新增贷款约 −1000 亿元；M2 7.1%，社融 7.2%。'}
+];
+var PB_DC={ease:'#5cc786',tight:'#e06060',neu:'#9aa4b2'},PB_DN={ease:'偏松',tight:'偏紧',neu:'中性'};
+function pbHTML(){
+  var ov=S.overlay.pboc||{},ev=(S.overlay.pbev||[]);
+  var h='<section class="panel"><div class="panel-head"><h2 class="amber">⑧ 央行工具箱：中国的钱是怎么“调”的</h2><span class="sub">点任一数字或工具卡看大白话解释 · 数据来自人民银行和公开报道</span><div class="right"><button class="ghost" id="pbWho">⤢ 谁在拍板</button> <button class="ghost" id="pbVs">⤢ 中美央行对照</button></div></div>';
+  // pipe diagram
+  var box=function(t,s,c){return '<div style="border:1px solid '+(c||'var(--line,#333)')+';border-radius:8px;padding:8px 10px;min-width:120px;text-align:center"><div style="font-size:12.5px"><b>'+t+'</b></div><div class="dim" style="font-size:11px">'+s+'</div></div>';},ar='<div class="dim" style="align-self:center;font-size:18px">→</div>';
+  h+='<h3>一张图看懂：钱从央行流到你手里</h3><div style="display:flex;flex-wrap:wrap;gap:6px;align-items:stretch">'+box('人民银行','总水厂','#e0a84a')+ar+box('7 天逆回购 1.40%','出厂水价（政策利率）','#e0a84a')+ar+box('银行间市场 DR007','银行之间互相借钱')+ar+box('LPR 3.0% / 3.5%','银行零售标价（加点）')+ar+box('你的贷款','企业 ≈2.9% · 房贷 ≈3.1%','#5cc786')+'</div>';
+  h+='<div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:6px"><span class="dim" style="font-size:12px;align-self:center">管“水量”的阀门：</span>'+['降准','MLF','买断式逆回购','国债买卖','再贷款（定向）'].map(function(x){return '<span class="chip">'+x+'</span>';}).join('')+'<span class="dim" style="font-size:12px;align-self:center">→ 决定银行手里有多少钱可贷</span></div>';
+  h+='<div class="note">一句话：<b>利率管“价”，降准和各种借贷便利管“量”，再贷款管“方向”</b>。中国现在的特点是：价基本不动，量灵活调节，方向向科技和民企倾斜。</div>';
+  // tiles
+  h+='<h3 style="margin-top:12px">现在的刻度</h3><div class="mx" style="grid-template-columns:repeat(auto-fill,minmax(200px,1fr))">'+PB_TILES.map(function(t){var u=ov[t.id]||{},l=u.light||t.l;return '<div class="pc dd" data-pbt="'+t.k+'" style="border-left-color:'+PB_LC[l]+'"><div class="dim" style="font-size:11.5px">'+t.n+'</div><div style="font-size:17px;margin:2px 0"><b>'+esc(u.value||t.v)+'</b></div><div class="mono dim" style="font-size:10.5px">'+esc(u.date||t.d)+(u.value?' · 已更新':'')+'</div></div>';}).join('')+'</div>';
+  // tools
+  h+='<h3 style="margin-top:12px">八个工具，逐个拆</h3><div class="mx" style="grid-template-columns:repeat(auto-fill,minmax(260px,1fr))">'+PB_TOOLS.map(function(t){return '<div class="pc dd" data-pbt="'+t.k+'" style="border-left-color:var(--amber)"><div style="display:flex;justify-content:space-between"><b>'+t.n+'</b><span class="dim">⤢</span></div><div class="dim" style="font-size:11.5px;margin-top:3px">'+t.tag+'</div></div>';}).join('')+'</div>';
+  // timeline
+  var tl=ev.concat(PB_TL).sort(function(a,b){return a.d<b.d?1:-1;});
+  h+='<h3 style="margin-top:12px">2026 年央行动作时间线 <span class="dim" style="font-size:11.5px">（绿=偏松 · 红=偏紧 · 灰=中性）</span></h3><table class="t" style="font-size:12.5px">'+tl.map(function(e){return '<tr><td class="mono" style="width:90px">'+esc(e.d)+'</td><td style="width:60px"><span class="chip" style="border-color:'+PB_DC[e.dir]+';color:'+PB_DC[e.dir]+'">'+PB_DN[e.dir]+'</span></td><td><b>'+esc(e.t)+'</b><div class="dim" style="font-size:11.5px">'+esc(e.n||'')+'</div></td></tr>';}).join('')+'</table>';
+  h+='<div class="box bottom" style="margin-top:8px"><h4>我的判断：现在是“名义宽松、实际观望”</h4><p style="font-size:12.5px">①<b>价不动：</b>政策利率和 LPR 已经 17 个月没动，银行净息差太薄、美联储又在加息，全面降息的门槛很高。②<b>量在放：</b>买断式逆回购、MLF、国债买卖持续净投放，主要是给政府发债托底。③<b>方向很明确：</b>结构性工具在给科技和民企降成本。④<b>真正的问题是需求：</b>M1 低、贷款负增长说明不缺钱、缺人借钱，所以下一步看点在 12 月中央经济工作会议的财政和地产政策，而不只是央行。<span class="dim">（情景判断，不构成投资建议。）</span></p></div>';
+  h+='<div class="box bottom" style="margin-top:8px"><h4>日历：什么时候看什么</h4><p style="font-size:12.5px">每月 <b>20 日</b> LPR · 每月 <b>中旬</b> 金融数据（M2、社融、贷款）· 每月 <b>25 日前后</b> MLF · 每天上午 <b>9:20</b> 公开市场操作公告 · 每季度末 <b>货币政策委员会例会</b>（下一次约 12 月下旬）· <b>12 月</b> 中央经济工作会议定明年调子 · 每季度 <b>货币政策执行报告</b>（看措辞增删）。</p></div></section>';
+  return h;
+}
+function bindPb(m){
+  $$('[data-pbt]',m).forEach(function(el){el.onclick=function(){var t=PB_TOOLS.filter(function(x){return x.k===el.getAttribute('data-pbt');})[0];if(!t)return;openDeep({kick:'央行工具箱 · '+t.tag,title:t.n,accent:'amber',labels:['是什么（大白话）','现在的状态','怎么读信号','政治与博弈'],parts:[t.what,t.now,t.read,t.pol==='—'?'':t.pol]});};});
+  var w=$('#pbWho',m);if(w)w.onclick=function(){openDeep({kick:'央行 · 权力结构',title:'谁在拍板中国的货币政策',accent:'amber',labels:['决策链','关键人物','约束和博弈',''],parts:[
+   '中国人民银行<b>不是独立央行</b>，它是国务院组成部门。大方向由 <b>12 月中央经济工作会议</b>定调（如“适度宽松”），重大金融事项由<b>中央金融委员会</b>（2023 年成立，党中央决策议事协调机构）统筹；降准降息这样的大动作通常需要国务院同意。央行内部的<b>货币政策委员会</b>每季度开例会，是咨询议事机构，主要用来释放信号。',
+   '<b>潘功胜</b>：行长兼党委书记，外管局出身，主导利率框架改革（政策利率改成 7 天逆回购、推进贷款定价多元基准）。<br><b>邹澜</b>：副行长兼新闻发言人，常在国新办发布会上透露政策（2026 年 1 月的结构性降息就是他宣布的）。<br><b>陆磊</b>：副行长，9 月提出“十五五”期间完善存款准备金制度。<br><b>何立峰</b>：国务院副总理、中央金融委员会办公室主任，金融系统的政治总负责人。',
+   '<b>银行要利润：</b>净息差低，降息会伤银行，银行通过报价加点“消化”降息。<br><b>财政要发债：</b>央行用买断式逆回购、国债买卖托底，被批评有“货币配合财政”的味道。<br><b>美联储和汇率：</b>美国加息时，中国降息更谨慎。<br><b>防空转：</b>央行担心便宜的钱流进债市、股市而不是实体，所以强调“高效”和“结构性”。','']});};
+  var v=$('#pbVs',m);if(v)v.onclick=function(){openDrawer({kick:'中美央行对照',title:'人民银行 vs 美联储',accent:'amber',html:'<table class="t" style="font-size:12.5px"><tr><th></th><th>人民银行</th><th>美联储</th></tr><tr><td>主要政策利率</td><td>7 天逆回购 1.40%</td><td>联邦基金利率 3.75–4.00%</td></tr><tr><td>最近动作</td><td>2025-05 降 10bp 后未动；2026-01 结构性降息</td><td>2026-09 加息 25bp，10 月维持（10:2）</td></tr><tr><td>10 年期国债</td><td>约 1.8%</td><td>约 5.0%（10 月底）</td></tr><tr><td>独立性</td><td>国务院组成部门，党中央定调</td><td>法律上独立，主席沃什</td></tr><tr><td>主要担心</td><td>需求不足、物价偏低、银行利润</td><td>通胀粘性</td></tr><tr><td>风格</td><td>价稳、量调、定向结构性工具</td><td>主要靠调利率和预期管理</td></tr></table><p class="dim" style="font-size:12px">两国正好走在相反方向：一个怕通缩，一个怕通胀。这个利差是人民币、资本流动和中国降息空间的关键变量。</p>'});};
+}
 /* =========================================================
    10. 路由 / 渲染 / 事件
    ========================================================= */
@@ -2836,6 +2936,7 @@ function renderMain(){
   else if(k==='m5'){m.innerHTML=renderM5();bindM5(m);bindSummit(m);post(m);}
   else if(k==='m6'){m.innerHTML=renderM6();bindM6(m);post(m);renderM6List();}
   else if(k==='m7'){m.innerHTML=thHTML();bindTh(m);post(m);}
+  else if(k==='m8'){m.innerHTML=pbHTML();bindPb(m);post(m);}
   else{m.innerHTML=renderPH(k);post(m);}
 }
 function renderFoot(){$('#foot').innerHTML='本地键名 <span class="mono">'+KEY+'</span> · schema v'+SCHEMA+' · 基线 '+BASELINE+' · 单文件离线，无任何外部依赖 · 人物因子为主观示意值，仅供研究复盘';post($('#foot'));}
@@ -2844,7 +2945,7 @@ function renderAll(){
   document.body.classList.toggle('boss',!!S.ui.boss);
   document.title=S.ui.boss?'Global Macro & Semi Tracker':'宏观与半导体情报终端 · Macro Intel Terminal v2';
   $('#brandTitle').firstChild.nodeValue=S.ui.boss?'Global Macro & Semi Tracker':'宏观政治 × 全球半导体 情报终端';
-  var tabNames=S.ui.boss?['① Policy Cycle','② Chip Controls','③ AI Scorecard','④ Regional Security','⑤ Diplomacy','⑥ Timeline','⑦ Macro Pulse']:['① 政治周期 & 人事反腐','② 芯片博弈：谁卡谁','③ 中美 AI 国运计分板','④ 台海与军事态势','⑤ 元首外交雷达','⑥ 跨轨时间轴 & 周报','⑦ 中国体温计'];
+  var tabNames=S.ui.boss?['① Policy Cycle','② Chip Controls','③ AI Scorecard','④ Regional Security','⑤ Diplomacy','⑥ Timeline','⑦ Macro Pulse','⑧ Monetary Tools']:['① 政治周期 & 人事反腐','② 芯片博弈：谁卡谁','③ 中美 AI 国运计分板','④ 台海与军事态势','⑤ 元首外交雷达','⑥ 跨轨时间轴 & 周报','⑦ 中国体温计','⑧ 央行工具箱'];
   $$('#tabs button').forEach(function(b,i){b.textContent=tabNames[i];});
   $('#btnGloss').textContent=S.ui.boss?'[? Glossary]':'[? 体制与级别图鉴]';
   $('#btnPrompt').textContent=S.ui.boss?'⧉ Daily Prompt':'⧉ 复制今日更新指令';$('#btnWeekly').textContent=S.ui.boss?'◷ Weekly':'◷ 3分钟周报';
