@@ -1,5 +1,5 @@
 {
- "ts": "2026-11-27T18:25:49Z",
+ "ts": "2026-11-27T19:25:17Z",
  "pm": {
   "party": {
    "top": [
@@ -9,50 +9,50 @@
     },
     {
      "n": "民进党",
-     "p": 24.4
+     "p": 24.9
     },
     {
      "n": "民众党",
      "p": 0.1
     }
    ],
-   "vol": "919.9K",
+   "vol": "920.0K",
    "url": "https://polymarket.com/event/2026-taiwanese-local-elections-party-winner"
   },
   "tpe": {
    "top": [
     {
      "n": "蒋万安",
-     "p": 58.5
+     "p": 57.5
     },
     {
      "n": "沈伯洋",
-     "p": 41.9
+     "p": 43.2
     },
     {
      "n": "Kuo Hsi",
      "p": 0.1
     }
    ],
-   "vol": "10298.1K",
+   "vol": "10401.6K",
    "url": "https://polymarket.com/event/taipei-mayor-election-winner-20260813125857100"
   },
   "ntp": {
    "top": [
     {
      "n": "苏巧慧",
-     "p": 61.5
+     "p": 63.5
     },
     {
      "n": "李四川",
-     "p": 39.0
+     "p": 37.5
     },
     {
      "n": "Huang Kuo-chang",
      "p": 0.1
     }
    ],
-   "vol": "1100.8K",
+   "vol": "1106.5K",
    "url": "https://polymarket.com/event/new-taipei-mayor-election-winner-20260813125857200"
   },
   "txg": {
@@ -63,7 +63,7 @@
     },
     {
      "n": "何欣纯",
-     "p": 21.7
+     "p": 21.8
     },
     {
      "n": "Yang Chiung-ying",
@@ -88,7 +88,7 @@
      "p": 0.1
     }
    ],
-   "vol": "572.2K",
+   "vol": "575.3K",
    "url": "https://polymarket.com/event/kaohsiung-mayor-election-winner-20260813125857600"
   }
  },
@@ -97,7 +97,7 @@
    "top": [
     {
      "n": "蒋万安",
-     "p": 56.0
+     "p": 57.0
     },
     {
      "n": "沈伯洋",
@@ -108,21 +108,21 @@
      "p": 1.0
     }
    ],
-   "vol": "2661.6K",
+   "vol": "2694.7K",
    "url": "https://kalshi.com/markets/kxtaipeimayor"
   },
   "ntp": {
    "top": [
     {
      "n": "苏巧慧",
-     "p": 64.0
+     "p": 62.0
     },
     {
      "n": "李四川",
-     "p": 38.0
+     "p": 37.0
     }
    ],
-   "vol": "492.3K",
+   "vol": "498.1K",
    "url": "https://kalshi.com/markets/kxnewtaipeimayor"
   },
   "txg": {
@@ -140,7 +140,7 @@
      "p": 1.0
     }
    ],
-   "vol": "102.8K",
+   "vol": "104.5K",
    "url": "https://kalshi.com/markets/kxtaichungmayor"
   },
   "khh": {
@@ -158,7 +158,7 @@
      "p": 2.0
     }
    ],
-   "vol": "188.9K",
+   "vol": "190.2K",
    "url": "https://kalshi.com/markets/kxkaohsiungmayor"
   },
   "party": {
@@ -169,14 +169,14 @@
     },
     {
      "n": "民进党",
-     "p": 26.0
+     "p": 24.0
     },
     {
      "n": "民众党",
      "p": 2.0
     }
    ],
-   "vol": "47.9K",
+   "vol": "48.0K",
    "url": "https://kalshi.com/markets/kxtaiwanlocal"
   }
  },
