@@ -202,7 +202,7 @@ body.boss main svg{filter:grayscale(1)}
 <body>
 <header>
   <div class="topbar">
-    <div class="brand" id="brandTitle">宏观政治 × 全球半导体 情报终端<small id="syncLbl">BASELINE 2026-11-24 · v2 · FULL · 4.16</small></div>
+    <div class="brand" id="brandTitle">宏观政治 × 全球半导体 情报终端<small id="syncLbl">BASELINE 2026-11-24 · v2 · FULL · 4.17</small></div>
     <div class="spacer"></div>
     <div class="tools">
       <button id="btnNote" title="Shift+N">+ 快速记录</button><button id="btnWeekly">◷ 3分钟周报</button><button class="primary" id="btnPrompt">⧉ 复制今日更新指令</button><button id="btnImport">⇪ 导入增量 JSON</button><button class="ghost" id="btnGloss">[? 体制与级别图鉴]</button>
@@ -943,7 +943,7 @@ function openImport(){
       }catch(e){res.innerHTML='<div class="box"><h4 class="red">✕ 解析失败</h4><p class="mono" style="font-size:12px">'+esc(e.message)+'</p><p class="dim">检查是否为合法 JSON（引号、逗号、括号）。</p></div>';}
     };}});
 }
-function updateSyncLbl(){$('#syncLbl').textContent='BASELINE '+BASELINE+' · SYNC '+(S.lastSync||BASELINE)+' · v2 · FULL 4.16';}
+function updateSyncLbl(){$('#syncLbl').textContent='BASELINE '+BASELINE+' · SYNC '+(S.lastSync||BASELINE)+' · v2 · FULL 4.17';}
 
 /* ---------- 快速记录 ---------- */
 function openQuickNote(edit){
@@ -3158,6 +3158,54 @@ function twplHTML(){var h='<section class="panel"><div class="panel-head"><h2 cl
   return h;}
 function bindTwpl(m){$$('[data-twpl]',m).forEach(function(el){el.onclick=function(){var c=TWPL.filter(function(x){return x.k===el.getAttribute('data-twpl');})[0];
   openDrawer({kick:'民调走势 · '+c.n,title:c.n+'：'+c.b+' vs '+c.g,accent:'amber',html:'<div style="max-width:420px">'+twplSpark(c)+'</div><h4>TVBS 系列</h4><table class="t" style="font-size:12.5px">'+c.pts.map(function(p){return '<tr><td class="mono">'+p[0]+'</td><td>'+(p[1]===0?'平手':(p[1]>0?c.b:c.g)+' 领先 '+Math.abs(p[1]))+'</td><td class="dim">'+esc(p[2])+'</td></tr>';}).join('')+'</table><h4>封关前其他机构</h4><table class="t" style="font-size:12.5px">'+c.other.map(function(o){return '<tr><td>'+esc(o[0])+'</td><td>'+esc(o[1])+'</td></tr>';}).join('')+'</table><p>'+esc(c.read)+'</p><p class="dim" style="font-size:12px">TPOC 是整合民调和网络声量的预测模型，AI 模拟不是对真人做的民调；二者都不适用抽样误差。</p>'});};});}
+/* ---- 4.17 年龄 · 中间选民 · 追踪清单 ---- */
+var TWAGE_TO=[['20–24',58,72.7],['25–29',56.3,71.8],['30–34',57.6,71.5],['35–39',58.8,70]];
+var TWAGE_SPLIT=[['台北（2026-11，TVBS）','20–39 岁：沈伯洋领先 21 个百分点；50 岁以上：蒋万安占优'],['台北（综合多家）','40–49 岁两人只差 1 个百分点'],['高雄（2025-11，TVBS）','20–29 岁：赖瑞隆 56%、柯志恩 26%'],['台南（2026-03，TVBS）','30–39 岁：陈亭妃 61%、谢龙介 22%'],['桃园（2025-12，TVBS）','20–29 岁：张善政 51%、王义川 19%（30% 无意见）——蓝营在桃园连年轻人都领先']];
+var TWMID={dpp:{n:'民进党做了什么',c:'#2e9b55',list:[
+  ['换颜色','逾 8 成民进党候选人的主视觉改用粉红、橘色，不再是传统的绿；沈伯洋的“洋流”橘色海报印了 45 万张。用色彩降低“深绿”感。'],
+  ['派“不那么绿”的人','在艰困选区提名党派色彩较淡、全国知名度较低的人选。'],
+  ['把国安讲成民生','沈伯洋淡化“国安学者”标签，把民防重新诠释为防灾体系，提出“运动驿站”“无限都更”“AI 教练”等市政政见。'],
+  ['两岸话术放软','苏巧慧对郑习会的回应是：只要不牺牲防卫能力或国家主权，乐见任何正向的两岸互动。'],
+  ['用跨党派人气王搭桥','王世坚担任沈伯洋竞选副总干事、陪扫街；不少候选人也更期待蔡英文而不是赖清德来站台。'],
+  ['团体战','新竹市每到一处都由议员“如影随形”带着庄竞程跑，同时扩大议员提名。']],
+  risk:'风险：2025 年大罢免和 1.25 兆国防特别预算，让选战可能被框成“战争与和平”；评论者提醒，蔡英文时期地方选举大卖“芒果干”（亡国感）反而惨败。'},
+ kmt:{n:'国民党做了什么',c:'#3b6fd8',list:[
+  ['打市政和建设牌','蒋万安、李四川以“双北共治”为主轴，再串联基隆谢国梁、桃园张善政打团体战，用建设牌吸引中间选民。'],
+  ['候选人讲“做事”不讲“路线”','李四川讲屏东讨海人家庭出身，主打打通新北交通、引进 AI 产业、松绑法规；还推出长辈住家修缮补助最高 3 万元。江启臣主打台中从“幸福城”走向“旗舰城”、“20 分钟生活圈”。'],
+  ['把两岸议题去红化','被问郑习会是否冲击选情，李四川回应赖清德也说过想要“赖习会”，多沟通对话对台湾都好；蒋万安的说法是保护国人应该靠沟通交流，而不是加剧冲突。'],
+  ['和党主席保持距离','中间选民对郑丽文有疑虑；蒋万安被问会不会请她站台时只说党部会统一安排。'],
+  ['反负面选举','蒋万安公开为李四川被攻击“抱不平”，称选举应该谈治理和政见——借此塑造“理性、不撕裂”的形象。'],
+  ['蓝白合','新北、嘉义市共推人选，把民众党的“白色”中间选票拉进来。']],
+  risk:'风险：郑习会和 10 项惠台措施，让国民党随时可能被贴上“亲中”标签；评论者认为国民党的关键是能否把“和平避战”去红化。'},
+ both:{n:'两党的共同点',c:'#e0a84a',list:[
+  ['党主席都被“藏起来”','中间选民对赖清德和郑丽文都有疑虑，同阵营候选人反而更期待蔡英文、蒋万安、卢秀燕、韩国瑜来助选。'],
+  ['关键词是“安全感”','民进党要证明台湾不会被并吞、也不会因意识形态走向危险；国民党要证明两岸可以降温、但台湾不会被卖掉；民众党要证明自己不只是柯文哲的政治共同体。'],
+  ['都在抢农业和观光议题','一边是北京的惠台措施，一边是台美贸易协定可能增加美国农产品进口，两岸红利和台美经贸压力夹击农民。']],
+  risk:'一句话：两党都在把“统独 / 抗中”换成“谁比较会治理、谁比较让人安心”——这正是“往中间走”的具体做法。'}
+};
+var TWTRACK=[
+ ['开票夜','总投票率','天下杂志认为投票率破七成是关键；明显偏高通常代表年轻人被动员出来。'],
+ ['开票夜','全国县市长总得票率','小笠原欣幸认为，全国总得票率是影响 2028 布局的关键指标，比席次更能看出气势。'],
+ ['开票夜','“大赢”的门槛','小笠原的标准：民进党若增加 3–4 个县市并拿下新北，就算大赢；赖清德连任看好度会大幅上升。'],
+ ['开票夜','台北的“李应元防线”','民进党在台北的心理底线是 2002 年李应元创下的历届最低得票率；守住它是最低目标，超过越多越算赢。'],
+ ['开票夜','台北关键选区','TVBS 显示沈伯洋只在士林北投、中山大同领先，其余 4 区蒋万安领先；看沈能否在蒋的选区缩小差距。'],
+ ['开票夜','“大选章鱼哥”天玉里','台北市天玉里的开票结果多次和全国结果一致，媒体称“大选章鱼哥”。'],
+ ['开票夜','核电公投','同意票是否超过约 489 万的门槛。'],
+ ['选后一周','催票率','候选人得票除以全体选举人数，比得票率更能看出“有多少人愿意出门投给你”；和 2022 年比较可看出各党动员力变化。'],
+ ['选后一周','议员席次和政党总得票','议员是政党的“脚”。民众党目标是议员从 14 席倍增到 28 席；小党联盟“台湾前进”能否拿到席次，关系到 2028 不分区布局。'],
+ ['选后一周','分裂投票','同一选区市长和议员的政党得票差距，越大代表越多中间选民“跨党投票”。'],
+ ['选后一周','党主席去留、国台办和美国的反应','谁请辞、北京怎么定调、美国国务院怎么表态。'],
+ ['选后一个月','12 月国政民调和 2028 盘口','美丽岛电子报 12 月国政民调里赖清德满意度的变化；Polymarket / Kalshi 上 2028 相关市场的价格变化。'],
+ ['一两年后','中选会委托的年龄别投票率研究','真正回答“年轻人有没有出来投”的官方数据。']
+];
+function twMidHTML(){var mx=80;
+  var h='<section class="panel"><div class="panel-head"><h2 class="amber">④-A3 年龄 · 中间选民 · 开票夜追踪清单</h2><span class="sub">点卡片看细节</span></div>';
+  h+='<div style="display:grid;grid-template-columns:minmax(280px,1fr) minmax(280px,1fr);gap:14px"><div class="pc" style="border-left-color:var(--amber)"><b>年轻人一被动员，投票率能跳 15 个百分点</b><div class="dim" style="font-size:11.5px;margin:2px 0 8px">总统大选年龄别投票率（中选会委托研究）：<span style="color:#9aa4b2">■ 2016</span> <span style="color:#e0a84a">■ 2020</span></div>'+TWAGE_TO.map(function(r){return '<div style="display:grid;grid-template-columns:52px 1fr;gap:6px;align-items:center;margin:4px 0;font-size:11.5px"><span class="mono">'+r[0]+'</span><div><div style="height:9px;width:'+r[1]/mx*100+'%;background:#9aa4b2;border-radius:3px"></div><div style="height:9px;width:'+r[2]/mx*100+'%;background:#e0a84a;border-radius:3px;margin-top:2px"></div><span class="dim mono" style="font-size:10.5px">'+r[1]+'% → '+r[2]+'%</span></div></div>';}).join('')+'<div class="note" style="margin-top:6px">2020 年的跳升一般被认为是受香港反修例风波刺激，也是蔡英文胜选的关键。今年按年龄的实际投票率要等中选会事后研究才有。</div></div>';
+  h+='<div class="pc" style="border-left-color:var(--amber)"><b>今年的民调：支持度按年龄几乎一刀切</b>'+TWAGE_SPLIT.map(function(r){return '<div style="margin-top:6px;font-size:12px"><span class="dim">'+esc(r[0])+'：</span>'+esc(r[1])+'</div>';}).join('')+'<div class="note" style="margin-top:8px">选民结构：40–49 岁最多（19.88%），其次 50–59 岁（18.06%）。中老年人数多、投票率又高，所以靠年轻人领先的一方更没底。地方选举 20 岁才能投，18、19 岁这次只能投核电公投。</div></div></div>';
+  h+='<h3 style="margin-top:12px">两党怎么争取中间选民</h3><div class="mx" style="grid-template-columns:repeat(auto-fill,minmax(280px,1fr))">'+Object.keys(TWMID).map(function(k){var c=TWMID[k];return '<div class="pc dd" data-twmid="'+k+'" style="border-left-color:'+c.c+'"><b style="color:'+c.c+'">'+c.n+'</b> <span class="dim">⤢</span><div class="dim" style="font-size:11.5px;margin-top:4px">'+c.list.map(function(x){return x[0];}).join(' · ')+'</div></div>';}).join('')+'</div>';
+  h+='<h3 style="margin-top:12px">追踪清单：开票夜到选后一年</h3><table class="t" style="font-size:12.5px">'+TWTRACK.map(function(r){return '<tr><td style="width:84px"><span class="chip">'+r[0]+'</span></td><td style="width:170px"><b>'+esc(r[1])+'</b></td><td>'+esc(r[2])+'</td></tr>';}).join('')+'</table></section>';
+  return h;}
+function bindTwMid(m){$$('[data-twmid]',m).forEach(function(el){el.onclick=function(){var c=TWMID[el.getAttribute('data-twmid')];openDrawer({kick:'争取中间选民',title:c.n,accent:'amber',html:c.list.map(function(x){return '<p style="margin:0 0 9px"><b>'+esc(x[0])+'：</b>'+esc(x[1])+'</p>';}).join('')+'<div class="note">'+esc(c.risk)+'</div>'});};});}
 /* =========================================================
    10. 路由 / 渲染 / 事件
    ========================================================= */
@@ -3176,7 +3224,7 @@ function renderMain(){
     post(m);renderFeed();renderDiff();renderRadar();
   }else if(k==='m2'){m.innerHTML=renderM2()+dcMapHTML()+cnTeamHTML();bindWires(m);bindM2(m);bindCnTeam(m);bindDcMap(m);post(m);}
   else if(k==='m3'){m.innerHTML=renderM3()+nukeHTML()+aisHTML()+econHTML();var af=$('#aisFear',m);if(af)af.onclick=openFear;bindWires(m);bindM3(m);bindScore(m);bindEcon(m);var nb=$('#nukeOpen',m);if(nb)nb.onclick=openNuke;post(m);}
-  else if(k==='m4'){m.innerHTML=twHTML()+electionHTML()+twmHTML()+twplHTML()+twpHTML()+twsHTML()+twhHTML()+twjpPeopleHTML()+kcardsHTML()+renderM4();bindM4(m);bindTW(m);bindElection(m);bindTwm(m);bindTwpl(m);bindTwp(m);bindTws(m);bindTwh(m);bindTWJP(m);$$('[data-k]',m).forEach(function(el){el.onclick=function(){openKCard(el.getAttribute('data-k'));};});post(m);}
+  else if(k==='m4'){m.innerHTML=twHTML()+electionHTML()+twmHTML()+twplHTML()+twMidHTML()+twpHTML()+twsHTML()+twhHTML()+twjpPeopleHTML()+kcardsHTML()+renderM4();bindM4(m);bindTW(m);bindElection(m);bindTwm(m);bindTwpl(m);bindTwMid(m);bindTwp(m);bindTws(m);bindTwh(m);bindTWJP(m);$$('[data-k]',m).forEach(function(el){el.onclick=function(){openKCard(el.getAttribute('data-k'));};});post(m);}
   else if(k==='m5'){m.innerHTML=renderM5();bindM5(m);bindSummit(m);post(m);}
   else if(k==='m6'){m.innerHTML=renderM6();bindM6(m);post(m);renderM6List();}
   else if(k==='m7'){m.innerHTML=thHTML();bindTh(m);post(m);}
