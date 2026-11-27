@@ -3208,7 +3208,7 @@ function twMidHTML(){var mx=80;
   return h;}
 function bindTwMid(m){$$('[data-twmid]',m).forEach(function(el){el.onclick=function(){var c=TWMID[el.getAttribute('data-twmid')];openDrawer({kick:'争取中间选民',title:c.n,accent:'amber',html:c.list.map(function(x){return '<p style="margin:0 0 9px"><b>'+esc(x[0])+'：</b>'+esc(x[1])+'</p>';}).join('')+'<div class="note">'+esc(c.risk)+'</div>'});};});}
 /* ---- ④-A0 开票夜：双北追踪器 ---- */
-var NT_NTP={base:6.79,src:'鉅闻天下/皮尔森 民调（选前最后一批之一，李减苏）',a:'李四川',b:'苏巧慧',rows:[
+var NT_NTP={base:6.79,src:'7 月 20 日鉅闻天下/皮尔森民调（李减苏；距今 4 个月，是唯一公布分区数字的一份）',a:'李四川',b:'苏巧慧',rows:[
  ['bq','板桥（第5选区）',1.87,'人口最多的摇摆区，“得板桥者得天下”'],
  ['xz','新庄（第3选区）',-0.11,'苏巧慧的老家地盘，她要明显赢'],
  ['sl','三重·芦洲（第4选区）',5.53,'绿营传统票仓，苏要赢 5 点以上'],
@@ -3233,14 +3233,14 @@ function nightHTML(){
   h+='<div class="note" style="margin-bottom:10px">输入方法：每格填得票率（如 48.3）或票数（如 152340）都可以。填票数时会自动换算成百分点。差距一律是“蓝减绿”。看中选会开票网站的各区累计数字最准；电视台数字偏快偏高，只看气氛。</div>';
   h+='<div style="display:grid;grid-template-columns:minmax(320px,1fr) minmax(320px,1fr);gap:14px">';
   /* 新北 */
-  var sw=[],nh='<div class="pc" style="border-left-color:var(--amber)"><b>新北：苏巧慧 vs 李四川</b><div class="dim" style="font-size:11.5px;margin:2px 0 6px">基准 = '+NT_NTP.src+'，全市李领先 '+NT_NTP.base+'。实际差距减基准 = 摆动；平均摆动约 −6.8 就是平手。</div><table class="t" style="font-size:12px"><tr><th>区</th><th>基准</th><th>李</th><th>苏</th><th>实际</th><th>摆动</th></tr>';
+  var sw=[],nh='<div class="pc" style="border-left-color:var(--amber)"><b>新北：苏巧慧 vs 李四川</b><div class="dim" style="font-size:11.5px;margin:2px 0 6px">基准 = '+NT_NTP.src+'，全市李领先 '+NT_NTP.base+'。实际差距减基准 = 摆动；平均摆动约 −6.8 就是平手。注意：TVBS 从 10 月到封关已往苏移动约 7 点，所以摆动 −7 左右只代表“和封关民调一致”。</div><table class="t" style="font-size:12px"><tr><th>区</th><th>基准</th><th>李</th><th>苏</th><th>实际</th><th>摆动</th></tr>';
   NT_NTP.rows.forEach(function(r){var m=ntMargin('ntp',r[0]);var s=m==null?null:m-r[2];if(s!=null)sw.push(s);nh+='<tr title="'+esc(r[3])+'"><td>'+esc(r[1])+'</td><td class="mono">'+ntFmt(r[2])+'</td><td>'+ntInp('ntp',r[0],'a','%/票',58)+'</td><td>'+ntInp('ntp',r[0],'b','%/票',58)+'</td><td class="mono">'+ntFmt(m)+'</td><td class="mono" style="color:'+(s==null?'':s<-NT_NTP.base?'#4caf7a':'#5b8def')+'">'+ntFmt(s)+'</td></tr>';});
   nh+='</table>';
   var avg=sw.length?sw.reduce(function(x,y){return x+y;},0)/sw.length:null;
   var proj=avg==null?null:NT_NTP.base+avg;
   nh+='<div style="margin-top:8px;font-size:12.5px">已填 '+sw.length+'/7 区 · 平均摆动 <b class="mono">'+ntFmt(avg)+'</b> → 推算全市 李−苏 ≈ <b class="mono" style="color:'+(proj==null?'':proj<0?'#4caf7a':'#5b8def')+'">'+ntFmt(proj)+'</b>'+(proj==null?'':proj<0?'（苏领先）':'（李领先）')+'</div>';
   var nm=ntMargin('ntp','all');nh+='<div style="margin-top:6px;font-size:12px">全市累计：李 '+ntInp('ntp','all','a','票数',84)+' 苏 '+ntInp('ntp','all','b','票数',84)+' → 李−苏 <b class="mono">'+ntFmt(nm)+'</b></div>';
-  nh+='<div class="note" style="margin-top:6px">读法：板桥、新庄、三重芦洲决定胜负；中和、永和、新店、淡水看苏“少输”多少。早期只开出几个区时，总数会被先开完的区带偏，摆动比总数可靠。不同民调差很多（TVBS 最后一份是苏 43.0 比李 42.4，苏反而领先 0.6），−6.8 这条线要打折扣看。</div></div>';
+  nh+='<div class="note" style="margin-top:6px">读法：板桥、新庄、三重芦洲决定胜负；中和、永和、新店、淡水看苏“少输”多少。早期只开出几个区时，总数会被先开完的区带偏，摆动比总数可靠。这个基准是 7 月的旧民调；封关时 TVBS 已是苏 43.0 比李 42.4。各区平均摆动明显超过 −8 到 −9，才是苏比较有把握的信号。</div></div>';
   /* 台北 */
   var tw=0,ts=0,th='<div class="pc" style="border-left-color:var(--amber)"><b>台北：蒋万安 vs 沈伯洋</b><div class="dim" style="font-size:11.5px;margin:2px 0 6px">台北没有完整的分区民调基准，这里改用“各区按选民人数加权”推算全市。权重 = 2022 年各议员选区选举人数（万人）。</div><table class="t" style="font-size:12px"><tr><th>区</th><th>选民</th><th>蒋</th><th>沈</th><th>蒋−沈</th></tr>';
   NT_TPE.rows.forEach(function(r){var m=ntMargin('tpe',r[0]);if(m!=null){tw+=r[2];ts+=m*r[2];}th+='<tr title="'+esc(r[3])+'"><td>'+esc(r[1])+'</td><td class="mono">'+r[2]+'</td><td>'+ntInp('tpe',r[0],'a','%/票',58)+'</td><td>'+ntInp('tpe',r[0],'b','%/票',58)+'</td><td class="mono">'+ntFmt(m)+'</td></tr>';});
@@ -3251,13 +3251,35 @@ function nightHTML(){
   th+='<div style="margin-top:6px;font-size:12px">全市累计：蒋 '+ntInp('tpe','all','a','票数',84)+' 沈 '+ntInp('tpe','all','b','票数',84)+' 有效票 '+ntInp('tpe','all','t','含小党(可空)',96)+'</div>';
   th+='<div style="margin-top:8px;padding:8px;border:1px dashed #3a4656;border-radius:6px;font-size:12.5px">Kalshi「沈伯洋胜选差距 ≥ 4」：沈−蒋 = <b class="mono">'+ntFmt(shen)+'</b> 个百分点 → '+(shen==null?'<span class="dim">等待数字</span>':shen>=4?'<b style="color:#4caf7a">Yes 一侧（沈大赢 ≥4）</b>':'<b style="color:#e0a84a">No 一侧（沈赢不到 4，或蒋赢）</b>')+(shen!=null&&Math.abs(shen-4)<0.6?' <span style="color:#e05a5a">· 贴近门槛，要等官方小数点</span>':'')+'<div class="dim" style="font-size:11px;margin-top:4px">填了有效票总数时按总数算（小党票会稀释分母）；没填时只用两人票数相加，会略微放大差距。盘口正式结算要等中选会审定（12/4 前）。</div></div>';
   th+='<div class="note" style="margin-top:6px">读法：松山信义、文山是蒋的底；士林、中山、万华、内湖南港是沈要赢的地方；大安是指标区（9 月民调沈只 +1.1）。如果沈在大安明显领先、在松山信义只小输，就是“沈大赢”的剧本。</div></div>';
-  h+=nh+th+'</div><div style="margin-top:10px;text-align:right"><button class="chip btn" id="ntClear">清空我输入的数字</button></div></section>';
+  h+=nh+th+'</div><div style="margin-top:10px;text-align:right"><button class="chip btn" id="ntDemo" style="margin-right:6px">选民年龄结构与民调方法 ⤢</button><button class="chip btn" id="ntClear">清空我输入的数字</button></div></section>';
   return h;}
+
+var NT_AGE={tpe:{n:'台北',tot:2090062,g:[251773,319763,409740,370084,370624,245337,97932,24809]},ntp:{n:'新北',tot:3402064,g:[475930,564271,697073,623920,591775,321911,105854,21330]}};
+var NT_AGEL=['20–29','30–39','40–49','50–59','60–69','70–79','80–89','90+'];
+var NT_POLLS={tpe:[
+ ['TVBS','11/14–15','蒋 46.0 · 沈 44.0','市话＋手机电访','1,331','±2.7%','未决定 10%；中立选民沈 40 比蒋 37'],
+ ['ETtoday 民调云','11/13–15','蒋 48.1 · 沈 42.0','封闭式网络问卷','1,505','±2.53%','自愿加入的网络样本，非随机抽样'],
+ ['中国时报','封关','蒋 44.1 · 沈 37.1','未查到','—','—','未表态 15.4%；20–29 岁沈 +31.9'],
+ ['锋灿传媒','11/4–9','沈 44.7 · 蒋 43.0','市话＋网络混合','2,026','±2.18%','台大政治系张佑宗设计；调查较早'],
+ ['信民协会','11/11–13','沈 48.6 · 蒋 33.8','市话＋手机电访','1,072','±3.0%','这是“估计得票率”，分母和支持度不同，不能直接比；委托方为台北市信民两岸研究协会']],
+ ntp:[
+ ['TVBS','封关（11/17 公布）','苏 43.0 · 李 42.4','未查到（7 月同机构为市话）','—','—','未决定 13.6%；会去投票 86.9%；估投票率 62%'],
+ ['镜新闻','11/5 公布','苏 47.7 · 李 32.8','未查到','—','—','一定会投票者苏 55.5 比李 34.5'],
+ ['TPOC 台湾议题研究中心','11/17 公布','苏 50.73 · 李 49.27','不是民调：AI“矽基样本”模拟','26,771 个 AI 代理人','不适用','非随机抽样，用大语言模型按人口结构生成虚拟选民；只能当模型预测看'],
+ ['震传媒','9/23 公布','苏 38.2 · 李 37.1','未查到','—','—','较早'],
+ ['鉅闻天下/皮尔森','7/20 公布','李 50.85 · 苏 44.06','未查到（同机构 7 月另一份为网络样本）','—','—','分区数字来源；已是 4 个月前'],
+ ['TVBS（国民党议会党团委托）','7/20–23','李 43.7 · 苏 36.8','市话','1,303','±2.7%','委托方是国民党新北市议会党团']]};
+function ntDemoHTML(c){var a=NT_AGE[c],mx=Math.max.apply(null,a.g);
+  var h='<p class="dim" style="margin:0 0 6px">'+a.n+'选举人（2024 年中选会年龄分层，合计 '+a.tot.toLocaleString()+' 人）。2026 年的正式人数要以选委会 11/24 公告为准。</p>';
+  h+=a.g.map(function(v,i){var pc=v/a.tot*100;return '<div style="display:grid;grid-template-columns:52px 1fr 92px;gap:6px;align-items:center;margin:3px 0;font-size:12px"><span class="mono">'+NT_AGEL[i]+'</span><div style="height:9px;background:#1b2430;border-radius:3px"><div style="height:9px;width:'+(v/mx*100).toFixed(1)+'%;background:'+(i<2?'#4caf7a':i>3?'#5b8def':'#8a94a6')+';border-radius:3px"></div></div><span class="mono dim">'+pc.toFixed(1)+'% · '+Math.round(v/1000)+'k</span></div>';}).join('');
+  h+='<table class="t" style="font-size:11.5px;margin-top:10px"><tr><th>机构</th><th>时间</th><th>结果</th><th>方式</th><th>样本</th><th>误差</th><th>备注</th></tr>'+NT_POLLS[c].map(function(r){return '<tr><td><b>'+esc(r[0])+'</b></td><td class="mono">'+esc(r[1])+'</td><td class="mono">'+esc(r[2])+'</td><td>'+esc(r[3])+'</td><td class="mono">'+esc(r[4])+'</td><td class="mono">'+esc(r[5])+'</td><td class="dim">'+esc(r[6])+'</td></tr>';}).join('')+'</table>';
+  return h;}
+function openNtDemo(){openDrawer({kick:'开票夜 · 背景',title:'选民年龄结构与封关民调方法',accent:'amber',html:'<h3 style="margin:0 0 6px">台北</h3>'+ntDemoHTML('tpe')+'<p class="note">投票率：2022 台北市长 67.7%；TVBS 估今年约 72%。20–39 岁占 27%，60 岁以上占 35%，而且中老年人投票率通常更高。</p><h3 style="margin:14px 0 6px">新北</h3>'+ntDemoHTML('ntp')+'<p class="note">投票率：2022 新北市长约 55.6%，是新北升格以来最低（历届 71.25%、61.65%、64%）；TVBS 估今年约 62%。新北比台北年轻：20–39 岁占 31%，60 岁以上占 31%。2022 年新北选举人 331.7 万，最多的是板桥 45.1 万。</p><p class="note">读民调的五个要点：①电话还是网络（网络问卷多为自愿样本）；②“支持度”还是“估计得票率”；③有没有、怎么加权；④调查日期；⑤委托方是谁。AI 模拟（如 TPOC）不是民调。年龄别投票率只有全国、总统大选的研究，双北没有公开数字。</p>'});}
 var ntT=null;
 function ntRefresh(m){clearTimeout(ntT);ntT=setTimeout(function(){var p=$('#ntPanel',m);if(!p||!p.isConnected)return;var ae=document.activeElement,fk=ae&&ae.getAttribute&&ae.getAttribute('data-nt');var d=document.createElement('div');d.innerHTML=nightHTML();p.parentNode.replaceChild(d.firstChild,p);bindNight(m);if(fk){var n=$('[data-nt="'+fk+'"]',m);if(n){n.focus();try{n.select();}catch(e){}}}},30);}
 function bindNight(m){
   $$('[data-nt]',m).forEach(function(el){el.onchange=function(){S.ui.night=S.ui.night||{};S.ui.night[el.getAttribute('data-nt')]=el.value.trim();save();ntRefresh(m);};});
-  var c=$('#ntClear',m);if(c)c.onclick=function(){S.ui.night={};save();ntRefresh(m);toast('已清空手动输入（自动填入的数字保留）');};}
+  var dm=$('#ntDemo',m);if(dm)dm.onclick=openNtDemo;var c=$('#ntClear',m);if(c)c.onclick=function(){S.ui.night={};save();ntRefresh(m);toast('已清空手动输入（自动填入的数字保留）');};}
 /* =========================================================
    10. 路由 / 渲染 / 事件
    ========================================================= */
