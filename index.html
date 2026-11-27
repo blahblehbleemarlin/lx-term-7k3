@@ -202,7 +202,7 @@ body.boss main svg{filter:grayscale(1)}
 <body>
 <header>
   <div class="topbar">
-    <div class="brand" id="brandTitle">宏观政治 × 全球半导体 情报终端<small id="syncLbl">BASELINE 2026-11-24 · v2 · FULL · 4.12</small></div>
+    <div class="brand" id="brandTitle">宏观政治 × 全球半导体 情报终端<small id="syncLbl">BASELINE 2026-11-24 · v2 · FULL · 4.13</small></div>
     <div class="spacer"></div>
     <div class="tools">
       <button id="btnNote" title="Shift+N">+ 快速记录</button><button id="btnWeekly">◷ 3分钟周报</button><button class="primary" id="btnPrompt">⧉ 复制今日更新指令</button><button id="btnImport">⇪ 导入增量 JSON</button><button class="ghost" id="btnGloss">[? 体制与级别图鉴]</button>
@@ -943,7 +943,7 @@ function openImport(){
       }catch(e){res.innerHTML='<div class="box"><h4 class="red">✕ 解析失败</h4><p class="mono" style="font-size:12px">'+esc(e.message)+'</p><p class="dim">检查是否为合法 JSON（引号、逗号、括号）。</p></div>';}
     };}});
 }
-function updateSyncLbl(){$('#syncLbl').textContent='BASELINE '+BASELINE+' · SYNC '+(S.lastSync||BASELINE)+' · v2 · FULL 4.12';}
+function updateSyncLbl(){$('#syncLbl').textContent='BASELINE '+BASELINE+' · SYNC '+(S.lastSync||BASELINE)+' · v2 · FULL 4.13';}
 
 /* ---------- 快速记录 ---------- */
 function openQuickNote(edit){
@@ -2732,7 +2732,7 @@ function twpHTML(){
 }
 function bindTwp(m){
   bindTwpNews(m);
-  var mb=$('#twpMktBox',m);if(mb){bindTwpMkt(mb);var L=S.ui.twmkt||{};if(!L.at||Date.now()-L.at>6e5){S.ui.twmkt=Object.assign(L,{at:Date.now()});twpMktPull();}}
+  var mb=$('#twpMktBox',m);if(mb){bindTwpMkt(mb);var L=S.ui.twmkt||{};if(!L.at||Date.now()-L.at>3e5){S.ui.twmkt=Object.assign(L,{at:Date.now()});twpMktPull();}}
   var w=$('#twpWhy',m);if(w)w.onclick=function(){openDeep({kick:'TAIWAN POLITICS · 核心逻辑',title:'为什么蓝绿都要往“中间”走',accent:'amber',labels:['选民结构','两党怎么调整','2026 这一仗的特殊之处','怎么追踪'],parts:[
    '用政大选研中心的长期数据看台湾选民：<br>①<b>身份：</b>六成多认同自己是“台湾人”，三成认为“既是台湾人也是中国人”，只认同“中国人”的只有约 2.5%。<br>②<b>统独：</b>约六成选择某种形式的“维持现状”，明确要尽快统一或尽快独立的都是少数。<br>③<b>政党：</b>约三成半选民没有固定政党认同。<br><br>结论：<b>认同上偏“台湾”，行动上偏“维持现状”，政党上有三成多的人不站队。</b>这就是“中间”。',
    '<b>民进党</b>：从早年的“台独党纲”转向“台湾已是主权独立国家，名为中华民国，无须宣布独立”，把“维持现状”包装成自己的立场。<br><b>国民党</b>：坚持“九二共识”，但长期回避“统一时间表”，用“和平、交流、经济”争取中间选民。郑丽文的路线更强调中国认同，这次选举是对这条路线的第一次检验。<br><b>民众党</b>：本来就是靠“既不蓝也不绿”的中间选民起家，但和国民党结盟后，“第三势力”的标签在褪色——这也是它支持度下滑的原因之一。',
@@ -2748,6 +2748,7 @@ var TWP_MKT=[
  {id:'party',n:'谁拿最多县市长',poll:'国民党 2022 拿 14 席，机构普遍预期仍居首',snap:[{v:'Polymarket',t:'国民党 82%',d:'11 月快照'},{v:'Polymarket（另一追踪站）',t:'民进党 16%（7 日区间 16–19%）',d:'11 月快照'}],sig:'同向',why:'盘口和机构判断方向一致：国民党大概率仍是最大党。真正的悬念是差距多大。'},
  {id:'tpe',n:'台北市',poll:'拉锯：7 份封关民调 4 份沈伯洋高、3 份蒋万安高',snap:[{v:'Polymarket',t:'蒋万安 92%',d:'09-12，较旧'},{v:'Kalshi',t:'蒋万安约 67%',d:'报价页快照'}],sig:'盘口更笃定',why:'民调说拉锯，盘口仍偏向蒋万安。要么盘口低估了“洋流”，要么民调高估了；开票后可以看谁更准。'},
  {id:'ntp',n:'新北市',poll:'拉锯：封关时苏巧慧首次小幅超车（TVBS 43.0 比 42.4、TPOC 50.7 比 49.3）',snap:[{v:'Polymarket',t:'李四川 56%',d:'10-05'},{v:'Kalshi',t:'苏巧慧 54%',d:'快照'},{v:'Public',t:'苏巧慧 67%',d:'快照'}],sig:'平台打架',why:'不同平台的热门人选相反，和民调的五五波一致：这是今晚最没有共识的一场。'},
+ {id:'khh',n:'高雄市',poll:'偏绿，但方法打架：ETtoday 网络问卷柯志恩 46.1 比 44.6，TPOC 预测赖瑞隆领先约 11 个百分点',snap:[{v:'—',t:'暂无快照，等服务器抓取',d:''}],sig:'平台打架',why:'民调方法分歧很大，盘口能当第三个参照。'},
  {id:'txg',n:'台中市',poll:'偏蓝：TPOC 预测江启臣领先 5.8 个百分点，但个别民调结论相反',snap:[{v:'Polymarket',t:'江启臣 80%',d:'11 月快照'}],sig:'盘口更笃定',why:'民调两家结论相反，盘口却一面倒押江启臣。成交量只有约 5 万美元，几笔大单就能做出这个价。'}
 ];
 var TWP_MKT_Q={party:'Taiwanese Local Elections: Party Winner',tpe:'Taipei Mayor Election Winner',ntp:'New Taipei Mayor Election Winner',txg:'Taichung Mayor Election Winner'};
@@ -2756,22 +2757,19 @@ function twpCn(s){s=String(s||'');var l=s.toLowerCase();if(TWP_EN[l])return TWP_
 var TWP_SIGC={'同向':'#5cc786','盘口更笃定':'#e0a84a','平台打架':'#e06060','背离':'#e06060'};
 function twpMktHTML(){
   var L=(S.ui.twmkt||{}),rows=L.rows||{};
-  var h='<h3 style="margin-top:12px">盘口 vs 民调 <span class="dim" style="font-size:11.5px">（预测市场只当情绪指标）</span> <button class="ghost" id="twpMktPull" style="font-size:11px">↻ 拉实时盘口</button> <button class="ghost" id="twpMktHow" style="font-size:11px">⤢ 怎么读</button> <span class="mono dim" id="twpMktSt" style="font-size:11px">'+(L.ts?'实时 · '+esc(L.ts):(L.err?'实时拉取失败，显示快照':'显示快照'))+'</span></h3>';
-  h+='<table class="t" style="font-size:12.5px"><tr><th style="width:110px">场次</th><th>民调 / 机构评级</th><th>盘口</th><th style="width:90px">信号</th></tr>'+TWP_MKT.map(function(r){var live=rows[r.id];var mk=live?('<b class="amber">Polymarket 实时：</b>'+live.top.map(function(x){return esc(x.n)+' '+x.p+'%';}).join(' · ')+' <span class="dim">（成交 $'+esc(live.vol)+'）</span><br><span class="dim" style="font-size:11px">快照：'+r.snap.map(function(s){return esc(s.v)+' '+esc(s.t);}).join(' · ')+'</span>'):r.snap.map(function(s){return esc(s.v)+'：'+esc(s.t)+' <span class="dim" style="font-size:11px">'+esc(s.d)+'</span>';}).join('<br>');return '<tr class="dd" data-twm="'+r.id+'" style="cursor:pointer"><td><b>'+r.n+'</b></td><td>'+esc(r.poll)+'</td><td>'+mk+'</td><td><span class="chip" style="border-color:'+TWP_SIGC[r.sig]+';color:'+TWP_SIGC[r.sig]+'">'+r.sig+'</span></td></tr>';}).join('')+'</table>';
+  var h='<h3 style="margin-top:12px">盘口 vs 民调 <span class="dim" style="font-size:11.5px">（预测市场只当情绪指标）</span> <button class="ghost" id="twpMktPull" style="font-size:11px">↻ 拉实时盘口</button> <button class="ghost" id="twpMktHow" style="font-size:11px">⤢ 怎么读</button> <span class="mono dim" id="twpMktSt" style="font-size:11px">'+(L.ts&&!L.err?'服务器抓取于 '+esc(L.ts)+'（每 10 分钟）':(L.err?'实时数据暂不可用，显示快照':'显示快照'))+'</span></h3>';
+  h+='<table class="t" style="font-size:12.5px"><tr><th style="width:110px">场次</th><th>民调 / 机构评级</th><th>盘口</th><th style="width:90px">信号</th></tr>'+TWP_MKT.map(function(r){var live=rows[r.id]||{};var ln=function(lab,x){return x&&x.top?'<b class="amber">'+lab+'：</b>'+x.top.map(function(y){return esc(y.n)+' '+y.p+'%';}).join(' · ')+' <span class="dim">（成交 $'+esc(x.vol||'?')+(x.stale?' · 上轮数据':'')+'）</span>'+(x.url?' <a href="'+esc(x.url)+'" target="_blank" rel="noopener" class="dim">↗</a>':''):'';};var lv=[ln('Polymarket 实时',live.pm),ln('Kalshi 实时',live.ks)].filter(Boolean);var mk=lv.length?(lv.join('<br>')+'<br><span class="dim" style="font-size:11px">快照：'+r.snap.map(function(s){return esc(s.v)+' '+esc(s.t);}).join(' · ')+'</span>'):r.snap.map(function(s){return esc(s.v)+'：'+esc(s.t)+' <span class="dim" style="font-size:11px">'+esc(s.d)+'</span>';}).join('<br>');return '<tr class="dd" data-twm="'+r.id+'" style="cursor:pointer"><td><b>'+r.n+'</b></td><td>'+esc(r.poll)+'</td><td>'+mk+'</td><td><span class="chip" style="border-color:'+TWP_SIGC[r.sig]+';color:'+TWP_SIGC[r.sig]+'">'+r.sig+'</span></td></tr>';}).join('')+'</table>';
   h+='<div class="note">快照来自公开的盘口聚合页，日期以各行标注为准。这些市场每场成交量只有几万到几十万美元，少数大单就能改变价格。台湾媒体也提醒，在境外平台押注台湾选举可能违反《选罢法》。本表只做对照，不构成任何交易建议。</div>';
   return h;
 }
 function twpMktPull(done){
   var st=$('#twpMktSt');function say(t){if(st)st.textContent=t;}
   if(!/^https?:$/.test(location.protocol)){say('本地打开的文件无法拉取，请在 GitHub Pages 网址上用');return;}
-  say('拉取中…');var ids=Object.keys(TWP_MKT_Q),out={},n=0,ok=0;
-  ids.forEach(function(id){var q=TWP_MKT_Q[id],ctl=window.AbortController?new AbortController():null,tm=setTimeout(function(){if(ctl)ctl.abort();},9000);
-    fetch('https://gamma-api.polymarket.com/public-search?q='+encodeURIComponent(q)+'&limit_per_type=8',ctl?{signal:ctl.signal}:{}).then(function(r){return r.json();}).then(function(j){
-      var ev=(j.events||[]).filter(function(e){var t=String(e.title||'').toLowerCase(),k=q.toLowerCase();return id==='party'?t.indexOf('party winner')>=0&&t.indexOf('taiwan')>=0:t.indexOf(k)===0;})[0];
-      if(!ev)return;var mk=(ev.markets||[]).map(function(m){var p;try{p=JSON.parse(m.outcomePrices||'[]')[0];}catch(e){}return {n:twpCn(m.groupItemTitle||m.question),p:Math.round(parseFloat(p||0)*1000)/10,closed:m.closed};}).filter(function(x){return x.p>0;}).sort(function(a,b){return b.p-a.p;}).slice(0,2);
-      if(!mk.length)return;var v=Math.round(parseFloat(ev.volume||0));out[id]={top:mk,vol:v>=1000?Math.round(v/100)/10+'K':String(v)};ok++;
-    }).catch(function(){}).then(function(){clearTimeout(tm);n++;if(n===ids.length){var now=new Date();if(ok){S.ui.twmkt={ts:now.toLocaleString(),rows:out,at:Date.now()};}else{S.ui.twmkt=Object.assign(S.ui.twmkt||{},{err:1});}save();var box=$('#twpMktBox');if(box){box.innerHTML=twpMktHTML();bindTwpMkt(box);}if(done)done(ok);}});
-  });
+  say('拉取中…');
+  fetch('data/markets.json?t='+Date.now(),{cache:'no-store'}).then(function(r){if(!r.ok)throw new Error(r.status);return r.json();}).then(function(j){
+    var rows={};['pm','ks'].forEach(function(src){Object.keys(j[src]||{}).forEach(function(id){rows[id]=rows[id]||{};rows[id][src]=j[src][id];});});
+    var n=Object.keys(rows).length;S.ui.twmkt={ts:j.ts?new Date(j.ts).toLocaleString():'',rows:rows,at:Date.now(),err:n?0:1};
+  }).catch(function(){S.ui.twmkt=Object.assign(S.ui.twmkt||{},{err:1,at:Date.now()});}).then(function(){save();var box=$('#twpMktBox');if(box){box.innerHTML=twpMktHTML();bindTwpMkt(box);}if(done)done();});
 }
 function bindTwpMkt(m){
   var b=$('#twpMktPull',m);if(b)b.onclick=function(){twpMktPull();};
