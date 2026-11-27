@@ -202,7 +202,7 @@ body.boss main svg{filter:grayscale(1)}
 <body>
 <header>
   <div class="topbar">
-    <div class="brand" id="brandTitle">宏观政治 × 全球半导体 情报终端<small id="syncLbl">BASELINE 2026-11-24 · v2 · FULL · 4.17</small></div>
+    <div class="brand" id="brandTitle">宏观政治 × 全球半导体 情报终端<small id="syncLbl">BASELINE 2026-11-24 · v2 · FULL · 4.18</small></div>
     <div class="spacer"></div>
     <div class="tools">
       <button id="btnNote" title="Shift+N">+ 快速记录</button><button id="btnWeekly">◷ 3分钟周报</button><button class="primary" id="btnPrompt">⧉ 复制今日更新指令</button><button id="btnImport">⇪ 导入增量 JSON</button><button class="ghost" id="btnGloss">[? 体制与级别图鉴]</button>
@@ -943,7 +943,7 @@ function openImport(){
       }catch(e){res.innerHTML='<div class="box"><h4 class="red">✕ 解析失败</h4><p class="mono" style="font-size:12px">'+esc(e.message)+'</p><p class="dim">检查是否为合法 JSON（引号、逗号、括号）。</p></div>';}
     };}});
 }
-function updateSyncLbl(){$('#syncLbl').textContent='BASELINE '+BASELINE+' · SYNC '+(S.lastSync||BASELINE)+' · v2 · FULL 4.17';}
+function updateSyncLbl(){$('#syncLbl').textContent='BASELINE '+BASELINE+' · SYNC '+(S.lastSync||BASELINE)+' · v2 · FULL 4.18';}
 
 /* ---------- 快速记录 ---------- */
 function openQuickNote(edit){
@@ -3184,26 +3184,27 @@ var TWMID={dpp:{n:'民进党做了什么',c:'#2e9b55',list:[
   risk:'一句话：两党都在把“统独 / 抗中”换成“谁比较会治理、谁比较让人安心”——这正是“往中间走”的具体做法。'}
 };
 var TWTRACK=[
- ['开票夜','总投票率','天下杂志认为投票率破七成是关键；明显偏高通常代表年轻人被动员出来。'],
- ['开票夜','全国县市长总得票率','小笠原欣幸认为，全国总得票率是影响 2028 布局的关键指标，比席次更能看出气势。'],
- ['开票夜','“大赢”的门槛','小笠原的标准：民进党若增加 3–4 个县市并拿下新北，就算大赢；赖清德连任看好度会大幅上升。'],
- ['开票夜','台北的“李应元防线”','民进党在台北的心理底线是 2002 年李应元创下的历届最低得票率；守住它是最低目标，超过越多越算赢。'],
- ['开票夜','台北关键选区','TVBS 显示沈伯洋只在士林北投、中山大同领先，其余 4 区蒋万安领先；看沈能否在蒋的选区缩小差距。'],
- ['开票夜','“大选章鱼哥”天玉里','台北市天玉里的开票结果多次和全国结果一致，媒体称“大选章鱼哥”。'],
- ['开票夜','核电公投','同意票是否超过约 489 万的门槛。'],
- ['选后一周','催票率','候选人得票除以全体选举人数，比得票率更能看出“有多少人愿意出门投给你”；和 2022 年比较可看出各党动员力变化。'],
- ['选后一周','议员席次和政党总得票','议员是政党的“脚”。民众党目标是议员从 14 席倍增到 28 席；小党联盟“台湾前进”能否拿到席次，关系到 2028 不分区布局。'],
- ['选后一周','分裂投票','同一选区市长和议员的政党得票差距，越大代表越多中间选民“跨党投票”。'],
- ['选后一周','党主席去留、国台办和美国的反应','谁请辞、北京怎么定调、美国国务院怎么表态。'],
- ['选后一个月','12 月国政民调和 2028 盘口','美丽岛电子报 12 月国政民调里赖清德满意度的变化；Polymarket / Kalshi 上 2028 相关市场的价格变化。'],
- ['一两年后','中选会委托的年龄别投票率研究','真正回答“年轻人有没有出来投”的官方数据。']
+ ['开票夜','总投票率','2022：直辖市长 59.86%、县市长 64.2%（选情偏冷）；高雄从 2018 年 73.54% 跌到 2022 年 58.61%','天下杂志认为破七成是关键；明显高于 2022 通常代表年轻人被动员。'],
+ ['开票夜','县市长席次','2022：国民党 14、民进党 5、民众党 1、无党籍 2','小笠原欣幸的“大赢”标准：民进党增加 3–4 个县市并拿下新北。'],
+ ['开票夜','全国总得票率','2022 议员总得票率（可当基本盘参考）：国民党 37.75%、民进党 33.28%、民众党 4.0%','小笠原认为全国总得票率是影响 2028 布局的关键指标。'],
+ ['开票夜','台北“李应元防线”','2002 李应元 35.89%（48.9 万票），是民进党在台北蓝绿一对一的唯一一次低于 40%；民进党在台北平均约 40.35%','2022 陈时中 31.93% 更低，但那是三脚督。一对一时民进党基本盘约 4 成；评论者估沈伯洋地板 57–60 万票、天花板约 44%。'],
+ ['开票夜','台北六大分区','2022：士林北投蒋 38.3 / 陈 36.3；中山大同 39.3 / 36.4；大安文山 47.3 / 27.8；松山信义 45.5 / 30.5；内湖南港 40.7 / 29.1（黄珊珊 29.7）','TVBS 封关民调中沈伯洋只在士林北投、中山大同领先；看他能否在蒋的四个区缩小差距，尤其黄珊珊票最多的内湖南港。'],
+ ['开票夜','“大选章鱼哥”天玉里','2024 总统：赖清德 2149、侯友宜 2005、柯文哲 1094（与全国排名一致）','看它这次是否又和全台结果一致。'],
+ ['开票夜','核电公投','门槛 4,887,133 张同意票；2025 年核三公投 434 万同意票未过；2022 年 18 岁公民权修宪复决只拿 564.7 万票','同意票多于不同意票且过门槛才算通过。'],
+ ['选后一周','议员席次','2022：国民党 367、民进党 277、民众党 14、时代力量 6、台湾基进 2、社民党 1、无党籍 227（共 910 席）','民众党目标 28 席（倍增）；小党联盟“台湾前进”能否守住席次。'],
+ ['选后一周','催票率','2022：民进党地方选举催票率普遍低于总统大选，与 2018 差别不大；国民党整体催票能力比上届下滑（高雄柯志恩乡镇最高催票率 5 成多，韩国瑜时 8 成多）','候选人得票 ÷ 全体选举人；比得票率更能看出“愿意出门投你的人”有多少。'],
+ ['选后一周','南部基本盘','2022 台南：黄伟哲 48.8% 险胜谢龙介 43.63%（只差 4.6 万票）；高雄：民进党三次选举都在 67–77 万票，约 70 万是基本盘','台南得票率若再逼近，代表绿营南部铁票仓松动。'],
+ ['选后一周','分裂投票','2022 台北：民进党议员总得票还比陈时中少约 1 万票（42 万对 43.5 万），却拿下 21 席议员','同一选区市长和议员政党得票的差距越大，代表跨党投票越多。'],
+ ['选后一周','党主席去留、国台办和美国的反应','2022：蔡英文当晚辞民进党主席；2018 年她也辞过','谁请辞、北京怎么定调、美国国务院怎么表态。'],
+ ['选后一个月','国政民调和 2028 盘口','赖清德满意度：2025-11 为 40.9%（不满意 53.3%），2026-09 为 47.9%（不满意 41.4%）','看 12 月美丽岛电子报国政民调怎么变；Polymarket / Kalshi 上 2028 相关市场的价格。'],
+ ['一两年后','年龄别投票率','2016 → 2020 总统：20–24 岁 58.0% → 72.7%，25–29 岁 56.3% → 71.8%','中选会委托的研究，真正回答“年轻人有没有出来投”。']
 ];
 function twMidHTML(){var mx=80;
   var h='<section class="panel"><div class="panel-head"><h2 class="amber">④-A3 年龄 · 中间选民 · 开票夜追踪清单</h2><span class="sub">点卡片看细节</span></div>';
   h+='<div style="display:grid;grid-template-columns:minmax(280px,1fr) minmax(280px,1fr);gap:14px"><div class="pc" style="border-left-color:var(--amber)"><b>年轻人一被动员，投票率能跳 15 个百分点</b><div class="dim" style="font-size:11.5px;margin:2px 0 8px">总统大选年龄别投票率（中选会委托研究）：<span style="color:#9aa4b2">■ 2016</span> <span style="color:#e0a84a">■ 2020</span></div>'+TWAGE_TO.map(function(r){return '<div style="display:grid;grid-template-columns:52px 1fr;gap:6px;align-items:center;margin:4px 0;font-size:11.5px"><span class="mono">'+r[0]+'</span><div><div style="height:9px;width:'+r[1]/mx*100+'%;background:#9aa4b2;border-radius:3px"></div><div style="height:9px;width:'+r[2]/mx*100+'%;background:#e0a84a;border-radius:3px;margin-top:2px"></div><span class="dim mono" style="font-size:10.5px">'+r[1]+'% → '+r[2]+'%</span></div></div>';}).join('')+'<div class="note" style="margin-top:6px">2020 年的跳升一般被认为是受香港反修例风波刺激，也是蔡英文胜选的关键。今年按年龄的实际投票率要等中选会事后研究才有。</div></div>';
   h+='<div class="pc" style="border-left-color:var(--amber)"><b>今年的民调：支持度按年龄几乎一刀切</b>'+TWAGE_SPLIT.map(function(r){return '<div style="margin-top:6px;font-size:12px"><span class="dim">'+esc(r[0])+'：</span>'+esc(r[1])+'</div>';}).join('')+'<div class="note" style="margin-top:8px">选民结构：40–49 岁最多（19.88%），其次 50–59 岁（18.06%）。中老年人数多、投票率又高，所以靠年轻人领先的一方更没底。地方选举 20 岁才能投，18、19 岁这次只能投核电公投。</div></div></div>';
   h+='<h3 style="margin-top:12px">两党怎么争取中间选民</h3><div class="mx" style="grid-template-columns:repeat(auto-fill,minmax(280px,1fr))">'+Object.keys(TWMID).map(function(k){var c=TWMID[k];return '<div class="pc dd" data-twmid="'+k+'" style="border-left-color:'+c.c+'"><b style="color:'+c.c+'">'+c.n+'</b> <span class="dim">⤢</span><div class="dim" style="font-size:11.5px;margin-top:4px">'+c.list.map(function(x){return x[0];}).join(' · ')+'</div></div>';}).join('')+'</div>';
-  h+='<h3 style="margin-top:12px">追踪清单：开票夜到选后一年</h3><table class="t" style="font-size:12.5px">'+TWTRACK.map(function(r){return '<tr><td style="width:84px"><span class="chip">'+r[0]+'</span></td><td style="width:170px"><b>'+esc(r[1])+'</b></td><td>'+esc(r[2])+'</td></tr>';}).join('')+'</table></section>';
+  h+='<h3 style="margin-top:12px">追踪清单：开票夜到选后一年 <span class="dim" style="font-size:11.5px">（中间一栏是拿来对比的基准数字）</span></h3><table class="t" style="font-size:12.5px"><tr><th style="width:84px">时间</th><th style="width:150px">指标</th><th>基准（拿什么比）</th><th>怎么读</th></tr>'+TWTRACK.map(function(r){return '<tr><td><span class="chip">'+r[0]+'</span></td><td><b>'+esc(r[1])+'</b></td><td class="mono" style="font-size:11.5px">'+esc(r[2])+'</td><td>'+esc(r[3])+'</td></tr>';}).join('')+'</table></section>';
   return h;}
 function bindTwMid(m){$$('[data-twmid]',m).forEach(function(el){el.onclick=function(){var c=TWMID[el.getAttribute('data-twmid')];openDrawer({kick:'争取中间选民',title:c.n,accent:'amber',html:c.list.map(function(x){return '<p style="margin:0 0 9px"><b>'+esc(x[0])+'：</b>'+esc(x[1])+'</p>';}).join('')+'<div class="note">'+esc(c.risk)+'</div>'});};});}
 /* =========================================================
