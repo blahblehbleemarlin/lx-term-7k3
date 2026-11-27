@@ -202,7 +202,7 @@ body.boss main svg{filter:grayscale(1)}
 <body>
 <header>
   <div class="topbar">
-    <div class="brand" id="brandTitle">宏观政治 × 全球半导体 情报终端<small id="syncLbl">BASELINE 2026-11-24 · v2 · FULL · 4.15</small></div>
+    <div class="brand" id="brandTitle">宏观政治 × 全球半导体 情报终端<small id="syncLbl">BASELINE 2026-11-24 · v2 · FULL · 4.16</small></div>
     <div class="spacer"></div>
     <div class="tools">
       <button id="btnNote" title="Shift+N">+ 快速记录</button><button id="btnWeekly">◷ 3分钟周报</button><button class="primary" id="btnPrompt">⧉ 复制今日更新指令</button><button id="btnImport">⇪ 导入增量 JSON</button><button class="ghost" id="btnGloss">[? 体制与级别图鉴]</button>
@@ -943,7 +943,7 @@ function openImport(){
       }catch(e){res.innerHTML='<div class="box"><h4 class="red">✕ 解析失败</h4><p class="mono" style="font-size:12px">'+esc(e.message)+'</p><p class="dim">检查是否为合法 JSON（引号、逗号、括号）。</p></div>';}
     };}});
 }
-function updateSyncLbl(){$('#syncLbl').textContent='BASELINE '+BASELINE+' · SYNC '+(S.lastSync||BASELINE)+' · v2 · FULL 4.15';}
+function updateSyncLbl(){$('#syncLbl').textContent='BASELINE '+BASELINE+' · SYNC '+(S.lastSync||BASELINE)+' · v2 · FULL 4.16';}
 
 /* ---------- 快速记录 ---------- */
 function openQuickNote(edit){
@@ -3136,6 +3136,28 @@ function bindTwm(m){
   $$('[data-twm]',m).forEach(function(p){p.onclick=function(){S.ui.twmSel=p.getAttribute('data-twm');save();var d=$('#twmDet',m);if(d)d.innerHTML=twmDetail(S.ui.twmSel);$$('[data-twm]',m).forEach(function(q){q.setAttribute('stroke-width',q===p?'2.4':'0.8');q.setAttribute('stroke',q===p?'#fff':'#0e1116');});};
     p.onmouseenter=function(){p.style.opacity='.8';};p.onmouseleave=function(){p.style.opacity='1';};});
 }
+/* ---- 4.16 六都民调走势（TVBS 系列，蓝 − 绿 差距） ---- */
+var TWPL=[
+ {k:'tpe',n:'台北',b:'蒋万安',g:'沈伯洋',pts:[['2025-12',42,'假设对决'],['2026-05',28,'58:30'],['2026-10',8,'49:41'],['2026-11',2,'46:44']],other:[['ETtoday 民调云','蒋 48.1 · 沈 42.0'],['中国时报','蒋 44.1 · 沈 37.1'],['信民协会','沈 48.6 · 蒋 33.8'],['新台湾国策智库','沈 46.3 · 蒋 42.2'],['TPOC 预测模型','蒋 51.01 · 沈 48.99']],read:'一年内从蓝领先 40 多个百分点，收敛到误差范围内的 2 个百分点。TVBS 显示 14% 的蒋万安旧支持者转向沈伯洋；沈在 40 岁以下领先，蒋在 50 岁以上占优。'},
+ {k:'ntp',n:'新北',b:'李四川',g:'苏巧慧',pts:[['2026-07',6.9,''],['2026-08',6.3,''],['2026-10',6.7,'苏 35.9'],['2026-11',-0.6,'42.4:43.0']],other:[['TPOC 预测模型','苏 50.73 · 李 49.27（10 月初李领先 5.6）']],read:'李四川领先 6–7 个百分点维持了三个月，封关时苏巧慧首次超车，但差距在误差内，13.6% 未决定。'},
+ {k:'tao',n:'桃园',b:'张善政',g:'黄世杰',pts:[['2025-01',35,'59:24'],['2025-12',42,'61:19']],other:[['TPOC 预测模型','张领先约 13.5 个百分点'],['TPOC AI 模拟（非民调）','张 47.3 · 黄 36.5']],read:'TVBS 2026 年没有再做桃园；现有资料都显示张善政大幅领先，是蓝营最稳的一都。'},
+ {k:'txg',n:'台中',b:'江启臣',g:'何欣纯',pts:[['2025-01',24,'50:26'],['2026-01',15,'46:31'],['2026-10',12.6,'45.1:32.5 *']],other:[['匯流 CNEWS（2025-11）','江 43.9 · 何 25.0'],['信民协会（11 月）','何 41.1 · 江 30.4'],['TPOC 预测模型','江 52.91 · 何 47.09']],read:'TVBS 系列一路显示江领先但差距缩小（24 → 15 → 12.6）。*10 月那期由台中市议会国民党党团委托 TVBS 执行。信民协会的结果方向相反，不同机构差距很大。'},
+ {k:'tnn',n:'台南',b:'谢龙介',g:'陈亭妃',pts:[['2024-08',-11,'35:46'],['2025-02',-16,'32:48'],['2025-09',-5,'36:41'],['2025-11',-13,'34:47'],['2026-03',-23,'30:53 †']],other:[['锋灿传媒（2025-12）','陈 53.2 · 谢 25.0'],['TPOC 预测模型','陈领先约 19 个百分点']],read:'大罢免后（2025-09）一度收窄到 5 个百分点，之后重新拉开。†2026-03 那期是“有投票意愿者”的支持度。'},
+ {k:'khh',n:'高雄',b:'柯志恩',g:'赖瑞隆',pts:[['2025-09',0,'41:41'],['2025-11',-2,'40:42'],['2025-12',-2,'39:41'],['2026-06',-0.6,'39.7:40.3']],other:[['ETtoday 民调云（封关，网络问卷）','柯 46.1 · 赖 44.6'],['ETtoday（10 月）','赖 43.2 · 柯 43.1'],['联合报（10 月）','赖 40 · 柯 33'],['锋灿传媒（10 月）','赖 47.8 · 柯 27.4'],['TPOC 预测模型','赖领先约 11 个百分点']],read:'TVBS 一整年都在误差范围内，是民调最“打架”的城市：10 月三家民调的差距从 0.1 到 20.4 个百分点不等。'}
+];
+function twplSpark(c){var W=260,H=116,P=22,y0=-30,y1=48,xs=c.pts.length;function X(i){return P+(xs<2?0:(W-2*P)*i/(xs-1));}function Y(v){return 16+(H-34)*(y1-v)/(y1-y0);}
+  var s='<svg viewBox="0 0 '+W+' '+H+'" style="width:100%;display:block">';
+  s+='<rect x="0" y="'+Y(y1)+'" width="'+W+'" height="'+(Y(0)-Y(y1))+'" fill="#3b6fd8" opacity=".07"/><rect x="0" y="'+Y(0)+'" width="'+W+'" height="'+(Y(y0)-Y(0))+'" fill="#2e9b55" opacity=".07"/>';
+  s+='<line x1="0" x2="'+W+'" y1="'+Y(0)+'" y2="'+Y(0)+'" stroke="#8a93a0" stroke-dasharray="3 3" stroke-width=".8"/>';
+  s+='<polyline fill="none" stroke="#e0a84a" stroke-width="1.8" points="'+c.pts.map(function(p,i){return X(i)+','+Y(p[1]);}).join(' ')+'"/>';
+  c.pts.forEach(function(p,i){var col=p[1]>0?'#5b8ee8':p[1]<0?'#4fbf7a':'#e0a84a';s+='<circle cx="'+X(i)+'" cy="'+Y(p[1])+'" r="3.2" fill="'+col+'"><title>'+p[0]+'：'+(p[1]>0?'蓝':'绿')+'领先 '+Math.abs(p[1])+(p[2]?'（'+p[2]+'）':'')+'</title></circle><text x="'+X(i)+'" y="'+(Y(p[1])+(p[1]>=0?-6:13))+'" text-anchor="middle" style="font-size:9.5px;fill:'+col+'">'+(p[1]>0?'+':'')+p[1]+'</text><text x="'+X(i)+'" y="'+(H-3)+'" text-anchor="middle" style="font-size:8.5px;fill:#8a93a0">'+p[0].slice(2)+'</text>';});
+  return s+'</svg>';}
+function twplHTML(){var h='<section class="panel"><div class="panel-head"><h2 class="amber">④-A2 六都民调走势：一年多来蓝绿差距怎么变</h2><span class="sub">折线 = TVBS 同一系列民调的“蓝 − 绿”差距（正数蓝领先，负数绿领先）；点卡片看封关时各家民调</span></div>';
+  h+='<div class="mx" style="grid-template-columns:repeat(auto-fill,minmax(270px,1fr))">'+TWPL.map(function(c){var last=c.pts[c.pts.length-1];return '<div class="pc dd" data-twpl="'+c.k+'" style="border-left-color:'+(last[1]>0?'#3b6fd8':'#2e9b55')+'"><div style="display:flex;justify-content:space-between;align-items:baseline"><b>'+c.n+'</b><span class="dim" style="font-size:11px"><span style="color:#5b8ee8">'+c.b+'</span> vs <span style="color:#4fbf7a">'+c.g+'</span></span></div>'+twplSpark(c)+'<div style="font-size:11.5px">TVBS 最新：'+(last[1]===0?'平手':(last[1]>0?'<b style="color:#5b8ee8">'+c.b:'<b style="color:#4fbf7a">'+c.g)+' 领先 '+Math.abs(last[1])+'</b>')+' <span class="dim">（'+last[0]+'）</span></div></div>';}).join('')+'</div>';
+  h+='<div class="note">早期几个点是政党提名前的“假设对决”。不同机构的方法差别很大（电话随机抽样、网络问卷、预测模型、AI 模拟），数字不宜直接相减；同一机构的走势比单一数字更有参考价值。台湾选前 10 天禁止公布民调，最后的公开数据都在 11/17 前。</div></section>';
+  return h;}
+function bindTwpl(m){$$('[data-twpl]',m).forEach(function(el){el.onclick=function(){var c=TWPL.filter(function(x){return x.k===el.getAttribute('data-twpl');})[0];
+  openDrawer({kick:'民调走势 · '+c.n,title:c.n+'：'+c.b+' vs '+c.g,accent:'amber',html:'<div style="max-width:420px">'+twplSpark(c)+'</div><h4>TVBS 系列</h4><table class="t" style="font-size:12.5px">'+c.pts.map(function(p){return '<tr><td class="mono">'+p[0]+'</td><td>'+(p[1]===0?'平手':(p[1]>0?c.b:c.g)+' 领先 '+Math.abs(p[1]))+'</td><td class="dim">'+esc(p[2])+'</td></tr>';}).join('')+'</table><h4>封关前其他机构</h4><table class="t" style="font-size:12.5px">'+c.other.map(function(o){return '<tr><td>'+esc(o[0])+'</td><td>'+esc(o[1])+'</td></tr>';}).join('')+'</table><p>'+esc(c.read)+'</p><p class="dim" style="font-size:12px">TPOC 是整合民调和网络声量的预测模型，AI 模拟不是对真人做的民调；二者都不适用抽样误差。</p>'});};});}
 /* =========================================================
    10. 路由 / 渲染 / 事件
    ========================================================= */
@@ -3154,7 +3176,7 @@ function renderMain(){
     post(m);renderFeed();renderDiff();renderRadar();
   }else if(k==='m2'){m.innerHTML=renderM2()+dcMapHTML()+cnTeamHTML();bindWires(m);bindM2(m);bindCnTeam(m);bindDcMap(m);post(m);}
   else if(k==='m3'){m.innerHTML=renderM3()+nukeHTML()+aisHTML()+econHTML();var af=$('#aisFear',m);if(af)af.onclick=openFear;bindWires(m);bindM3(m);bindScore(m);bindEcon(m);var nb=$('#nukeOpen',m);if(nb)nb.onclick=openNuke;post(m);}
-  else if(k==='m4'){m.innerHTML=twHTML()+electionHTML()+twmHTML()+twpHTML()+twsHTML()+twhHTML()+twjpPeopleHTML()+kcardsHTML()+renderM4();bindM4(m);bindTW(m);bindElection(m);bindTwm(m);bindTwp(m);bindTws(m);bindTwh(m);bindTWJP(m);$$('[data-k]',m).forEach(function(el){el.onclick=function(){openKCard(el.getAttribute('data-k'));};});post(m);}
+  else if(k==='m4'){m.innerHTML=twHTML()+electionHTML()+twmHTML()+twplHTML()+twpHTML()+twsHTML()+twhHTML()+twjpPeopleHTML()+kcardsHTML()+renderM4();bindM4(m);bindTW(m);bindElection(m);bindTwm(m);bindTwpl(m);bindTwp(m);bindTws(m);bindTwh(m);bindTWJP(m);$$('[data-k]',m).forEach(function(el){el.onclick=function(){openKCard(el.getAttribute('data-k'));};});post(m);}
   else if(k==='m5'){m.innerHTML=renderM5();bindM5(m);bindSummit(m);post(m);}
   else if(k==='m6'){m.innerHTML=renderM6();bindM6(m);post(m);renderM6List();}
   else if(k==='m7'){m.innerHTML=thHTML();bindTh(m);post(m);}
