@@ -202,7 +202,7 @@ body.boss main svg{filter:grayscale(1)}
 <body>
 <header>
   <div class="topbar">
-    <div class="brand" id="brandTitle">宏观政治 × 全球半导体 情报终端<small id="syncLbl">BASELINE 2026-11-24 · v2 · FULL · 4.7.1</small></div>
+    <div class="brand" id="brandTitle">宏观政治 × 全球半导体 情报终端<small id="syncLbl">BASELINE 2026-11-24 · v2 · FULL · 4.8</small></div>
     <div class="spacer"></div>
     <div class="tools">
       <button id="btnNote" title="Shift+N">+ 快速记录</button><button id="btnWeekly">◷ 3分钟周报</button><button class="primary" id="btnPrompt">⧉ 复制今日更新指令</button><button id="btnImport">⇪ 导入增量 JSON</button><button class="ghost" id="btnGloss">[? 体制与级别图鉴]</button>
@@ -913,6 +913,9 @@ function mergeIncoming(j){
   });
   (Array.isArray(j.communiqueDiff)?j.communiqueDiff:[]).forEach(function(d){if(d&&d.A!=null&&d.B!=null){addDiff(d);r.diff++;}});
   (j.tickerUpdates||[]).forEach(function(u){if(!u||!u.ticker)return;var T=String(u.ticker).toUpperCase();o.tickers[T]=Object.assign(o.tickers[T]||{},u,{ticker:T});(o.tickerHist[T]=o.tickerHist[T]||[]).push(Object.assign({importedAt:new Date().toISOString()},u));r.tick++;});
+  (j.twResults||[]).forEach(function(u){if(!u||!u.id)return;o.twres=o.twres||{};o.twres[u.id]=u;r.tw=(r.tw||0)+1;});
+  if(j.twSeats&&typeof j.twSeats==='object')o.twseats=j.twSeats;
+  (j.twPulse||[]).forEach(function(u){if(!u||!u.id)return;o.twpulse=o.twpulse||{};o.twpulse[u.id]=Object.assign(o.twpulse[u.id]||{},u);});
   (j.formulations||[]).forEach(function(u){if(!u||!u.theme||!u.quote)return;o.fmls=o.fmls||[];if(o.fmls.some(function(x){return x.theme===u.theme&&x.quote===u.quote;}))return;o.fmls.push(u);r.fm=(r.fm||0)+1;});
   (j.statements||[]).forEach(function(u){if(!u||!u.pid||!u.quote)return;o.stmts=o.stmts||[];if(o.stmts.some(function(x){return x.pid===u.pid&&x.date===u.date&&x.quote===u.quote;}))return;o.stmts.push(u);r.st=(r.st||0)+1;});
   (j.thermoUpdates||[]).forEach(function(u){if(!u||!u.id)return;o.thermo=o.thermo||{};o.thermo[u.id]=Object.assign(o.thermo[u.id]||{},u);r.th=(r.th||0)+1;});
@@ -939,7 +942,7 @@ function openImport(){
       }catch(e){res.innerHTML='<div class="box"><h4 class="red">✕ 解析失败</h4><p class="mono" style="font-size:12px">'+esc(e.message)+'</p><p class="dim">检查是否为合法 JSON（引号、逗号、括号）。</p></div>';}
     };}});
 }
-function updateSyncLbl(){$('#syncLbl').textContent='BASELINE '+BASELINE+' · SYNC '+(S.lastSync||BASELINE)+' · v2 · FULL 4.7.1';}
+function updateSyncLbl(){$('#syncLbl').textContent='BASELINE '+BASELINE+' · SYNC '+(S.lastSync||BASELINE)+' · v2 · FULL 4.8';}
 
 /* ---------- 快速记录 ---------- */
 function openQuickNote(edit){
@@ -2682,6 +2685,60 @@ function openWqs(){openDeep({kick:'元老网络观察',title:'王岐山系：已
  '王岐山是否继续在公开场合露面（如国庆招待会、重要纪念活动）；是否有更高级别的王岐山旧部被查；官方是否首次在通报中点名“王岐山”。']});}
 
 /* =========================================================
+   43. ④ 台湾政治读法 + 蓝绿白追踪 + 11/28 选举对照表
+   ========================================================= */
+var TWP_PARTY=[
+ {k:'kmt',n:'国民党（蓝）',c:'#3b6fd8',lead:'主席 郑丽文',seat:'52 + 2 名无党籍盟友',cs:'接受“九二共识”，主张与大陆对话交流、反对“台独”；郑丽文路线比前任更强调中国认同，4 月访京见习近平。',base:'北部都会、外省及眷村背景、中高龄、公教军警；传统上北台湾和离岛强。',now:'地方执政优势（2022 年拿下 14 席县市长）；与民众党签合作协议。'},
+ {k:'dpp',n:'民进党（绿）',c:'#2e9b55',lead:'主席 赖清德（兼总统）',seat:'51',cs:'“台湾已是主权独立国家，名为中华民国，无须宣布独立”；把大陆定位为“境外敌对势力”。',base:'南部（台南、高雄、屏东、嘉义县）、本省籍、年轻世代与中小企业主；“北蓝南绿”是长期格局。',now:'掌握总统府和行政院，但立法院是少数，预算和法案常被卡住；2025 年大罢免失败。'},
+ {k:'tpp',n:'民众党（白）',c:'#9aa4b2',lead:'主席 黄国昌',seat:'8',cs:'自称“理性务实”的第三势力，两岸立场接近蓝营但更模糊；主打反建制、清廉和年轻人议题。',base:'都会年轻选民、对蓝绿都失望的人；支持度靠个人魅力，波动大。',now:'创党主席柯文哲官司缠身；在立法院是“关键少数”，和国民党结盟后影响力大增，但支持度下滑。'}
+];
+var TWP_PULSE=[
+ {id:'pid',n:'政党认同',src:'政治大学选举研究中心（每半年）',d:'2026-06',v:'民进党 33.8% · 国民党 21.0% · 民众党 8.8% · 中立无反应 35.5%',r:'<b>最大的“党”是中立选民。</b>民进党认同最高，但不到三成半；蓝白相加（约 30%）略低于绿。所以每次选举都是在抢那三成多的中间选民。（该期数据为网友转述，待对照政大原图核实。）'},
+ {id:'idn',n:'身份认同',src:'政大选研中心',d:'2026-06',v:'台湾人 63.1% · 都是 30.7% · 中国人 2.5%',r:'“只认同自己是中国人”的比例已降到历史低点附近。郑丽文喊出要让台湾人自豪地说“我是中国人”，日本学者小笠原欣幸的观察是：数据没有因此变化。<b>注意：认同“台湾人”不等于支持独立。</b>'},
+ {id:'uni',n:'统独立场',src:'政大选研中心',d:'2026-06',v:'永远维持现状 34.4% · 维持现状再决定 25.5% · 偏向独立 21.7% · 偏向统一 6.3% · 尽快独立 4.5% · 尽快统一 1.3%',r:'<b>约六成选“维持现状”的某种形式。</b>这就是“中间”的含义：大多数人既不要统一，也不想冒险宣布独立。蓝绿两党为了赢，都必须向这个中间靠拢——民进党说“无须宣布独立”，国民党说“九二共识但不谈统一时间表”。谁被对手成功贴上“极端”标签，谁就输掉中间选民。'},
+ {id:'lai',n:'赖清德声望',src:'各家民调口径差异大',d:'2025-11 / 2026-08',v:'台湾民意基金会 37.9%（2025-11）· 震传媒满意度 46.9%（2026-08）',r:'不同机构差距可达 10 个百分点，<b>只看同一家机构的趋势</b>，不要跨机构比较。2025 年大罢免失败后声望重挫，之后缓慢回升。'},
+ {id:'ly',n:'立法院席次',src:'2024 年立委选举',d:'2024-01',v:'国民党 52 + 无党籍 2 · 民进党 51 · 民众党 8（共 113）',r:'<b>分立政府</b>：总统是绿的，国会是蓝白多数。好处是选民不会把所有问题都怪到民进党头上；坏处是预算（包括约 400 亿美元特别国防预算）和人事常年僵持。'},
+ {id:'loc',n:'县市长版图',src:'2022 年地方选举',d:'2022-11',v:'国民党 14 · 民进党 5 · 民众党 1 · 无党籍 2',r:'2026-11-28 改选。这是国民党的“高基数”，守住就算赢，掉几席就会被解读为失败。'}
+];
+var TWP_RACES=[
+ {id:'tpe',n:'台北市',p22:'kmt',k:'蒋万安',d:'沈伯洋',o:'',rate:'拉锯',note:'现任蒋万安一度大幅领先，秋天以来沈伯洋的“洋流”效应让选情变成五五波；蒋是国民党 2028 潜在人选。'},
+ {id:'ntp',n:'新北市',p22:'kmt',k:'李四川（蓝白共推）',d:'苏巧慧',o:'',rate:'拉锯',note:'台湾人口最多的城市、传统蓝营地盘。4 月蓝白整合民调由李四川胜出，黄国昌退选辅选；民调两人几乎打平。是民进党在北部证明自己的最好机会。'},
+ {id:'tao',n:'桃园市',p22:'kmt',k:'张善政（现任）',d:'—',o:'',rate:'—',note:'蓝白协议“现任者优先”，民众党不推人。'},
+ {id:'txg',n:'台中市',p22:'kmt',k:'江启臣',d:'何欣纯',o:'',rate:'偏蓝',note:'卸任市长卢秀燕被视为国民党 2028 热门人选，若台中失守会伤到她。民调分歧大：年代 37.3 比 31.3（江领先）、信民协会 30.4 比 41.1（何领先）；中间选民占约四成。'},
+ {id:'tnn',n:'台南市',p22:'dpp',k:'谢龙介',d:'陈亭妃',o:'',rate:'偏绿',note:'民进党大本营。'},
+ {id:'khh',n:'高雄市',p22:'dpp',k:'柯志恩',d:'赖瑞隆',o:'',rate:'稳绿',note:'现任陈其迈卸任交棒。2018 年韩国瑜曾证明高雄“交棒年”可能翻盘，国民党全力主攻。'},
+ {id:'cyi',n:'嘉义市',p22:'kmt',k:'—',d:'王美惠',o:'张启楷（民众党，蓝白共推）',rate:'—',note:'蓝白协议下第一个整合的县市，由民众党人代表出战——白营能否靠蓝营选票拿下第二个县市长。'},
+ {id:'chw',n:'彰化县',p22:'kmt',k:'—',d:'—',o:'',rate:'偏绿',note:'2022 年由国民党执政，评级机构认为偏向民进党，是可能翻转的县市之一。'},
+ {id:'hsc',n:'新竹市',p22:'tpp',k:'—',d:'—',o:'高虹安（民众党，现任）',rate:'—',note:'民众党目前唯一执政的县市，蓝白协议下“现任者优先”。'}
+];
+var TWP_PC={kmt:'#3b6fd8',dpp:'#2e9b55',tpp:'#9aa4b2',ind:'#b08cd8'};
+var TWP_PN={kmt:'国民党',dpp:'民进党',tpp:'民众党',ind:'无党籍'};
+function twpHTML(){
+  var ov=S.overlay, res=ov.twres||{}, seats=ov.twseats, pulse=ov.twpulse||{};
+  var h='<section class="panel"><div class="panel-head"><h2 class="amber">看懂台湾政治：蓝、绿、白和“中间”</h2><span class="sub">点政党卡看细节 · 点“为什么都往中间走”看核心逻辑</span><div class="right"><button class="ghost" id="twpWhy">⤢ 为什么都往中间走</button></div></div>';
+  h+='<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px">'+TWP_PARTY.map(function(p){return '<div class="pc dd" data-twp="'+p.k+'" style="border-left-color:'+p.c+'"><div class="n" style="color:'+p.c+'">'+p.n+' <span class="dim">⤢</span></div><div class="dim" style="font-size:11.5px">'+esc(p.lead)+' · 立委 '+esc(p.seat)+' 席</div><div style="font-size:12px;margin-top:4px">'+esc(p.cs)+'</div></div>';}).join('')+'</div>';
+  h+='<h3 style="margin-top:12px">蓝绿白温度计（长期指标）</h3><div class="mx" style="grid-template-columns:repeat(auto-fill,minmax(300px,1fr))">'+TWP_PULSE.map(function(x){var u=pulse[x.id]||{};return '<div class="pc dd" data-twpp="'+x.id+'" style="border-left-color:var(--amber)"><div style="display:flex;justify-content:space-between"><b>'+x.n+'</b><span class="mono dim" style="font-size:11px">'+esc(u.date||x.d)+(u.value?' · 已更新':'')+'</span></div><div style="font-size:12.5px;margin:4px 0">'+esc(u.value||x.v)+'</div><div class="dim" style="font-size:11px">'+esc(x.src)+' ⤢</div></div>';}).join('')+'</div>';
+  // race table
+  var d=daysTo('2026-11-28');
+  h+='<h3 style="margin-top:12px">11/28 关键县市对照表 '+(d>0?'<span class="chip amber">还有 '+d+' 天</span>':'<span class="chip">已投票，结果由增量自动填入</span>')+'</h3>';
+  if(seats)h+='<div style="margin-bottom:8px">'+Object.keys(TWP_PN).map(function(k){return seats[k]!=null?'<span class="chip" style="border-color:'+TWP_PC[k]+';color:'+TWP_PC[k]+'">'+TWP_PN[k]+' '+seats[k]+'</span>':'';}).join('')+' <span class="dim" style="font-size:11.5px">22 县市长结果（2022：国民党 14 · 民进党 5 · 民众党 1 · 无党籍 2）</span></div>';
+  h+='<table class="t" style="font-size:12.5px"><tr><th style="width:70px">县市</th><th style="width:70px">2022</th><th>国民党</th><th>民进党</th><th>其他/共推</th><th style="width:60px">评级</th><th style="width:120px">结果</th></tr>'+TWP_RACES.map(function(r){var x=res[r.id];return '<tr class="dd" data-twr="'+r.id+'" style="cursor:pointer"><td><b>'+r.n+'</b></td><td><span class="chip" style="border-color:'+TWP_PC[r.p22]+';color:'+TWP_PC[r.p22]+'">'+TWP_PN[r.p22]+'</span></td><td style="color:#7ea2ef">'+esc(r.k)+'</td><td style="color:#5cc786">'+esc(r.d)+'</td><td class="dim">'+esc(r.o)+'</td><td>'+esc(r.rate)+'</td><td>'+(x&&x.party?'<span class="chip" style="background:'+TWP_PC[x.party]+';color:#fff">'+esc(x.winner||TWP_PN[x.party])+'</span>'+(x.party!==r.p22?' <b class="red">翻</b>':''):'<span class="dim">待开票</span>')+'</td></tr>';}).join('')+'</table>';
+  h+='<div class="note">评级综合 CSIS、詹姆斯敦基金会等机构的赛前判断和公开民调，只代表选前格局。同日还有一项“废除非核家园”（重启核电）公投。投票时间为台湾时间 11/28 上午 8 点至下午 4 点（美东 11/27 晚 7 点至 11/28 凌晨 3 点）。</div>';
+  h+='<div class="box bottom" style="margin-top:8px"><h4>开票后怎么读</h4><p style="font-size:12.5px">①<b>先看双北：</b>台北和新北若都翻绿，是民进党 2018 年以来在北部最大的突破；若都守住，国民党 2028 年的气势就稳了。②<b>再看台中：</b>决定卢秀燕 2028 年的含金量。③<b>看蓝白合作有没有效：</b>新北、嘉义市的共推人选能不能赢，决定 2028 年蓝白会不会再合。④<b>别过度解读：</b>2018 年民进党地方选举大败，蔡英文辞去党主席，但 2020 年仍以高票连任——地方选举主要看候选人和地方议题，不等于总统大选的预演。⑤<b>看北京：</b>国台办第一时间怎么定调，以及选后一周共机和海警的动作（对照本页上方的三大晴雨表）。</p></div></section>';
+  return h;
+}
+function bindTwp(m){
+  var w=$('#twpWhy',m);if(w)w.onclick=function(){openDeep({kick:'TAIWAN POLITICS · 核心逻辑',title:'为什么蓝绿都要往“中间”走',accent:'amber',labels:['选民结构','两党怎么调整','2026 这一仗的特殊之处','怎么追踪'],parts:[
+   '用政大选研中心的长期数据看台湾选民：<br>①<b>身份：</b>六成多认同自己是“台湾人”，三成认为“既是台湾人也是中国人”，只认同“中国人”的只有约 2.5%。<br>②<b>统独：</b>约六成选择某种形式的“维持现状”，明确要尽快统一或尽快独立的都是少数。<br>③<b>政党：</b>约三成半选民没有固定政党认同。<br><br>结论：<b>认同上偏“台湾”，行动上偏“维持现状”，政党上有三成多的人不站队。</b>这就是“中间”。',
+   '<b>民进党</b>：从早年的“台独党纲”转向“台湾已是主权独立国家，名为中华民国，无须宣布独立”，把“维持现状”包装成自己的立场。<br><b>国民党</b>：坚持“九二共识”，但长期回避“统一时间表”，用“和平、交流、经济”争取中间选民。郑丽文的路线更强调中国认同，这次选举是对这条路线的第一次检验。<br><b>民众党</b>：本来就是靠“既不蓝也不绿”的中间选民起家，但和国民党结盟后，“第三势力”的标签在褪色——这也是它支持度下滑的原因之一。',
+   '①<b>分立政府：</b>总统是绿的、国会是蓝白多数，选民不会把所有问题都算在民进党头上（内华达大学王宏恩的分析）。<br>②<b>蓝白合：</b>国民党和民众党 3 月签了合作协议，在新北、嘉义市、宜兰共推人选，看能不能“一加一大于二”。<br>③<b>“洋流”：</b>沈伯洋把台北选战打成两岸立场之争，外溢到台中等地，让原本偏蓝的城市变成拉锯。<br>④<b>2018 剧本：</b>在野党的打法（主攻交棒中的高雄、同日办公投、主打保守议题）和 2018 年很像，但选民结构已经不同。',
+   '<b>长期（每半年）</b>：政大选研中心的政党认同、身份认同、统独立场。<br><b>中期（每月）</b>：同一家机构的总统声望和政党支持度，比如台湾民意基金会每月中旬发布。<br><b>事件</b>：选举结果、立法院关键表决（国防预算）、蓝白合作是否延续到 2028、郑丽文是否再访大陆。<br><b>外部</b>：北京的反应（国台办措辞、军演）、美国对台军售。<br><br>本页的“蓝绿白温度计”和“对照表”会由每日增量自动更新。']});};
+  $$('[data-twp]',m).forEach(function(el){el.onclick=el.ondblclick=function(){var p=TWP_PARTY.filter(function(x){return x.k===el.getAttribute('data-twp');})[0];openDeep({kick:'TAIWAN POLITICS · 政党',title:p.n,accent:'amber',labels:['两岸立场','基本盘','现在的处境','相关人物'],parts:[p.cs,p.base,p.now,'<div>'+xpChips(p.k==='kmt'?['c:tw-cheng','c:tw-chiang']:p.k==='dpp'?['c:tw-lai','c:tw-shen']:[])+'</div>'+(p.k==='tpp'?'民众党：黄国昌（主席）、柯文哲（创党主席，司法案件审理中）。':'')]});};});
+  $$('[data-twpp]',m).forEach(function(el){el.onclick=el.ondblclick=function(){var x=TWP_PULSE.filter(function(y){return y.id===el.getAttribute('data-twpp');})[0],u=(S.overlay.twpulse||{})[x.id]||{};openDeep({kick:'蓝绿白温度计',title:x.n,accent:'amber',labels:['最新数字','怎么读','',''],parts:['<b>'+esc(u.value||x.v)+'</b><br><span class="dim">'+esc(x.src)+' · '+esc(u.date||x.d)+'</span>'+(u.note?'<br><br>最新增量：'+esc(u.note):''),x.r,'','']});};});
+  $$('[data-twr]',m).forEach(function(el){el.onclick=function(){var r=TWP_RACES.filter(function(y){return y.id===el.getAttribute('data-twr');})[0],x=(S.overlay.twres||{})[r.id];openDeep({kick:'11/28 选举 · '+r.n,title:r.n+'：'+(x&&x.party?'结果 '+(x.winner||TWP_PN[x.party]):'待开票'),accent:'amber',labels:['选前格局','结果','',''],parts:['<b>2022：</b>'+TWP_PN[r.p22]+'执政。<br><b>国民党：</b>'+esc(r.k)+'　<b>民进党：</b>'+esc(r.d)+(r.o?'　<b>其他：</b>'+esc(r.o):'')+'<br><b>赛前评级：</b>'+esc(r.rate)+'<br><br>'+esc(r.note),x?('<b>'+esc(x.winner||'')+'（'+TWP_PN[x.party]+'）</b>'+(x.share?' 得票率 '+esc(x.share):'')+(x.note?'<br>'+esc(x.note):'')):'尚未开票。','','']});};});
+}
+
+/* =========================================================
    10. 路由 / 渲染 / 事件
    ========================================================= */
 function setTab(k){if(S.ui.tab!==k){S.ui.tab=k;save();renderMain();}$$('#tabs button').forEach(function(b){b.classList.toggle('on',b.getAttribute('data-tab')===k);});}
@@ -2699,7 +2756,7 @@ function renderMain(){
     post(m);renderFeed();renderDiff();renderRadar();
   }else if(k==='m2'){m.innerHTML=renderM2()+dcMapHTML()+cnTeamHTML();bindWires(m);bindM2(m);bindCnTeam(m);bindDcMap(m);post(m);}
   else if(k==='m3'){m.innerHTML=renderM3()+nukeHTML()+aisHTML()+econHTML();var af=$('#aisFear',m);if(af)af.onclick=openFear;bindWires(m);bindM3(m);bindScore(m);bindEcon(m);var nb=$('#nukeOpen',m);if(nb)nb.onclick=openNuke;post(m);}
-  else if(k==='m4'){m.innerHTML=twHTML()+electionHTML()+twjpPeopleHTML()+kcardsHTML()+renderM4();bindM4(m);bindTW(m);bindElection(m);bindTWJP(m);$$('[data-k]',m).forEach(function(el){el.onclick=function(){openKCard(el.getAttribute('data-k'));};});post(m);}
+  else if(k==='m4'){m.innerHTML=twHTML()+electionHTML()+twpHTML()+twjpPeopleHTML()+kcardsHTML()+renderM4();bindM4(m);bindTW(m);bindElection(m);bindTwp(m);bindTWJP(m);$$('[data-k]',m).forEach(function(el){el.onclick=function(){openKCard(el.getAttribute('data-k'));};});post(m);}
   else if(k==='m5'){m.innerHTML=renderM5();bindM5(m);bindSummit(m);post(m);}
   else if(k==='m6'){m.innerHTML=renderM6();bindM6(m);post(m);renderM6List();}
   else if(k==='m7'){m.innerHTML=thHTML();bindTh(m);post(m);}
