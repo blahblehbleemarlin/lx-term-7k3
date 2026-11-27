@@ -202,7 +202,7 @@ body.boss main svg{filter:grayscale(1)}
 <body>
 <header>
   <div class="topbar">
-    <div class="brand" id="brandTitle">宏观政治 × 全球半导体 情报终端<small id="syncLbl">BASELINE 2026-11-24 · v2 · FULL · 4.9</small></div>
+    <div class="brand" id="brandTitle">宏观政治 × 全球半导体 情报终端<small id="syncLbl">BASELINE 2026-11-24 · v2 · FULL · 4.10</small></div>
     <div class="spacer"></div>
     <div class="tools">
       <button id="btnNote" title="Shift+N">+ 快速记录</button><button id="btnWeekly">◷ 3分钟周报</button><button class="primary" id="btnPrompt">⧉ 复制今日更新指令</button><button id="btnImport">⇪ 导入增量 JSON</button><button class="ghost" id="btnGloss">[? 体制与级别图鉴]</button>
@@ -914,7 +914,7 @@ function mergeIncoming(j){
   (Array.isArray(j.communiqueDiff)?j.communiqueDiff:[]).forEach(function(d){if(d&&d.A!=null&&d.B!=null){addDiff(d);r.diff++;}});
   (j.tickerUpdates||[]).forEach(function(u){if(!u||!u.ticker)return;var T=String(u.ticker).toUpperCase();o.tickers[T]=Object.assign(o.tickers[T]||{},u,{ticker:T});(o.tickerHist[T]=o.tickerHist[T]||[]).push(Object.assign({importedAt:new Date().toISOString()},u));r.tick++;});
   (j.twResults||[]).forEach(function(u){if(!u||!u.id)return;o.twres=o.twres||{};o.twres[u.id]=u;r.tw=(r.tw||0)+1;});
-  if(j.twSeats&&typeof j.twSeats==='object')o.twseats=j.twSeats;
+  if(j.twSeats&&typeof j.twSeats==='object')o.twseats=j.twSeats;(j.twNews||[]).forEach(function(u){if(!u||!u.id)return;o.twnews=o.twnews||{};o.twnews[u.id]=u;r.tw=(r.tw||0)+1;});
   (j.twPulse||[]).forEach(function(u){if(!u||!u.id)return;o.twpulse=o.twpulse||{};o.twpulse[u.id]=Object.assign(o.twpulse[u.id]||{},u);});
   (j.formulations||[]).forEach(function(u){if(!u||!u.theme||!u.quote)return;o.fmls=o.fmls||[];if(o.fmls.some(function(x){return x.theme===u.theme&&x.quote===u.quote;}))return;o.fmls.push(u);r.fm=(r.fm||0)+1;});
   (j.statements||[]).forEach(function(u){if(!u||!u.pid||!u.quote)return;o.stmts=o.stmts||[];if(o.stmts.some(function(x){return x.pid===u.pid&&x.date===u.date&&x.quote===u.quote;}))return;o.stmts.push(u);r.st=(r.st||0)+1;});
@@ -942,7 +942,7 @@ function openImport(){
       }catch(e){res.innerHTML='<div class="box"><h4 class="red">✕ 解析失败</h4><p class="mono" style="font-size:12px">'+esc(e.message)+'</p><p class="dim">检查是否为合法 JSON（引号、逗号、括号）。</p></div>';}
     };}});
 }
-function updateSyncLbl(){$('#syncLbl').textContent='BASELINE '+BASELINE+' · SYNC '+(S.lastSync||BASELINE)+' · v2 · FULL 4.9';}
+function updateSyncLbl(){$('#syncLbl').textContent='BASELINE '+BASELINE+' · SYNC '+(S.lastSync||BASELINE)+' · v2 · FULL 4.10';}
 
 /* ---------- 快速记录 ---------- */
 function openQuickNote(edit){
@@ -2703,13 +2703,13 @@ var TWP_PULSE=[
 var TWP_RACES=[
  {id:'tpe',n:'台北市',p22:'kmt',k:'蒋万安',d:'沈伯洋',o:'',rate:'拉锯',note:'现任蒋万安一度大幅领先，秋天以来沈伯洋的“洋流”效应让选情变成五五波；蒋是国民党 2028 潜在人选。'},
  {id:'ntp',n:'新北市',p22:'kmt',k:'李四川（蓝白共推）',d:'苏巧慧',o:'',rate:'拉锯',note:'台湾人口最多的城市、传统蓝营地盘。4 月蓝白整合民调由李四川胜出，黄国昌退选辅选；民调两人几乎打平。是民进党在北部证明自己的最好机会。'},
- {id:'tao',n:'桃园市',p22:'kmt',k:'张善政（现任）',d:'—',o:'',rate:'—',note:'蓝白协议“现任者优先”，民众党不推人。'},
+ {id:'tao',n:'桃园市',p22:'kmt',k:'张善政（现任）',d:'黄世杰',o:'',rate:'偏蓝',note:'蓝白协议“现任者优先”，民众党不推人。TPOC 封关预测张善政领先约 13 个百分点。'},
  {id:'txg',n:'台中市',p22:'kmt',k:'江启臣',d:'何欣纯',o:'',rate:'偏蓝',note:'卸任市长卢秀燕被视为国民党 2028 热门人选，若台中失守会伤到她。民调分歧大：年代 37.3 比 31.3（江领先）、信民协会 30.4 比 41.1（何领先）；中间选民占约四成。'},
  {id:'tnn',n:'台南市',p22:'dpp',k:'谢龙介',d:'陈亭妃',o:'',rate:'偏绿',note:'民进党大本营。'},
- {id:'khh',n:'高雄市',p22:'dpp',k:'柯志恩',d:'赖瑞隆',o:'',rate:'稳绿',note:'现任陈其迈卸任交棒。2018 年韩国瑜曾证明高雄“交棒年”可能翻盘，国民党全力主攻。'},
+ {id:'khh',n:'高雄市',p22:'dpp',k:'柯志恩',d:'赖瑞隆',o:'',rate:'偏绿',note:'现任陈其迈卸任交棒（满意度约七成）。封关时一份网络问卷显示柯志恩 46.1 比 44.6 小幅领先，但 TPOC 预测赖瑞隆领先约 11 个百分点。2018 年韩国瑜曾证明高雄“交棒年”可能翻盘，国民党全力主攻。'},
  {id:'cyi',n:'嘉义市',p22:'kmt',k:'—',d:'王美惠',o:'张启楷（民众党，蓝白共推）',rate:'—',note:'蓝白协议下第一个整合的县市，由民众党人代表出战——白营能否靠蓝营选票拿下第二个县市长。'},
- {id:'chw',n:'彰化县',p22:'kmt',k:'—',d:'—',o:'',rate:'偏绿',note:'2022 年由国民党执政，评级机构认为偏向民进党，是可能翻转的县市之一。'},
- {id:'hsc',n:'新竹市',p22:'tpp',k:'—',d:'—',o:'高虹安（民众党，现任）',rate:'—',note:'民众党目前唯一执政的县市，蓝白协议下“现任者优先”。'}
+ {id:'chw',n:'彰化县',p22:'kmt',k:'魏平政',d:'陈素月',o:'',rate:'偏绿',note:'2022 年由国民党执政。彰化有“两届蓝、一届绿”的传统，这次蓝营地方分裂，绿营视为最可能夺回的中部县市。'},
+ {id:'hsc',n:'新竹市',p22:'tpp',k:'—',d:'庄竞程',o:'高虹安（现任，现以无党籍参选）',rate:'偏高',note:'2022 年以民众党身份当选，现以无党籍参选、蓝白支持。民进党推前清大教授庄竞程，主打她任内的司法争议。'}
 ];
 var TWP_PC={kmt:'#3b6fd8',dpp:'#2e9b55',tpp:'#9aa4b2',ind:'#b08cd8'};
 var TWP_PN={kmt:'国民党',dpp:'民进党',tpp:'民众党',ind:'无党籍'};
@@ -2725,10 +2725,12 @@ function twpHTML(){
   h+='<table class="t" style="font-size:12.5px"><tr><th style="width:70px">县市</th><th style="width:70px">2022</th><th>国民党</th><th>民进党</th><th>其他/共推</th><th style="width:60px">评级</th><th style="width:120px">结果</th></tr>'+TWP_RACES.map(function(r){var x=res[r.id];return '<tr class="dd" data-twr="'+r.id+'" style="cursor:pointer"><td><b>'+r.n+'</b></td><td><span class="chip" style="border-color:'+TWP_PC[r.p22]+';color:'+TWP_PC[r.p22]+'">'+TWP_PN[r.p22]+'</span></td><td style="color:#7ea2ef">'+esc(r.k)+'</td><td style="color:#5cc786">'+esc(r.d)+'</td><td class="dim">'+esc(r.o)+'</td><td>'+esc(r.rate)+'</td><td>'+(x&&x.party?'<span class="chip" style="background:'+TWP_PC[x.party]+';color:#fff">'+esc(x.winner||TWP_PN[x.party])+'</span>'+(x.party!==r.p22?' <b class="red">翻</b>':''):'<span class="dim">待开票</span>')+'</td></tr>';}).join('')+'</table>';
   h+='<div class="note">评级综合 CSIS、詹姆斯敦基金会等机构的赛前判断和公开民调，只代表选前格局。同日还有一项“废除非核家园”（重启核电）公投。投票时间为台湾时间 11/28 上午 8 点至下午 4 点（美东 11/27 晚 7 点至 11/28 凌晨 3 点）。</div>';
   h+='<div id="twpMktBox">'+twpMktHTML()+'</div>';
+  h+=twpNewsHTML();
   h+='<div class="box bottom" style="margin-top:8px"><h4>开票后怎么读</h4><p style="font-size:12.5px">①<b>先看双北：</b>台北和新北若都翻绿，是民进党 2018 年以来在北部最大的突破；若都守住，国民党 2028 年的气势就稳了。②<b>再看台中：</b>决定卢秀燕 2028 年的含金量。③<b>看蓝白合作有没有效：</b>新北、嘉义市的共推人选能不能赢，决定 2028 年蓝白会不会再合。④<b>别过度解读：</b>2018 年民进党地方选举大败，蔡英文辞去党主席，但 2020 年仍以高票连任——地方选举主要看候选人和地方议题，不等于总统大选的预演。⑤<b>看北京：</b>国台办第一时间怎么定调，以及选后一周共机和海警的动作（对照本页上方的三大晴雨表）。</p></div></section>';
   return h;
 }
 function bindTwp(m){
+  bindTwpNews(m);
   var mb=$('#twpMktBox',m);if(mb){bindTwpMkt(mb);var L=S.ui.twmkt||{};if(!L.at||Date.now()-L.at>6e5){S.ui.twmkt=Object.assign(L,{at:Date.now()});twpMktPull();}}
   var w=$('#twpWhy',m);if(w)w.onclick=function(){openDeep({kick:'TAIWAN POLITICS · 核心逻辑',title:'为什么蓝绿都要往“中间”走',accent:'amber',labels:['选民结构','两党怎么调整','2026 这一仗的特殊之处','怎么追踪'],parts:[
    '用政大选研中心的长期数据看台湾选民：<br>①<b>身份：</b>六成多认同自己是“台湾人”，三成认为“既是台湾人也是中国人”，只认同“中国人”的只有约 2.5%。<br>②<b>统独：</b>约六成选择某种形式的“维持现状”，明确要尽快统一或尽快独立的都是少数。<br>③<b>政党：</b>约三成半选民没有固定政党认同。<br><br>结论：<b>认同上偏“台湾”，行动上偏“维持现状”，政党上有三成多的人不站队。</b>这就是“中间”。',
@@ -2743,9 +2745,9 @@ function bindTwp(m){
 /* ---- 4.9 盘口 vs 民调 ---- */
 var TWP_MKT=[
  {id:'party',n:'谁拿最多县市长',poll:'国民党 2022 拿 14 席，机构普遍预期仍居首',snap:[{v:'Polymarket',t:'国民党 82%',d:'11 月快照'},{v:'Polymarket（另一追踪站）',t:'民进党 16%（7 日区间 16–19%）',d:'11 月快照'}],sig:'同向',why:'盘口和机构判断方向一致：国民党大概率仍是最大党。真正的悬念是差距多大。'},
- {id:'tpe',n:'台北市',poll:'拉锯（秋季以来沈伯洋追近）',snap:[{v:'Polymarket',t:'蒋万安 92%',d:'09-12，较旧'},{v:'Kalshi',t:'蒋万安约 67%',d:'报价页快照'}],sig:'盘口更笃定',why:'民调说拉锯，盘口仍偏向蒋万安。要么盘口低估了“洋流”，要么民调高估了；开票后可以看谁更准。'},
- {id:'ntp',n:'新北市',poll:'拉锯（两人几乎打平）',snap:[{v:'Polymarket',t:'李四川 56%',d:'10-05'},{v:'Kalshi',t:'苏巧慧 54%',d:'快照'},{v:'Public',t:'苏巧慧 67%',d:'快照'}],sig:'平台打架',why:'不同平台的热门人选相反，和民调的五五波一致：这是今晚最没有共识的一场。'},
- {id:'txg',n:'台中市',poll:'偏蓝，但民调分歧大（江 37.3:31.3 / 何 41.1:30.4）',snap:[{v:'Polymarket',t:'江启臣 80%',d:'11 月快照'}],sig:'盘口更笃定',why:'民调两家结论相反，盘口却一面倒押江启臣。成交量只有约 5 万美元，几笔大单就能做出这个价。'}
+ {id:'tpe',n:'台北市',poll:'拉锯：7 份封关民调 4 份沈伯洋高、3 份蒋万安高',snap:[{v:'Polymarket',t:'蒋万安 92%',d:'09-12，较旧'},{v:'Kalshi',t:'蒋万安约 67%',d:'报价页快照'}],sig:'盘口更笃定',why:'民调说拉锯，盘口仍偏向蒋万安。要么盘口低估了“洋流”，要么民调高估了；开票后可以看谁更准。'},
+ {id:'ntp',n:'新北市',poll:'拉锯：封关时苏巧慧首次小幅超车（TVBS 43.0 比 42.4、TPOC 50.7 比 49.3）',snap:[{v:'Polymarket',t:'李四川 56%',d:'10-05'},{v:'Kalshi',t:'苏巧慧 54%',d:'快照'},{v:'Public',t:'苏巧慧 67%',d:'快照'}],sig:'平台打架',why:'不同平台的热门人选相反，和民调的五五波一致：这是今晚最没有共识的一场。'},
+ {id:'txg',n:'台中市',poll:'偏蓝：TPOC 预测江启臣领先 5.8 个百分点，但个别民调结论相反',snap:[{v:'Polymarket',t:'江启臣 80%',d:'11 月快照'}],sig:'盘口更笃定',why:'民调两家结论相反，盘口却一面倒押江启臣。成交量只有约 5 万美元，几笔大单就能做出这个价。'}
 ];
 var TWP_MKT_Q={party:'Taiwanese Local Elections: Party Winner',tpe:'Taipei Mayor Election Winner',ntp:'New Taipei Mayor Election Winner',txg:'Taichung Mayor Election Winner'};
 var TWP_EN={'chiang wan-an':'蒋万安','puma shen':'沈伯洋','shen pao-yang':'沈伯洋','lee shu-chuan':'李四川','lee shih-chuan':'李四川','su chiao-hui':'苏巧慧','johnny chiang':'江启臣','chiang chi-chen':'江启臣','ho hsin-chun':'何欣纯'};
@@ -2777,6 +2779,40 @@ function bindTwpMkt(m){
    '<b>同向</b>：盘口和民调方向一致，结论较可信。<br><b>盘口更笃定</b>：民调说拉锯，盘口却一面倒，可能是盘口掌握了民调没测到的东西，也可能只是几笔大单。<br><b>平台打架</b>：不同平台热门人选相反，说明根本没有共识，就是真正的五五波，开票当晚最值得盯。',
    '① 成交量小：单场只有几万到几十万美元，2024 美国大选是几十亿美元，差了好几个数量级。② 下注者多半不在台湾，对地方议题的感知有限。③ 《选罢法》风险让岛内资金很少进场。④ 选前十天台湾禁止发布民调（“封关”），这段时间盘口几乎是唯一会动的数字，所以更容易被放大解读。','']});};
   $$('[data-twm]',m).forEach(function(el){el.onclick=function(){var r=TWP_MKT.filter(function(y){return y.id===el.getAttribute('data-twm');})[0];openDrawer({kick:'盘口 vs 民调 · '+r.n,title:r.n+'：'+r.sig,accent:'amber',html:'<p><b>民调 / 评级：</b>'+esc(r.poll)+'</p><p><b>盘口快照：</b><br>'+r.snap.map(function(s){return esc(s.v)+'：'+esc(s.t)+'（'+esc(s.d)+'）';}).join('<br>')+'</p><p><b>怎么解读：</b>'+esc(r.why)+'</p>'});};});
+}
+/* ---- 4.10 媒体视角 + 分析 ---- */
+var TWP_NEWS=[
+ {id:'n-tpoc',d:'11-17',src:'NOWnews / TPOC',k:'ntp',t:'新北封关预测：苏巧慧 50.73% 对 李四川 49.27%',g:'六都差距最小的一场。10 月初还是李四川领先 5.6 个百分点，11 月 6 日出现“黄金交叉”。',u:'https://www.nownews.com/news/6893132'},
+ {id:'n-tvbsntp',d:'11-17',src:'NOWnews / TVBS 民调',k:'ntp',t:'TVBS 新北封关民调：苏 43.0% 对 李 42.4%',g:'TVBS 历次调查中苏巧慧首次超越李四川，但差距在误差范围内，仍有 13.6% 未决定。',u:'https://www.nownews.com/news/6893124'},
+ {id:'n-tpe5',d:'11-17',src:'TVBS 新闻网',k:'tpe',t:'台北五份封关民调互有领先',g:'沈伯洋 vs 蒋万安：中时 37.1 比 44.1、ETtoday 42.0 比 48.1、TVBS 44 比 46、信民协会 48.6 比 33.8、新台湾国策智库 46.3 比 42.2。各家方法不同，不宜直接相减。',u:'https://news.tvbs.com.tw/politics/4051705'},
+ {id:'n-lens',d:'11 月',src:'关键评论网',k:'tpe',t:'台北 7 份民调 4 比 3，年龄分化明显',g:'4 份沈伯洋高、3 份蒋万安高；20–39 岁偏沈，50–59 岁偏蒋，40 多岁几乎打平。年轻人和中间选民去不去投票是关键。',u:'https://www.thenewslens.com/article/271177'},
+ {id:'n-cw',d:'11-19',src:'天下杂志',k:'all',t:'六大看点：投票率破七成是关键',g:'民进党用总统大选规格打这场地方选举，靠沈伯洋的“洋流”主导话题，最大悬念是双北会不会“蓝天变绿地”。',u:'https://www.cw.com.tw/article/5143773'},
+ {id:'n-khh',d:'11-17',src:'三立 / ETtoday 民调云',k:'khh',t:'高雄一份封关民调：柯志恩 46.1% 小幅领先赖瑞隆 44.6%',g:'这是网络问卷调查，不是电话随机抽样。同一份调查里陈其迈满意度 72.1%；TPOC 的预测反而是赖瑞隆领先约 11 个百分点。两者差很大，开票后可以检验哪种方法更准。',u:'https://www.setn.com/news/1940181'},
+ {id:'n-tpoc6',d:'11-17',src:'NOWnews / TPOC',k:'txg',t:'其他四都预测差距',g:'台中江启臣领先 5.82 个百分点；桃园张善政领先 13.46；台南陈亭妃领先 19.22；高雄赖瑞隆领先 10.98。',u:'https://www.nownews.com/news/6893143'},
+ {id:'n-wire',d:'10 月',src:'The Wire China（Pomfret、Boyle）',k:'all',t:'这场地方选举可能改变世界',g:'民进党上次赢台北是 1994 年、赢新北是 2001 年，同时拿下将大大加分赖清德 2028 年连任。赖清德满意度已从 31% 回升到 51.4%，作者归因于国民党失误和 AI 芯片带动的经济（2026 年 GDP 预测约 11%）。作者预期若民进党走强，北京到 2028 年施压会加码，可能包括“软封锁”。',u:'https://www.thewirechina.com/?p=88592'},
+ {id:'n-tplus',d:'11-23',src:'TaiwanPlus',k:'all',t:'高风险的地方选举，透露 2028 线索',g:'虽然选的是地方首长，但被视为 2028 大选前的政治温度计，台北、新北两场对两大党意义最大。',u:'https://www.taiwanplus.com/news/taiwan-news/taiwan-decides-2026/261123006/high-stakes-local-elections-offer-clues-to-taiwans-political-future'},
+ {id:'n-jt',d:'11-26',src:'Jamestown 基金会',k:'all',t:'地方选举为下一任总统铺路',g:'选战主轴是交通、房价、基础建设、社福这些民生议题，近 2000 万选民参与，结果将塑造 2028 年的政治版图。',u:'https://jamestown.org/local-elections-to-set-stage-for-taiwans-next-president/'},
+ {id:'n-nbr',d:'09-24',src:'NBR（美国亚洲研究局）',k:'all',t:'看懂地方选举要分清“地方”和“全国”',g:'外界常把结果当成全国风向，但地方选战有自己的逻辑；把两者混为一谈容易误读。',u:'https://www.nbr.org/publication/a-look-ahead-to-taiwans-2026-local-elections/'},
+ {id:'n-cna',d:'10-28',src:'中央社 Focus Taiwan',k:'cs',t:'赖清德警告中国介选；郑丽文呼吁支持者投票',g:'民进党转述赖清德的说法：北京的介选已从传统宣传扩展到 AI、跨境压迫和协同网络操作。',u:'https://focustaiwan.tw/politics/202610280024'},
+ {id:'n-gti',d:'2026',src:'全球台湾研究中心（GTI）',k:'cs',t:'据报道：今年对台工作会议讨论成立介选专班',g:'据报道（未经官方证实），2 月中共对台工作会议上讨论过针对 11 月地方选举的专门小组；经济手段（如团客、贸易限制）也是常见工具。',u:'https://globaltaiwan.org/?p=36091'},
+ {id:'n-tvbsdpp',d:'07-18',src:'TVBS 新闻网',k:'chw',t:'民进党“坐五望五”：守南部五县市，强攻新北、彰化',g:'绿营目标是守住高雄、台南、屏东、嘉义县、澎湖，再拿新北、宜兰、新竹县、彰化、嘉义市；彰化因蓝营分裂，被视为最可能夺回的中部县市。',u:'https://news.tvbs.com.tw/politics/3259776'},
+ {id:'n-nuke',d:'10-21',src:'TVBS / 中央社',k:'ref',t:'核电公投第 22 案：门槛 4,887,133 张同意票',g:'同意票要多于不同意票，且达到投票权人四分之一才算通过。2025 年核三重启公投拿到 434 万同意票，但没过当时约 500 万的门槛。',u:'https://news.tvbs.com.tw/politics/4038790'}
+];
+var TWP_NK={all:'全局',ntp:'新北',tpe:'台北',khh:'高雄',txg:'台中',chw:'彰化',cs:'两岸',ref:'公投'};
+function twpNewsHTML(){
+  var extra=Object.values(S.overlay.twnews||{}),all=extra.concat(TWP_NEWS);
+  var h='<h3 style="margin-top:12px">媒体怎么看这一仗 <span class="dim" style="font-size:11.5px">（'+all.length+' 篇 · 点卡片看摘要和原文）</span> <button class="ghost" id="twpAna" style="font-size:11px">⤢ 我的分析与影响</button></h3>';
+  h+='<div class="mx" style="grid-template-columns:repeat(auto-fill,minmax(310px,1fr))">'+all.map(function(n){return '<div class="pc dd" data-twn="'+esc(n.id)+'" style="border-left-color:var(--amber)"><div style="display:flex;justify-content:space-between;gap:6px"><span class="chip" style="font-size:10.5px">'+esc(TWP_NK[n.k]||n.k||'')+'</span><span class="mono dim" style="font-size:10.5px">'+esc(n.d)+' · '+esc(n.src)+'</span></div><div style="font-size:12.5px;margin-top:4px"><b>'+esc(n.t)+'</b></div></div>';}).join('')+'</div>';
+  return h;
+}
+function bindTwpNews(m){
+  var all=Object.values(S.overlay.twnews||{}).concat(TWP_NEWS);
+  $$('[data-twn]',m).forEach(function(el){el.onclick=function(){var n=all.filter(function(y){return y.id===el.getAttribute('data-twn');})[0];if(!n)return;openDrawer({kick:'媒体视角 · '+(n.src||''),title:n.t,accent:'amber',html:'<p>'+esc(n.g||'')+'</p><p class="dim" style="font-size:12px">'+esc(n.d||'')+' · '+esc(n.src||'')+(n.u?' · <a href="'+esc(n.u)+'" target="_blank" rel="noopener">原文 ↗</a>':'')+'</p>'});};});
+  var a=$('#twpAna',m);if(a)a.onclick=function(){openDeep({kick:'TAIWAN 11/28 · 我的分析',title:'这一仗怎么看、有什么影响',accent:'amber',labels:['大盘判断','三种剧本','影响（你关心的几条线）','开票夜盯什么'],parts:[
+   '<b>基本盘没变：</b>国民党 2022 年拿下 14 席，盘口和机构都认为它仍会是最大党。真正的悬念不在“谁第一”，而在<b>双北会不会翻绿</b>。<br><br><b>趋势在往绿营移动：</b>新北从 10 月初李四川领先 5–7 个百分点，变成封关时苏巧慧小幅领先（TPOC、TVBS 都显示交叉）；台北 7 份民调 4 比 3 互有领先。推力是赖清德满意度回升到五成左右、AI 带动的经济，以及沈伯洋的“洋流”。<br><br><b>但别过度相信民调：</b>差距全部在误差范围内；高雄一份网络问卷显示国民党领先，和电话民调完全相反——方法差异很大。年轻人投票率、13% 左右的未决定选民，决定最后结果。',
+   '<b>剧本 A：蓝营守住双北和台中</b>（盘口偏向这个）<br>→ 郑丽文党主席位子稳住，“蓝白合”被证明有效，2028 会继续合作；赖清德执政后半段更难推法案和预算。北京会把结果解读为“台湾民意求和”，加大地方交流和惠台招商——2018 年国民党大胜后，北京就表示欢迎和台湾各县市加强合作。<br><br><b>剧本 B：民进党拿下新北或台北</b><br>→ 民进党 20 多年来首次在北部重镇突破，赖清德 2028 连任气势大增；国民党内部问责，郑丽文压力大，卸任台中市长卢秀燕（较温和、支持提高国防预算）可能成为 2028 共主。北京更可能加码施压：海警巡逻、经济胁迫，甚至“软封锁”演练。<br><br><b>剧本 C：各守地盘、差距很小</b><br>→ 维持现状，焦点立刻转向 2028 提名和立法院的预算战。',
+   '<b>① 两岸：</b>不管哪个剧本，北京都会“解读民意”。蓝胜→统战加码、用地方交流绕开民进党中央；绿胜→军事和海警施压加码。对照本页上方三大晴雨表看选后一周。<br><br><b>② 美中：</b>约 140 亿美元对台军售和国防特别预算要过立法院这关。蓝白继续掌握立法院、又在地方赢了，预算审查会更硬；绿营在地方赢了，有本钱在预算上施压在野党。2027 年 1 月美国新国会就职后会盯这一点。<br><br><b>③ 芯片 / 能源：</b>同日核电公投关系到台湾半导体和 AI 数据中心的电力。过关（同意票过半且达约 489 万票门槛）→ 政策上为重启核电开门，电力供应不确定性降低；不过 → 继续靠燃气和绿能，供电韧性和电价问题仍在。<br><br><b>④ 中间路线的验证：</b>如果高雄、台中这种看“施政成绩”的城市照样按地方逻辑投票，就再次证明台湾选民在地方选举里看的是候选人和民生，而不是统独——这对理解 2028 很重要。<br><br><span class="dim">以上是基于公开报道的情景分析，不是预测，也不构成任何投资建议。</span>',
+   '① <b>新北</b>（蓝白合的试金石）和<b>台北</b>（沈伯洋的“洋流”是真浪还是泡沫）。<br>② <b>台中差距</b>：江启臣赢多少，决定卢秀燕 2028 的含金量。<br>③ <b>高雄</b>：民调方法打架，开票后检验哪种更准。<br>④ <b>嘉义市</b>：民众党能不能靠蓝营选票拿下第二个县市；<b>彰化</b>：绿营“坐五望五”能不能实现。<br>⑤ <b>核电公投</b>是否跨过 4,887,133 票门槛。<br>⑥ <b>投票率</b>：天下杂志认为破七成是关键，越高通常对动员年轻人的一方越有利。<br>⑦ <b>选后 48 小时</b>：谁请辞党职、国台办怎么定调、美国国务院怎么表态。']});};
 }
 /* =========================================================
    10. 路由 / 渲染 / 事件
