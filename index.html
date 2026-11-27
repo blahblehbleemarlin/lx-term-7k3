@@ -202,7 +202,7 @@ body.boss main svg{filter:grayscale(1)}
 <body>
 <header>
   <div class="topbar">
-    <div class="brand" id="brandTitle">宏观政治 × 全球半导体 情报终端<small id="syncLbl">BASELINE 2026-11-24 · v2 · FULL · 4.18</small></div>
+    <div class="brand" id="brandTitle">宏观政治 × 全球半导体 情报终端<small id="syncLbl">BASELINE 2026-11-24 · v2 · FULL · 4.19</small></div>
     <div class="spacer"></div>
     <div class="tools">
       <button id="btnNote" title="Shift+N">+ 快速记录</button><button id="btnWeekly">◷ 3分钟周报</button><button class="primary" id="btnPrompt">⧉ 复制今日更新指令</button><button id="btnImport">⇪ 导入增量 JSON</button><button class="ghost" id="btnGloss">[? 体制与级别图鉴]</button>
@@ -914,7 +914,7 @@ function mergeIncoming(j){
   });
   (Array.isArray(j.communiqueDiff)?j.communiqueDiff:[]).forEach(function(d){if(d&&d.A!=null&&d.B!=null){addDiff(d);r.diff++;}});
   (j.tickerUpdates||[]).forEach(function(u){if(!u||!u.ticker)return;var T=String(u.ticker).toUpperCase();o.tickers[T]=Object.assign(o.tickers[T]||{},u,{ticker:T});(o.tickerHist[T]=o.tickerHist[T]||[]).push(Object.assign({importedAt:new Date().toISOString()},u));r.tick++;});
-  (j.twResults||[]).forEach(function(u){if(!u||!u.id)return;o.twres=o.twres||{};o.twres[u.id]=u;r.tw=(r.tw||0)+1;});
+  (j.twDistrict||[]).forEach(function(u){if(!u||!u.city||!u.d)return;o.twdist=o.twdist||{};o.twdist[u.city+'.'+u.d]=u;r.tw=(r.tw||0)+1;});(j.twResults||[]).forEach(function(u){if(!u||!u.id)return;o.twres=o.twres||{};o.twres[u.id]=u;r.tw=(r.tw||0)+1;});
   if(j.twSeats&&typeof j.twSeats==='object')o.twseats=j.twSeats;(j.twNews||[]).forEach(function(u){if(!u||!u.id)return;o.twnews=o.twnews||{};o.twnews[u.id]=u;r.tw=(r.tw||0)+1;});
   (j.twPulse||[]).forEach(function(u){if(!u||!u.id)return;o.twpulse=o.twpulse||{};o.twpulse[u.id]=Object.assign(o.twpulse[u.id]||{},u);});
   (j.formulations||[]).forEach(function(u){if(!u||!u.theme||!u.quote)return;o.fmls=o.fmls||[];if(o.fmls.some(function(x){return x.theme===u.theme&&x.quote===u.quote;}))return;o.fmls.push(u);r.fm=(r.fm||0)+1;});
@@ -943,7 +943,7 @@ function openImport(){
       }catch(e){res.innerHTML='<div class="box"><h4 class="red">✕ 解析失败</h4><p class="mono" style="font-size:12px">'+esc(e.message)+'</p><p class="dim">检查是否为合法 JSON（引号、逗号、括号）。</p></div>';}
     };}});
 }
-function updateSyncLbl(){$('#syncLbl').textContent='BASELINE '+BASELINE+' · SYNC '+(S.lastSync||BASELINE)+' · v2 · FULL 4.18';}
+function updateSyncLbl(){$('#syncLbl').textContent='BASELINE '+BASELINE+' · SYNC '+(S.lastSync||BASELINE)+' · v2 · FULL 4.19';}
 
 /* ---------- 快速记录 ---------- */
 function openQuickNote(edit){
@@ -3207,6 +3207,57 @@ function twMidHTML(){var mx=80;
   h+='<h3 style="margin-top:12px">追踪清单：开票夜到选后一年 <span class="dim" style="font-size:11.5px">（中间一栏是拿来对比的基准数字）</span></h3><table class="t" style="font-size:12.5px"><tr><th style="width:84px">时间</th><th style="width:150px">指标</th><th>基准（拿什么比）</th><th>怎么读</th></tr>'+TWTRACK.map(function(r){return '<tr><td><span class="chip">'+r[0]+'</span></td><td><b>'+esc(r[1])+'</b></td><td class="mono" style="font-size:11.5px">'+esc(r[2])+'</td><td>'+esc(r[3])+'</td></tr>';}).join('')+'</table></section>';
   return h;}
 function bindTwMid(m){$$('[data-twmid]',m).forEach(function(el){el.onclick=function(){var c=TWMID[el.getAttribute('data-twmid')];openDrawer({kick:'争取中间选民',title:c.n,accent:'amber',html:c.list.map(function(x){return '<p style="margin:0 0 9px"><b>'+esc(x[0])+'：</b>'+esc(x[1])+'</p>';}).join('')+'<div class="note">'+esc(c.risk)+'</div>'});};});}
+/* ---- ④-A0 开票夜：双北追踪器 ---- */
+var NT_NTP={base:6.79,src:'鉅闻天下/皮尔森 民调（选前最后一批之一，李减苏）',a:'李四川',b:'苏巧慧',rows:[
+ ['bq','板桥（第5选区）',1.87,'人口最多的摇摆区，“得板桥者得天下”'],
+ ['xz','新庄（第3选区）',-0.11,'苏巧慧的老家地盘，她要明显赢'],
+ ['sl','三重·芦洲（第4选区）',5.53,'绿营传统票仓，苏要赢 5 点以上'],
+ ['zh','中和（第6选区）',13.53,'蓝营票仓，看苏少输多少'],
+ ['yh','永和（第7选区）',11.52,'蓝营票仓'],
+ ['xd','新店·深坑·乌来等（第9选区）',16.52,'蓝营最强；绿营目标“少输 3 万票”'],
+ ['ds','淡水·八里·三芝·石门（第1选区）',15.21,'北海岸偏蓝']]};
+var NT_TPE={a:'蒋万安',b:'沈伯洋',rows:[
+ ['bt','北投·士林',41.4,'9 月信民民调：沈在士林领先'],
+ ['nh','内湖·南港',31.1,'9 月信民民调：沈在两区都领先'],
+ ['sx','松山·信义',31.9,'蒋的大本营，施政满意度近六成'],
+ ['zs','中山·大同',27.2,'大同蒋 +15.8；中山沈领先'],
+ ['zw','中正·万华',26.2,'沈在两区领先；最希望“变天”的地区之一'],
+ ['dw','大安·文山',43.0,'选民最多；大安沈 +1.1，文山偏蓝']]};
+function ntV(c,k,f){var n=S.ui.night||{};var v=n[c+'.'+k+'.'+f];if(v!==undefined&&v!=='')return v;var o=(S.overlay.twdist||{})[c+'.'+k];return o&&o[f]!=null?String(o[f]):'';}
+function ntNum(x){var n=parseFloat(String(x).replace(/,/g,''));return isFinite(n)?n:null;}
+function ntMargin(c,k){var a=ntNum(ntV(c,k,'a')),b=ntNum(ntV(c,k,'b'));if(a==null||b==null)return null;if(a+b>100.5){var t=ntNum(ntV(c,k,'t'));var T=t&&t>=a+b?t:a+b;return (a-b)/T*100;}return a-b;}
+function ntInp(c,k,f,ph,w){return '<input class="mono" data-nt="'+c+'.'+k+'.'+f+'" value="'+esc(ntV(c,k,f))+'" placeholder="'+ph+'" style="width:'+(w||64)+'px;background:#0e131b;border:1px solid #2a3442;color:#e6e9ef;padding:3px 5px;border-radius:4px;font-size:12px">';}
+function ntFmt(x){return x==null?'<span class="dim">—</span>':(x>0?'+':'')+x.toFixed(2);}
+function nightHTML(){
+  var h='<section class="panel" id="ntPanel"><div class="panel-head"><h2 class="amber">④-A0 开票夜 · 双北追踪器</h2><span class="sub">台湾 16:00 开票 = 纽约周六 03:00 · 数字可手动输入，也会被定时任务自动填入</span></div>';
+  h+='<div class="note" style="margin-bottom:10px">输入方法：每格填得票率（如 48.3）或票数（如 152340）都可以。填票数时会自动换算成百分点。差距一律是“蓝减绿”。看中选会开票网站的各区累计数字最准；电视台数字偏快偏高，只看气氛。</div>';
+  h+='<div style="display:grid;grid-template-columns:minmax(320px,1fr) minmax(320px,1fr);gap:14px">';
+  /* 新北 */
+  var sw=[],nh='<div class="pc" style="border-left-color:var(--amber)"><b>新北：苏巧慧 vs 李四川</b><div class="dim" style="font-size:11.5px;margin:2px 0 6px">基准 = '+NT_NTP.src+'，全市李领先 '+NT_NTP.base+'。实际差距减基准 = 摆动；平均摆动约 −6.8 就是平手。</div><table class="t" style="font-size:12px"><tr><th>区</th><th>基准</th><th>李</th><th>苏</th><th>实际</th><th>摆动</th></tr>';
+  NT_NTP.rows.forEach(function(r){var m=ntMargin('ntp',r[0]);var s=m==null?null:m-r[2];if(s!=null)sw.push(s);nh+='<tr title="'+esc(r[3])+'"><td>'+esc(r[1])+'</td><td class="mono">'+ntFmt(r[2])+'</td><td>'+ntInp('ntp',r[0],'a','%/票',58)+'</td><td>'+ntInp('ntp',r[0],'b','%/票',58)+'</td><td class="mono">'+ntFmt(m)+'</td><td class="mono" style="color:'+(s==null?'':s<-NT_NTP.base?'#4caf7a':'#5b8def')+'">'+ntFmt(s)+'</td></tr>';});
+  nh+='</table>';
+  var avg=sw.length?sw.reduce(function(x,y){return x+y;},0)/sw.length:null;
+  var proj=avg==null?null:NT_NTP.base+avg;
+  nh+='<div style="margin-top:8px;font-size:12.5px">已填 '+sw.length+'/7 区 · 平均摆动 <b class="mono">'+ntFmt(avg)+'</b> → 推算全市 李−苏 ≈ <b class="mono" style="color:'+(proj==null?'':proj<0?'#4caf7a':'#5b8def')+'">'+ntFmt(proj)+'</b>'+(proj==null?'':proj<0?'（苏领先）':'（李领先）')+'</div>';
+  var nm=ntMargin('ntp','all');nh+='<div style="margin-top:6px;font-size:12px">全市累计：李 '+ntInp('ntp','all','a','票数',84)+' 苏 '+ntInp('ntp','all','b','票数',84)+' → 李−苏 <b class="mono">'+ntFmt(nm)+'</b></div>';
+  nh+='<div class="note" style="margin-top:6px">读法：板桥、新庄、三重芦洲决定胜负；中和、永和、新店、淡水看苏“少输”多少。早期只开出几个区时，总数会被先开完的区带偏，摆动比总数可靠。不同民调差很多（TVBS 最后一份李只 +0.6），−6.8 这条线要打折扣看。</div></div>';
+  /* 台北 */
+  var tw=0,ts=0,th='<div class="pc" style="border-left-color:var(--amber)"><b>台北：蒋万安 vs 沈伯洋</b><div class="dim" style="font-size:11.5px;margin:2px 0 6px">台北没有完整的分区民调基准，这里改用“各区按选民人数加权”推算全市。权重 = 2022 年各议员选区选举人数（万人）。</div><table class="t" style="font-size:12px"><tr><th>区</th><th>选民</th><th>蒋</th><th>沈</th><th>蒋−沈</th></tr>';
+  NT_TPE.rows.forEach(function(r){var m=ntMargin('tpe',r[0]);if(m!=null){tw+=r[2];ts+=m*r[2];}th+='<tr title="'+esc(r[3])+'"><td>'+esc(r[1])+'</td><td class="mono">'+r[2]+'</td><td>'+ntInp('tpe',r[0],'a','%/票',58)+'</td><td>'+ntInp('tpe',r[0],'b','%/票',58)+'</td><td class="mono">'+ntFmt(m)+'</td></tr>';});
+  th+='</table>';
+  var tp=tw?ts/tw:null;
+  th+='<div style="margin-top:8px;font-size:12.5px">已填区的加权推算：蒋−沈 ≈ <b class="mono">'+ntFmt(tp)+'</b></div>';
+  var tm=ntMargin('tpe','all');var shen=tm==null?null:-tm;
+  th+='<div style="margin-top:6px;font-size:12px">全市累计：蒋 '+ntInp('tpe','all','a','票数',84)+' 沈 '+ntInp('tpe','all','b','票数',84)+' 有效票 '+ntInp('tpe','all','t','含小党(可空)',96)+'</div>';
+  th+='<div style="margin-top:8px;padding:8px;border:1px dashed #3a4656;border-radius:6px;font-size:12.5px">Kalshi「沈伯洋胜选差距 ≥ 4」：沈−蒋 = <b class="mono">'+ntFmt(shen)+'</b> 个百分点 → '+(shen==null?'<span class="dim">等待数字</span>':shen>=4?'<b style="color:#4caf7a">Yes 一侧（沈大赢 ≥4）</b>':'<b style="color:#e0a84a">No 一侧（沈赢不到 4，或蒋赢）</b>')+(shen!=null&&Math.abs(shen-4)<0.6?' <span style="color:#e05a5a">· 贴近门槛，要等官方小数点</span>':'')+'<div class="dim" style="font-size:11px;margin-top:4px">填了有效票总数时按总数算（小党票会稀释分母）；没填时只用两人票数相加，会略微放大差距。盘口正式结算要等中选会审定（12/4 前）。</div></div>';
+  th+='<div class="note" style="margin-top:6px">读法：松山信义、文山是蒋的底；士林、中山、万华、内湖南港是沈要赢的地方；大安是指标区（9 月民调沈只 +1.1）。如果沈在大安明显领先、在松山信义只小输，就是“沈大赢”的剧本。</div></div>';
+  h+=nh+th+'</div><div style="margin-top:10px;text-align:right"><button class="chip btn" id="ntClear">清空我输入的数字</button></div></section>';
+  return h;}
+var ntT=null;
+function ntRefresh(m){clearTimeout(ntT);ntT=setTimeout(function(){var p=$('#ntPanel',m);if(!p||!p.isConnected)return;var ae=document.activeElement,fk=ae&&ae.getAttribute&&ae.getAttribute('data-nt');var d=document.createElement('div');d.innerHTML=nightHTML();p.parentNode.replaceChild(d.firstChild,p);bindNight(m);if(fk){var n=$('[data-nt="'+fk+'"]',m);if(n){n.focus();try{n.select();}catch(e){}}}},30);}
+function bindNight(m){
+  $$('[data-nt]',m).forEach(function(el){el.onchange=function(){S.ui.night=S.ui.night||{};S.ui.night[el.getAttribute('data-nt')]=el.value.trim();save();ntRefresh(m);};});
+  var c=$('#ntClear',m);if(c)c.onclick=function(){S.ui.night={};save();ntRefresh(m);toast('已清空手动输入（自动填入的数字保留）');};}
 /* =========================================================
    10. 路由 / 渲染 / 事件
    ========================================================= */
@@ -3225,7 +3276,7 @@ function renderMain(){
     post(m);renderFeed();renderDiff();renderRadar();
   }else if(k==='m2'){m.innerHTML=renderM2()+dcMapHTML()+cnTeamHTML();bindWires(m);bindM2(m);bindCnTeam(m);bindDcMap(m);post(m);}
   else if(k==='m3'){m.innerHTML=renderM3()+nukeHTML()+aisHTML()+econHTML();var af=$('#aisFear',m);if(af)af.onclick=openFear;bindWires(m);bindM3(m);bindScore(m);bindEcon(m);var nb=$('#nukeOpen',m);if(nb)nb.onclick=openNuke;post(m);}
-  else if(k==='m4'){m.innerHTML=twHTML()+electionHTML()+twmHTML()+twplHTML()+twMidHTML()+twpHTML()+twsHTML()+twhHTML()+twjpPeopleHTML()+kcardsHTML()+renderM4();bindM4(m);bindTW(m);bindElection(m);bindTwm(m);bindTwpl(m);bindTwMid(m);bindTwp(m);bindTws(m);bindTwh(m);bindTWJP(m);$$('[data-k]',m).forEach(function(el){el.onclick=function(){openKCard(el.getAttribute('data-k'));};});post(m);}
+  else if(k==='m4'){m.innerHTML=nightHTML()+twHTML()+electionHTML()+twmHTML()+twplHTML()+twMidHTML()+twpHTML()+twsHTML()+twhHTML()+twjpPeopleHTML()+kcardsHTML()+renderM4();bindM4(m);bindNight(m);bindTW(m);bindElection(m);bindTwm(m);bindTwpl(m);bindTwMid(m);bindTwp(m);bindTws(m);bindTwh(m);bindTWJP(m);$$('[data-k]',m).forEach(function(el){el.onclick=function(){openKCard(el.getAttribute('data-k'));};});post(m);}
   else if(k==='m5'){m.innerHTML=renderM5();bindM5(m);bindSummit(m);post(m);}
   else if(k==='m6'){m.innerHTML=renderM6();bindM6(m);post(m);renderM6List();}
   else if(k==='m7'){m.innerHTML=thHTML();bindTh(m);post(m);}
