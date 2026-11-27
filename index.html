@@ -202,7 +202,7 @@ body.boss main svg{filter:grayscale(1)}
 <body>
 <header>
   <div class="topbar">
-    <div class="brand" id="brandTitle">宏观政治 × 全球半导体 情报终端<small id="syncLbl">BASELINE 2026-11-24 · v2 · FULL · 4.13</small></div>
+    <div class="brand" id="brandTitle">宏观政治 × 全球半导体 情报终端<small id="syncLbl">BASELINE 2026-11-24 · v2 · FULL · 4.14</small></div>
     <div class="spacer"></div>
     <div class="tools">
       <button id="btnNote" title="Shift+N">+ 快速记录</button><button id="btnWeekly">◷ 3分钟周报</button><button class="primary" id="btnPrompt">⧉ 复制今日更新指令</button><button id="btnImport">⇪ 导入增量 JSON</button><button class="ghost" id="btnGloss">[? 体制与级别图鉴]</button>
@@ -943,7 +943,7 @@ function openImport(){
       }catch(e){res.innerHTML='<div class="box"><h4 class="red">✕ 解析失败</h4><p class="mono" style="font-size:12px">'+esc(e.message)+'</p><p class="dim">检查是否为合法 JSON（引号、逗号、括号）。</p></div>';}
     };}});
 }
-function updateSyncLbl(){$('#syncLbl').textContent='BASELINE '+BASELINE+' · SYNC '+(S.lastSync||BASELINE)+' · v2 · FULL 4.13';}
+function updateSyncLbl(){$('#syncLbl').textContent='BASELINE '+BASELINE+' · SYNC '+(S.lastSync||BASELINE)+' · v2 · FULL 4.14';}
 
 /* ---------- 快速记录 ---------- */
 function openQuickNote(edit){
@@ -2971,11 +2971,11 @@ Object.assign(CG_GOSSIP,{
  'tw-ko':['<b>凯道 8 万人？</b>3 月 29 日“讨公道”集会，民众党宣称现场 8 万人，国民党立院党团也组团参加；网红馆长上台痛骂民进党。']
 });
 var TWS_SEATS=[
- {g:'中央 · 行政（做事的人）',c:'#7F77DD',rows:[['总统','c:tw-lai'],['行政院长','卓荣泰'],['行政院副院长','郑丽君']]},
- {g:'中央 · 立法（盯人的人，113 席）',c:'#7F77DD',rows:[['立法院长','韩国瑜（国民党）'],['立委 · 民进党','c:tw-wsj','c:tw-shen','c:tw-wusy','c:tw-sch','c:tw-ctf'],['前立委','c:tw-laipy']]},
- {g:'地方 · 行政（市长 / 县市长，22 位）',c:'#1D9E75',rows:[['台北市长','c:tw-chiang'],['台中市长（卸任）','c:tw-lu'],['新竹市长','高虹安']]},
+ {g:'中央 · 行政（做事的人）',c:'#7F77DD',rows:[['总统','c:tw-lai'],['行政院长','卓荣泰'],['行政院副院长','郑丽君'],['副总统','c:tw-hsiao']]},
+ {g:'中央 · 立法（盯人的人，113 席）',c:'#7F77DD',rows:[['立法院长','c:tw-han'],['立委 · 国民党党团总召','c:tw-fu'],['立委 · 民进党','c:tw-wsj','c:tw-shen','c:tw-wusy','c:tw-sch','c:tw-ctf'],['前立委','c:tw-laipy']]},
+ {g:'地方 · 行政（市长 / 县市长，22 位）',c:'#1D9E75',rows:[['台北市长','c:tw-chiang'],['台中市长（卸任）','c:tw-lu'],['高雄市长（卸任）','c:tw-cqm'],['新竹市长','高虹安']]},
  {g:'地方 · 立法（议员）',c:'#1D9E75',rows:[['台北市议员','c:tw-miao','（王世坚出身于此）']]},
- {g:'党职（不是公职）',c:'#BA7517',rows:[['民进党主席','c:tw-lai'],['国民党主席','c:tw-cheng'],['民众党主席','c:tw-hkc'],['民众党创党主席（一审判刑）','c:tw-ko']]}
+ {g:'党职（不是公职）',c:'#BA7517',rows:[['民进党主席','c:tw-lai'],['国民党主席','c:tw-cheng'],['民众党主席','c:tw-hkc'],['民众党创党主席（一审判刑）','c:tw-ko'],['前总统（无公职）','c:tw-tsai']]}
 ];
 var TWS_FAC={
  dpp:{n:'民进党：“一大多小”',c:'#2e9b55',intro:'民进党 2006 年就决议“解散派系”，但派系一直以“系统”的形式存在，负责培养人才、分配提名、在党代表大会上投票。2026 年 7 月 19 日全代会后，10 席中常委中新潮流拿 3 席，其余 7 席分属 7 个系统，被形容为“一大多小”。',
@@ -3020,6 +3020,92 @@ function bindTws(m){
    '先问“他手上有没有官印”。有官印的人要对成绩负责，说话通常保守、靠中间；没官印的立委和议员靠声量吃饭，说话可以更直、更有个性。',
    '<b>王世坚：</b>中央 · 立法 · 民进党 · 无派系，一辈子都是“盯人的人”，所以敢唱反调。<br><b>沈伯洋：</b>中央 · 立法 → 想跳到地方 · 行政。<br><b>蒋万安：</b>地方 · 行政 · 国民党，手握台北市政府。<br><b>郑丽文：</b>党职，没有公职——所以县市长不一定听她的。<br><b>苗博雅：</b>地方 · 立法 · 社民党，绿营外围的小党盟友。','']});};
 }
+/* ---- 4.14 台湾政坛速成课：总统 · 惠台牌 · 2028 人选 · 剧本 ---- */
+CG_PEOPLE.push(
+ {id:'tw-han',side:'tw',kick:'台海 · 人物档案',zh:'韩国瑜',en:'Han Kuo-yu',dept:'国民党 · 立法院长（中央·立法）',job:'2024 年起任立法院长，主持朝小野大下的国会；被视为国民党 2028 的潜在黑马。',
+  track:[['2018','n','掀起“韩流”，拿下民进党执政 20 年的高雄市长。'],['2020-01','n','代表国民党选总统，败给蔡英文。'],['2020-06','n','被罢免，成为台湾第一位被罢免的直辖市长。'],['2024-02','n','当选立法院长。'],['2026','n','访美后声量回升，被点名为 2028 可能人选。']],
+  why:'他是国民党里少数“蓝绿都不太讨厌”的院长形象，又不属于郑丽文或卢秀燕任何一边，所以常被视为调停者或黑马。',
+  odd:'“韩流”时期以“货出得去、人进得来、高雄发大财”爆红；从被罢免到当上立法院长，只用了不到 4 年，是台湾政坛最戏剧化的翻身之一。',
+  watch:'2026 选后国民党若内斗，他会不会出来“收拾残局”。'},
+ {id:'tw-hsiao',side:'tw',kick:'台海 · 人物档案',zh:'萧美琴',en:'Hsiao Bi-khim',dept:'民进党 · 副总统',job:'2024 年起任副总统，此前任驻美代表。',
+  track:[['2020–2023','n','驻美代表，自称“战猫外交”。'],['2024-05','n','就任副总统。'],['2026-01','n','评论者认为，若民进党 2026 大败，她和陈其迈是可能代表蔡英文一方的挑战者。']],
+  why:'她和蔡英文关系深，是民进党内“蔡系”最有分量的现任公职人物之一；只要赖清德的位置稳，她就是搭档；一旦不稳，就是备选。',
+  odd:'在华府人脉极广，是台湾对美关系的门面；“战猫”一词出自她对比“战狼外交”的自嘲。',
+  watch:'2026 选后的党内角色。'},
+ {id:'tw-cqm',side:'tw',kick:'台海 · 人物档案',zh:'陈其迈',en:'Chen Chi-mai',dept:'民进党 · 高雄市长（2026 年卸任）',job:'高雄市长，2020 年韩国瑜被罢免后补选上任，2022 年连任，满意度很高。',
+  track:[['2020-08','n','高雄市长补选当选。'],['2022','n','连任。'],['2026','n','任期届满；高雄由赖瑞隆接棒参选。']],
+  why:'高满意度加上卸任后不再背公职包袱，让他成为民进党 2028 之后的接班人选之一；评论者也认为他可以代表蔡英文一方。',
+  odd:'同一份高雄民调中，他的施政满意度比不满意度高出 47.3 个百分点。',
+  watch:'高雄能否守住；他卸任后的去向。'},
+ {id:'tw-tsai',side:'tw',kick:'台海 · 人物档案',zh:'蔡英文',en:'Tsai Ing-wen',dept:'民进党 · 前总统（2016–2024）· 无公职',job:'前总统，卸任后在社交平台人气很高，被传“重出江湖”，但幕僚否认。',
+  track:[['2016','n','以 56% 当选，民进党首次完全执政。'],['2018','n','地方选举大败，辞党主席。'],['2020','n','以 817 万票、57% 连任，创纪录。'],['2022','n','地方选举再败，再辞党主席。'],['2024-05','n','卸任。'],['2026-01','n','被传 2028 挑战赖清德，幕僚否认。']],
+  why:'她的英系在党内萎缩，但她个人对年轻人和中间选民仍有号召力。她和赖清德的关系是民进党内最值得看的“隐线”。',
+  odd:'在 Threads 上一句“留友看”拿到 15 万个赞；还写过“虽然我叫蔡英文，但我救不了你们的英文考试”鼓励考生。',
+  watch:'2026 选后会不会更公开地站台或发声。'},
+ {id:'tw-fu',side:'tw',kick:'台海 · 人物档案',zh:'傅崐萁',en:'Fu Kun-chi',dept:'国民党 · 立委 · 立法院党团总召',job:'国民党立法院党团总召集人，主导蓝白在立法院的强硬路线。',
+  track:[['2024','n','出任国民党团总召，主导多项与行政院对撞的法案和删预算。'],['2025','n','大罢免运动被认为由他引发，但罢免案全数未通过。'],['2026','n','一份民调显示他的好感度只有 9.7%。']],
+  why:'他是“朝小野大”的具体操盘手。他越强势，民进党越容易把选战打成“反傅”；国民党温和派也担心他成为全党的形象包袱。',
+  odd:'评论者说大罢免“因他而起”，一年后他又成了国民党形象的最大破口之一。',
+  watch:'若国民党选得不好，党团路线会不会软化。'}
+);
+Object.assign(CG_GOSSIP,{
+ 'tw-han':['<b>被郭正亮看好。</b>前立委郭正亮认为，韩国瑜若选 2028，会比郑丽文、卢秀燕、蒋万安都更有优势。'],
+ 'tw-tsai':['<b>“不是插刀是送暖”。</b>大罢免失败后她主动贴出和赖清德在官邸的合照；评论者说两人或许不是“过命姐弟”，但说反目成仇太夸张。'],
+ 'tw-fu':['<b>好感度 9.7%。</b>戴立安的“台湾民心调查”中，傅崐萁、郑丽文、黄国昌的好感度分别只有 9.7%、19.8%、20.9%。']
+});
+(CG_GOSSIP['tw-cheng']=CG_GOSSIP['tw-cheng']||[]).push('<b>“他也不会只在台北市”。</b>被问到 2028 时她点名蒋万安，又说包括自己在内“任何人都不应自我设限”。','<b>和蒋万安：暗中较劲。</b>评论者形容“郑丽文越弱，蒋万安就越强”，国民党最大的太阳已不在党中央，而在台北市政府。');
+(CG_GOSSIP['tw-chiang']=CG_GOSSIP['tw-chiang']||[]).push('<b>不接郑丽文的话。</b>被问会不会请郑丽文站台、怕不怕她成“败票机”，他只说党部会统一安排。','<b>“落跑市长”包袱。</b>震传媒 6 月民调：若他连任后选 2028，北市受访者 34.8% 支持、48.9% 不支持。');
+var TWH_PRES=[
+ {n:'李登辉',y:'1988–2000',p:'kmt',g:6.9,win:'1996 年首次直选得票 54%',did:['1991 年终止动员戡乱、国会全面改选，完成民主化','1996 年第一次总统直选（台海飞弹危机中当选）','“戒急用忍”限制对大陆投资','1999 年提出“两国论”'],react:'飞弹威胁下仍高票当选；但 2000 年国民党分裂（宋楚瑜脱党参选），首次失去政权。',econ:'高成长尾声，平均约 6.9%。',leg:'“民主先生”；国民党内则视他为“背叛者”，后来被开除党籍。'},
+ {n:'陈水扁',y:'2000–2008',p:'dpp',g:4.9,win:'2000 年 39.3%（蓝营分裂）；2004 年 50.1%',did:['第一次政党轮替','2002 年提出“一边一国”','推动公投立法','任内朝小野大，与国亲阵营激烈对抗'],react:'2004 年在“三一九枪击案”争议中险胜；2006 年“红衫军倒扁”；2008 年国民党大胜夺回政权。',econ:'平均约 4.9%；实质薪资年增仅约 0.19%。',leg:'卸任后因贪污案入狱，民进党花了 8 年才重新执政。'},
+ {n:'马英九',y:'2008–2016',p:'kmt',g:2.8,win:'2008 年 58.5%；2012 年 51.6%',did:['大三通、开放陆客来台','2010 年签 ECFA','2015 年马习会（两岸领导人首次会面）'],react:'2014 年太阳花学运反服贸；同年地方选举国民党惨败；民调最低时满意度只剩个位数。',econ:'平均约 2.8%，“633”政见没兑现；2009 年金融海啸 −1.57%；实质薪资年增约 0.21%。',leg:'两岸关系最缓和的 8 年，但也让“经济靠中国”成为国民党的包袱。'},
+ {n:'蔡英文',y:'2016–2024',p:'dpp',g:3.16,win:'2016 年 56.1%；2020 年 57.1%（817 万票，历史最高）',did:['年金改革、一例一休','2019 年同婚合法化（亚洲第一）','防疫、扩大军购、兵役延长为一年','台积电扩张、“台版晶片法案”'],react:'2018 和 2022 两次地方选举大败、两度辞党主席；但 2020 年借香港反送中效应高票连任。',econ:'2016–2023 年平均 3.16%，高于全球 2.67%；但房价所得比创新高（全国 9.97 倍，台北 15.71 倍）。',leg:'外交和国防评价高；房价和能源政策是主要不满来源。'},
+ {n:'赖清德',y:'2024–',p:'dpp',g:8.1,win:'2024 年 40.05%（三方混战）',did:['朝小野大，预算和法案屡被卡','2025 年大罢免蓝委全数失败','AI 出口带动 2025 年成长 8.63%、2026 年预测 11.05%','18 项少子化政策、对美关税谈判'],react:'2025 年底满意度 40.9%、不满意过半；2026 年 9 月回升到 47.9%、不满意 41.4%。最不满的施政是“打诈”（56% 不满意）。',econ:'2024–2026 年平均约 8%（含预测，2024 年部分在蔡任内）；但民间消费成长弱，传统产业受 ECFA 优惠取消冲击，“K 型化”明显。',leg:'进行中：11/28 是他的期中考。'}
+];
+var TWH_BJ=[
+ ['2005','连胡会','国共建立交流框架，此后北京的“惠台”多走国民党管道。'],
+ ['2008–16','马英九时期','大三通、ECFA、陆客来台；两岸最热的 8 年。'],
+ ['2016 起','对民进党政府','陆客、团客逐步收紧；“时而开放、时而取消”成为常态。'],
+ ['2018-02','31 条','给台企、台湾人“同等待遇”，开放 134 项职业资格考试；陆委会称“名为惠台、实则利中”。'],
+ ['2019-11','26 条','大选前两个多月推出，是 31 条的延伸。'],
+ ['2023–24','福建示范区、福建 21 条 / 13 条','金马“四通”、金厦共用机场；被视为把金马纳入“一国两制示范区”的实体化工程。'],
+ ['2024-05','ECFA 134 项中止','赖清德就职后，北京一边军演、一边取消部分关税优惠——“硬的更硬，软的更软”。'],
+ ['2026-04','郑习会后 10 项措施','包括国共常态化沟通、青年交流、金马“四通”、恢复上海和福建居民赴台自由行试点、农渔产品和食品输入便利、微短剧合作等。'],
+ ['2026-06','阶段成果','国台办称已开通 3 条两岸航线、引进 9 部台湾电影，并签署农产品购销协议。']
+];
+var TWH_C28={
+ kmt:{n:'国民党：四个太阳',c:'#3b6fd8',ppl:[['c:tw-lu','卢秀燕','台中，本土温和派；学者认为 2028 将与郑丽文正面对决。'],['c:tw-chiang','蒋万安','台北，“储君”；包袱是“落跑市长”。'],['c:tw-han','韩国瑜','立法院长，调停者或黑马。'],['c:tw-cheng','郑丽文','党主席，郑习会后掌握两岸话语权，不排除自己。']],rel:'<b>郑 vs 卢：</b>路线之争（亲中“和平兴台” vs 本土温和），2025 年党主席选举时挺卢派曾押注别人。<br><b>郑 vs 蒋：</b>党职 vs 公职，“郑越弱蒋越强”。<br><b>卢 vs 蒋：</b>中部太阳 vs 北部太阳，暂时互不冲突，2027 年党内初选才会正面相撞。<br><b>韩：</b>不属任何一边，是收拾残局的人选。<br><b>傅崐萁：</b>不选总统，但他主导的党团路线会影响所有人的形象。'},
+ dpp:{n:'民进党：赖清德几乎确定连任',c:'#2e9b55',ppl:[['c:tw-lai','赖清德','现任总统兼党主席，几乎确定寻求连任。'],['c:tw-hsiao','萧美琴','副总统，蔡系最有分量的现任公职人物。'],['c:tw-cqm','陈其迈','卸任高雄市长，高满意度。'],['c:tw-tsai','蔡英文','前总统，传重出江湖被否认。']],rel:'<b>关键条件：</b>评论者认为，只要 2026 年民进党守住基本盘（尤其台南、高雄），赖清德连任不会被党内挑战；若南二都失守，赖可能辞党主席，挑战者会是代表蔡英文一方的陈其迈或萧美琴，而不是蔡本人。<br><b>赖 vs 蔡：</b>不是“过命姐弟”，但也没有反目。<br><b>派系：</b>泛赖系在中常会过半，但 30 席中执委有 35 人登记，显示各派仍在极大化自己的势力。'},
+ tpp:{n:'民众党：柯文哲之后谁来',c:'#9aa4b2',ppl:[['c:tw-ko','柯文哲','一审 17 年，若不改判到 10 年以下就不能选。'],['c:tw-hkc','黄国昌','党主席，主导蓝白合作。']],rel:'民众党 2028 最可能的角色不是自己赢，而是和国民党谈“蓝白合”的价码：谁当正、谁当副，或换取立委席次。'}
+};
+var TWH_SC=[
+ ['双北都翻绿','民进党 20 多年来最大的北部突破。赖清德期中考过关，2028 气势大增；国民党会把账算在郑丽文的亲中路线上，党主席问责，卢秀燕的温和本土派崛起；蓝白合在新北失效；蒋万安的储君地位（若台北也翻）消失；北京的“惠台牌”被视为失灵，可能转向更硬的施压。但立法院到 2028 年仍是蓝白过半，朝小野大不变。'],
+ ['只翻新北','最可能的“中间结果”之一。苏系崛起，蓝白合受挫，但蒋万安守住台北，储君地位反而更稳。'],
+ ['蒋万安险胜','他仍是 2028 人选之一，但险胜会让“落跑市长”包袱更重，卢秀燕、韩国瑜的空间变大。'],
+ ['蓝营守住双北、台中','郑丽文坐稳党主席，“和平兴台”路线被视为可行，2028 继续蓝白合；北京会说“台湾民意求和”，加大对国民党县市的交流；赖清德执政后半段更难。'],
+ ['民进党失守台南或高雄','几乎不可能但影响最大：赖清德可能辞党主席，党内出现 2028 挑战者。']
+];
+function twhHTML(){
+  var cl={kmt:'#3b6fd8',dpp:'#2e9b55'},mx=12;
+  var h='<section class="panel"><div class="panel-head"><h2 class="amber">④-D 台湾政坛速成课：总统 · 惠台牌 · 2028 人选 · 开票剧本</h2><span class="sub">点卡片看细节</span></div>';
+  h+='<h3>历任总统：做了什么、选民怎么回应 <span class="dim" style="font-size:11.5px">（条形 = 任内平均经济成长率）</span></h3><div class="mx" style="grid-template-columns:repeat(auto-fill,minmax(230px,1fr))">'+TWH_PRES.map(function(p,i){return '<div class="pc dd" data-twh="'+i+'" style="border-left-color:'+cl[p.p]+'"><div style="display:flex;justify-content:space-between"><b>'+p.n+'</b><span class="mono dim" style="font-size:11px">'+p.y+'</span></div><div style="margin:6px 0 2px;height:8px;background:var(--line,#333);border-radius:4px"><div style="width:'+Math.min(100,p.g/mx*100)+'%;height:8px;background:'+cl[p.p]+';border-radius:4px"></div></div><div class="mono" style="font-size:12px">'+p.g+'%'+(p.n==='赖清德'?' <span class="dim">（含预测）</span>':'')+'</div><div class="dim" style="font-size:11.5px;margin-top:3px">'+esc(p.win)+'</div></div>';}).join('')+'</div>';
+  h+='<div class="note">规律：<b>执政党几乎总在“期中”地方选举受挫</b>（2005 民进党、2014 国民党、2018 和 2022 民进党），但地方大败不代表两年后总统大选会输（2018 败、2020 蔡英文大胜）。经济数字和选民体感也常常脱节：成长靠出口时，薪资和房价才是选民真正感受到的东西。</div>';
+  h+='<h3 style="margin-top:12px">北京的“惠台牌” <button class="ghost" id="twhBj" style="font-size:11px">⤢ 怎么解读</button></h3><table class="t" style="font-size:12.5px">'+TWH_BJ.map(function(r){return '<tr><td class="mono" style="width:80px">'+r[0]+'</td><td style="width:170px"><b>'+esc(r[1])+'</b></td><td>'+esc(r[2])+'</td></tr>';}).join('')+'</table>';
+  h+='<h3 style="margin-top:12px">2028 各党人选和他们的关系</h3><div class="mx" style="grid-template-columns:repeat(auto-fill,minmax(300px,1fr))">'+Object.keys(TWH_C28).map(function(k){var c=TWH_C28[k];return '<div class="pc" style="border-left-color:'+c.c+'"><b style="color:'+c.c+'">'+c.n+'</b> <button class="ghost" data-twc="'+k+'" style="font-size:11px">⤢ 关系</button>'+c.ppl.map(function(x){return '<div style="margin-top:5px;font-size:12px"><span class="chip btn" data-xp="'+x[0]+'">'+x[1]+' ⤢</span> <span class="dim">'+esc(x[2])+'</span></div>';}).join('')+'</div>';}).join('')+'</div>';
+  h+='<h3 style="margin-top:12px">开票夜剧本：结果出来后怎么读</h3><div class="mx" style="grid-template-columns:repeat(auto-fill,minmax(260px,1fr))">'+TWH_SC.map(function(s,i){return '<div class="pc dd" data-tws="'+i+'" style="border-left-color:var(--amber)"><b>'+esc(s[0])+'</b> <span class="dim">⤢</span></div>';}).join('')+'</div>';
+  h+='<div class="note">以上是基于公开报道的情景分析，不是预测。</div></section>';
+  return h;
+}
+function bindTwh(m){
+  $$('[data-twh]',m).forEach(function(el){el.onclick=function(){var p=TWH_PRES[+el.getAttribute('data-twh')];openDeep({kick:'历任总统 · '+p.y,title:p.n+'（'+(p.p==='kmt'?'国民党':'民进党')+'）',accent:'amber',labels:['做了什么','选民怎么回应','经济成绩单','留下了什么'],parts:['<p class="dim">'+esc(p.win)+'</p><ul>'+p.did.map(function(x){return '<li>'+esc(x)+'</li>';}).join('')+'</ul>',esc(p.react),esc(p.econ)+'<p class="dim" style="font-size:12px">各任总统面对的全球环境差异很大，成长率主要反映外部环境，不全是总统的功劳或过错；部分数字口径不完全一致。</p>',esc(p.leg)]});};});
+  var b=$('#twhBj',m);if(b)b.onclick=function(){openDeep({kick:'两岸 · 惠台牌',title:'北京的“惠台牌”怎么读',accent:'amber',labels:['逻辑：胡萝卜和大棒一起给','三方怎么说','怎么判断有没有用','和 11/28 的关系'],parts:[
+   '北京对台一直是“硬的更硬，软的更软”：一边军演、取消 ECFA 关税优惠，一边推出惠台措施。2026 年 4 月的 10 项措施有两个新特点：①<b>走国民党管道</b>，例如国共常态化沟通机制、国共青年交流平台，绕开民选政府；②<b>明确绑定政治条件</b>，农渔产品输入便利要以“九二共识、反对台独”为前提。国安人士称这是北京<b>首次把经济措施的生效条件和政治表态挂钩</b>，形同“经济胁迫的公开制度化”。',
+   '<b>国民党：</b>视为惠台利多，郑丽文称郑习会是 2026 的“大利多”。<br><b>总统府：</b>支持健康有序的交流，但任何安排都不应附带政治前提，也不应沦为特定政党交易的筹码。<br><b>陆委会：</b>称是包装成“大礼包”的糖衣毒药；北京的让利常被片面撤销，造成农渔民损失。<br><b>学者张元祥：</b>这些措施精准瞄准台湾“K 型化”下的闷经济，让民进党两难——开放对深绿交代不了，阻挡会流失经济型选民和中间选民。',
+   '①<b>有没有落地：</b>上海、福建居民赴台自由行什么时候真正恢复？截至 6 月，国台办称已开通 3 条航线、引进 9 部台湾电影。<br>②<b>惠给谁：</b>是不是集中在国民党执政县市、农渔会和金马？如果是，就是“区隔对待”。<br>③<b>同时在拿走什么：</b>今年起 ECFA 早收清单中石化、机械、纺织、农渔产品的关税优惠分阶段取消，传统产业成本上升——这和“惠台”同时发生。<br>④<b>有没有被收回：</b>历史上很多措施“时而开放、时而取消”，看它会不会因为选举结果或赖清德的言论又被冻结。',
+   '如果北部仍然翻绿，代表“惠台牌”没有转化成选票，北京可能转向更硬的施压。<br>如果国民党大胜，北京会把功劳算在“交流融合”上，并加大对国民党县市的直接交流——这会让中央（民进党）和地方（国民党）的两岸路线分歧更大。']});};
+  $$('[data-twc]',m).forEach(function(el){el.onclick=function(){var c=TWH_C28[el.getAttribute('data-twc')];openDrawer({kick:'2028 人选',title:c.n,accent:'amber',html:'<p>'+c.rel+'</p>'});};});
+  $$('[data-tws]',m).forEach(function(el){el.onclick=function(){var s=TWH_SC[+el.getAttribute('data-tws')];openDrawer({kick:'开票夜剧本',title:s[0],accent:'amber',html:'<p>'+esc(s[1])+'</p><p class="dim" style="font-size:12px">情景分析，不是预测。</p>'});};});
+}
 /* =========================================================
    10. 路由 / 渲染 / 事件
    ========================================================= */
@@ -3038,7 +3124,7 @@ function renderMain(){
     post(m);renderFeed();renderDiff();renderRadar();
   }else if(k==='m2'){m.innerHTML=renderM2()+dcMapHTML()+cnTeamHTML();bindWires(m);bindM2(m);bindCnTeam(m);bindDcMap(m);post(m);}
   else if(k==='m3'){m.innerHTML=renderM3()+nukeHTML()+aisHTML()+econHTML();var af=$('#aisFear',m);if(af)af.onclick=openFear;bindWires(m);bindM3(m);bindScore(m);bindEcon(m);var nb=$('#nukeOpen',m);if(nb)nb.onclick=openNuke;post(m);}
-  else if(k==='m4'){m.innerHTML=twHTML()+electionHTML()+twpHTML()+twsHTML()+twjpPeopleHTML()+kcardsHTML()+renderM4();bindM4(m);bindTW(m);bindElection(m);bindTwp(m);bindTws(m);bindTWJP(m);$$('[data-k]',m).forEach(function(el){el.onclick=function(){openKCard(el.getAttribute('data-k'));};});post(m);}
+  else if(k==='m4'){m.innerHTML=twHTML()+electionHTML()+twpHTML()+twsHTML()+twhHTML()+twjpPeopleHTML()+kcardsHTML()+renderM4();bindM4(m);bindTW(m);bindElection(m);bindTwp(m);bindTws(m);bindTwh(m);bindTWJP(m);$$('[data-k]',m).forEach(function(el){el.onclick=function(){openKCard(el.getAttribute('data-k'));};});post(m);}
   else if(k==='m5'){m.innerHTML=renderM5();bindM5(m);bindSummit(m);post(m);}
   else if(k==='m6'){m.innerHTML=renderM6();bindM6(m);post(m);renderM6List();}
   else if(k==='m7'){m.innerHTML=thHTML();bindTh(m);post(m);}
