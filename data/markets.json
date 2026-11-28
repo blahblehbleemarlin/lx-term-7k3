@@ -1,22 +1,22 @@
 {
- "ts": "2026-11-27T23:43:46Z",
+ "ts": "2026-11-28T00:34:48Z",
  "pm": {
   "party": {
    "top": [
     {
      "n": "国民党",
-     "p": 79.5
+     "p": 78.0
     },
     {
      "n": "民进党",
-     "p": 21.1
+     "p": 22.1
     },
     {
      "n": "民众党",
      "p": 0.1
     }
    ],
-   "vol": "923.3K",
+   "vol": "924.2K",
    "url": "https://polymarket.com/event/2026-taiwanese-local-elections-party-winner"
   },
   "tpe": {
@@ -27,50 +27,50 @@
     },
     {
      "n": "沈伯洋",
-     "p": 44.8
+     "p": 44.9
     },
     {
      "n": "Kuo Hsi",
      "p": 0.1
     }
    ],
-   "vol": "10719.4K",
+   "vol": "10735.1K",
    "url": "https://polymarket.com/event/taipei-mayor-election-winner-20260813125857100"
   },
   "ntp": {
    "top": [
     {
      "n": "苏巧慧",
-     "p": 63.5
+     "p": 64.0
     },
     {
      "n": "李四川",
-     "p": 36.5
+     "p": 37.0
     },
     {
      "n": "Huang Kuo-chang",
      "p": 0.1
     }
    ],
-   "vol": "1181.1K",
+   "vol": "1185.9K",
    "url": "https://polymarket.com/event/new-taipei-mayor-election-winner-20260813125857200"
   },
   "txg": {
    "top": [
     {
      "n": "江启臣",
-     "p": 75.0
+     "p": 72.5
     },
     {
      "n": "何欣纯",
-     "p": 25.7
+     "p": 26.8
     },
     {
      "n": "Yang Chiung-ying",
      "p": 0.1
     }
    ],
-   "vol": "380.2K",
+   "vol": "394.0K",
    "url": "https://polymarket.com/event/taichung-mayor-election-winner-20260813125857400"
   },
   "khh": {
@@ -81,14 +81,14 @@
     },
     {
      "n": "柯志恩",
-     "p": 21.7
+     "p": 21.8
     },
     {
      "n": "Lin Tai-hua",
      "p": 0.1
     }
    ],
-   "vol": "604.5K",
+   "vol": "605.0K",
    "url": "https://polymarket.com/event/kaohsiung-mayor-election-winner-20260813125857600"
   }
  },
@@ -97,79 +97,79 @@
    "top": [
     {
      "n": "蒋万安",
-     "p": 56.0
+     "p": 52.0
     },
     {
      "n": "沈伯洋",
-     "p": 46.0
+     "p": 47.0
     },
     {
      "n": "Tang Hsin-min",
      "p": 1.0
     }
    ],
-   "vol": "2767.7K",
+   "vol": "2816.7K",
    "url": "https://kalshi.com/markets/kxtaipeimayor"
   },
   "ntp": {
    "top": [
     {
      "n": "苏巧慧",
-     "p": 62.0
+     "p": 66.0
     },
     {
      "n": "李四川",
-     "p": 35.0
+     "p": 28.0
     }
    ],
-   "vol": "541.5K",
+   "vol": "544.5K",
    "url": "https://kalshi.com/markets/kxnewtaipeimayor"
   },
   "txg": {
    "top": [
     {
      "n": "江启臣",
-     "p": 74.0
+     "p": 73.0
     },
     {
      "n": "何欣纯",
-     "p": 28.0
+     "p": 29.0
     },
     {
      "n": "Hong Li-hua",
      "p": 1.0
     }
    ],
-   "vol": "114.6K",
+   "vol": "117.0K",
    "url": "https://kalshi.com/markets/kxtaichungmayor"
   },
   "khh": {
    "top": [
     {
      "n": "赖瑞隆",
-     "p": 80.0
+     "p": 81.0
     },
     {
      "n": "柯志恩",
-     "p": 21.0
+     "p": 20.0
     },
     {
      "n": "张静",
      "p": 2.0
     }
    ],
-   "vol": "200.5K",
+   "vol": "203.4K",
    "url": "https://kalshi.com/markets/kxkaohsiungmayor"
   },
   "party": {
    "top": [
     {
      "n": "国民党",
-     "p": 80.0
+     "p": 79.0
     },
     {
      "n": "民进党",
-     "p": 23.0
+     "p": 22.0
     },
     {
      "n": "民众党",
